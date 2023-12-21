@@ -1,0 +1,6 @@
+argparse
+colorama
+opencv-python
+pyshine
+pyyaml
+requests

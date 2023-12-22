@@ -37,6 +37,10 @@ https://github.com/mnotgod96/AppAgent/assets/27103154/e99c0e14-f61e-4921-ba20-e9
 
 
 
+https://github.com/mnotgod96/AppAgent/assets/40715314/4df6865b-2f52-4a7f-9621-4edefd71a47d
+
+
+
 
 
 

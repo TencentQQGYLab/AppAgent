@@ -139,12 +139,12 @@ python run.py
 
 ## 😉 Citation
 ```bib
-@misc{AppAgent,
-  author = {Chi Zhang and Zhao Yang and Jiaxuan Liu and Yucheng Han and Xin Chen and Zebiao Huang and Bin Fu and Gang Yu},
-  title = {AppAgent: Multimodal Agents as Smartphone Users},
-  year = {2023},
-  publisher = {GitHub},
-  journal = {GitHub repository},
-  howpublished = {\url{https://github.com/mnotgod96/AppAgent}},
+@misc{yang2023appagent,
+      title={AppAgent: Multimodal Agents as Smartphone Users}, 
+      author={Chi Zhang and Zhao Yang and Jiaxuan Liu and Yucheng Han and Xin Chen and Zebiao Huang and Bin Fu and Gang Yu},
+      year={2023},
+      eprint={2312.13771},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
 }
 ```

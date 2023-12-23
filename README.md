@@ -33,14 +33,11 @@ Central to our agent's functionality is its innovative learning method. The agen
 
 The demo video shows the process of using AppAgent to follow a user on X (Twitter) in the deployment phase.
 
-
-
 https://github.com/mnotgod96/AppAgent/assets/40715314/db99d650-dec1-4531-b4b2-e085bfcadfb7
 
+An interesting experiment showing AppAgent's ability to pass CAPTCHA.
 
-
-
-
+https://github.com/mnotgod96/AppAgent/assets/27103154/5cc7ba50-dbab-42a0-a411-a9a862482548
 
 ## 🚀 Quick Start
 

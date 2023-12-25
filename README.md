@@ -150,3 +150,6 @@ python run.py
 
 [![Star History Chart](https://api.star-history.com/svg?repos=mnotgod96/AppAgent&type=Date)](https://star-history.com/#mnotgod96/AppAgent&Date)
 
+
+## License
+The [MIT License](https://choosealicense.com/licenses/mit/).

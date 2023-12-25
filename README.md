@@ -45,7 +45,7 @@ https://github.com/mnotgod96/AppAgent/assets/27103154/5cc7ba50-dbab-42a0-a411-a9
 This section will guide you on how to quickly use gpt-4-vision-preview as an agent to complete specific tasks for you on
 your Android app.
 
-### ⚙️ Step 1. Prerequisites 
+### ⚙️ Step 1. Prerequisites
 
 1. Get an Android device and enable the USB debugging that can be found in Developer Options in Settings.
 
@@ -61,6 +61,11 @@ have installed it.
 cd AppAgent
 pip install -r requirements.txt
 ```
+
+> Note: If you do not have an Android device but still want to try AppAgent. We recommend you try to download
+> [Android Studio](https://developer.android.com/studio/run/emulator) and use the emulator that comes with it.
+> You can install apps on an emulator by downloading APK files from the internet and dragging them to the emulator.
+> AppAgent can detect the emulated device and operate apps on it just like operating a real device.
 
 ### 🤖 Step 2. Configure the Agent
 

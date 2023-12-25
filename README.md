@@ -152,4 +152,4 @@ python run.py
 
 
 ## License
-The [MIT License](https://choosealicense.com/licenses/mit/).
+The [MIT license](./assets/license.txt).

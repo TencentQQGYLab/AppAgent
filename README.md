@@ -145,3 +145,8 @@ python run.py
       primaryClass={cs.CV}
 }
 ```
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=mnotgod96/AppAgent&type=Date)](https://star-history.com/#mnotgod96/AppAgent&Date)
+

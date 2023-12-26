@@ -28,7 +28,9 @@ Our framework enables the agent to operate smartphone applications through a sim
 Central to our agent's functionality is its innovative learning method. The agent learns to navigate and use new apps either through autonomous exploration or by observing human demonstrations. This process generates a knowledge base that the agent refers to for executing complex tasks across different applications.
 
 ## 📝 Changelog
-- __[2023.12.21]__: 🔥🔥 Open-source the git repository, including the detailed configuration steps to implement our AppAgent!
+- __[2023.12.26]__: Added [Tips](#tips) section for better use experience; added instruction for using the Android Studio emulator for
+  users who do not have Android devices.
+- __[2023.12.21]__: 🔥🔥 Open-sourced the git repository, including the detailed configuration steps to implement our AppAgent!
 
 ## ✨ Demo
 
@@ -47,25 +49,28 @@ your Android app.
 
 ### ⚙️ Step 1. Prerequisites
 
-1. Get an Android device and enable the USB debugging that can be found in Developer Options in Settings.
+1. On your PC, download and install [Android Debug Bridge](https://developer.android.com/tools/adb) (adb) which is a
+   command-line tool that lets you communicate with your Android device from the PC.
 
-2. On your PC, download and install [Android Debug Bridge](https://developer.android.com/tools/adb) (adb) which is a 
-command-line tool that lets you communicate with your Android device from the PC.
+2. Get an Android device and enable the USB debugging that can be found in Developer Options in Settings.
 
 3. Connect your device to your PC using a USB cable.
 
-4. Clone this repo and install the dependencies. All scripts in this project are written in Python 3 so make sure you 
-have installed it.
+4. (Optional) If you do not have an Android device but still want to try AppAgent. We recommend you download
+   [Android Studio](https://developer.android.com/studio/run/emulator) and use the emulator that comes with it.
+   The emulator can be found in the device manager of Android Studio. You can install apps on an emulator by
+   downloading APK files from the internet and dragging them to the emulator.
+   AppAgent can detect the emulated device and operate apps on it just like operating a real device.
+
+   <img width="570" alt="Screenshot 2023-12-26 at 22 25 42" src="https://github.com/mnotgod96/AppAgent/assets/27103154/5d76b810-1f42-44c8-b024-d63ec7776789">
+
+5. Clone this repo and install the dependencies. All scripts in this project are written in Python 3 so make sure you
+   have installed it.
 
 ```bash
 cd AppAgent
 pip install -r requirements.txt
 ```
-
-> Note: If you do not have an Android device but still want to try AppAgent. We recommend you try to download
-> [Android Studio](https://developer.android.com/studio/run/emulator) and use the emulator that comes with it.
-> You can install apps on an emulator by downloading APK files from the internet and dragging them to the emulator.
-> AppAgent can detect the emulated device and operate apps on it just like operating a real device.
 
 ### 🤖 Step 2. Configure the Agent
 
@@ -87,10 +92,10 @@ accordingly.
 
 ### 🔍 Step 3. Exploration Phase
 
-Our paper proposed a novel solution that involves two phases, exploration and deployment, to turn GPT-4V into a capable 
+Our paper proposed a novel solution that involves two phases, exploration, and deployment, to turn GPT-4V into a capable 
 agent that can help users operate their Android phones when a task is given. The exploration phase starts with a task 
 given by you, and you can choose to let the agent either explore the app on its own or learn from your demonstration. 
-In both cases, the agent generates documentations for elements interacted during the exploration/demonstration and 
+In both cases, the agent generates documentation for elements interacted during the exploration/demonstration and 
 saves them for use in the deployment phase.
 
 #### Option 1: Autonomous Exploration
@@ -98,10 +103,10 @@ saves them for use in the deployment phase.
 This solution features a fully autonomous exploration which allows the agent to explore the use of the app by attempting
 the given task without any intervention from humans.
 
-To start, run `learn.py` in the root directory. Follow prompted instructions to select `autonomous exploration` as the 
-operating mode and provide the app name and task description. Then, your agent will do the job for you. Under this 
-mode, AppAgent will reflect on its previous action making sure its action adheres to the given task and generate 
-documentations for the elements explored.
+To start, run `learn.py` in the root directory. Follow the prompted instructions to select `autonomous exploration` 
+as the operating mode and provide the app name and task description. Then, your agent will do the job for you. Under 
+this mode, AppAgent will reflect on its previous action making sure its action adheres to the given task and generate 
+documentation for the elements explored.
 
 ```bash
 python learn.py
@@ -112,7 +117,7 @@ python learn.py
 This solution requires users to demonstrate a similar task first. AppAgent will learn from the demo and generate 
 documentations for UI elements seen during the demo.
 
-To start human demonstration, you should run `learn.py` in the root directory. Follow prompted instructions to select 
+To start human demonstration, you should run `learn.py` in the root directory. Follow the prompted instructions to select 
 `human demonstration` as the operating mode and provide the app name and task description. A screenshot of your phone 
 will be captured and all interactive elements shown on the screen will be labeled with numeric tags. You need to follow 
 the prompts to determine your next action and the target of the action. When you believe the demonstration is finished, 
@@ -126,8 +131,8 @@ python learn.py
 
 ### 📱 Step 4. Deployment Phase
 
-After the exploration phase finishes, you can run `run.py` in the root directory. Follow prompted instructions to enter 
-the name of the app, select the appropriate documentation base you want the agent to use, and provide the task 
+After the exploration phase finishes, you can run `run.py` in the root directory. Follow the prompted instructions to enter 
+the name of the app, select the appropriate documentation base you want the agent to use and provide the task 
 description. Then, your agent will do the job for you. The agent will automatically detect if there is documentation 
 base generated before for the app; if there is no documentation found, you can also choose to run the agent without any 
 documentation (success rate not guaranteed).
@@ -136,7 +141,15 @@ documentation (success rate not guaranteed).
 python run.py
 ```
 
-## 📖 TO-DO LIST
+## 💡 Tips<a name="tips"></a>
+- For a better experience, you can let AppAgent try a few more tasks through autonomous exploration or manually demonstrate
+  a few more app functions to the agent to enrich the app documentation. Usually, the more documentation the agent has, the
+  higher the probability the agent completes the task successfully.
+- It is always a good practice to inspect the documentation generated by the agent. When you find some documentation not accurately
+  describe the function of the element, manually revising the documentation is also an option.
+
+
+## 📖 To-Do List
 - [ ] Open source the Benchmark.
 - [x] Open source the configuration.
 

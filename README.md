@@ -17,7 +17,11 @@
 (* equal contributions, † Project Leader, ✦ Corresponding Author )
 </div>
 
+
 ![](./assets/teaser.png)
+
+ℹ️Should you encounter any issues⚠️ while using our project, please feel free to report them on [GitHub Issues](https://github.com/mnotgod96/AppAgent/issues) or reach out to Dr. Chi Zhang via email at dr.zhang.chi@outlook.com.
+
 
 ## 🔆 Introduction
 

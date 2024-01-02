@@ -134,15 +134,7 @@ class AndroidController:
         ret = execute_adb(adb_command)
         return ret
 
-    def tap(self, tl, br):
-        x, y = (tl[0] + br[0]) // 2, (tl[1] + br[1]) // 2
-        adb_command = f"adb -s {self.device} shell input tap {x} {y}"
-        ret = execute_adb(adb_command)
-        return ret
-
-    def tap_point(self, x: float, y: float):
-        x = int(x * self.width)
-        y = int(y * self.height)
+    def tap(self, x, y):
         adb_command = f"adb -s {self.device} shell input tap {x} {y}"
         ret = execute_adb(adb_command)
         return ret
@@ -154,26 +146,17 @@ class AndroidController:
         ret = execute_adb(adb_command)
         return ret
 
-    def long_press(self, tl, br, duration=1000):
-        x, y = (tl[0] + br[0]) // 2, (tl[1] + br[1]) // 2
+    def long_press(self, x, y, duration=1000):
         adb_command = f"adb -s {self.device} shell input swipe {x} {y} {x} {y} {duration}"
         ret = execute_adb(adb_command)
         return ret
 
-    def long_press_point(self, x: float, y: float, duration=1000):
-        x = int(x * self.width)
-        y = int(y * self.height)
-        adb_command = f"adb -s {self.device} shell input swipe {x} {y} {x} {y} {duration}"
-        ret = execute_adb(adb_command)
-        return ret
-
-    def swipe(self, tl, br, direction, dist="short", quick=False):
+    def swipe(self, x, y, direction, dist="medium", quick=False):
         unit_dist = int(self.width / 10)
         if dist == "long":
             unit_dist *= 3
         elif dist == "medium":
             unit_dist *= 2
-        x, y = (tl[0] + br[0]) // 2, (tl[1] + br[1]) // 2
         if direction == "up":
             offset = 0, -2 * unit_dist
         elif direction == "down":
@@ -189,9 +172,9 @@ class AndroidController:
         ret = execute_adb(adb_command)
         return ret
 
-    def swipe_point(self, start, end, duration=400):
-        start_x, start_y = int(start[0] * self.width), int(start[1] * self.height)
-        end_x, end_y = int(end[0] * self.width), int(end[1] * self.height)
+    def swipe_precise(self, start, end, duration=400):
+        start_x, start_y = start
+        end_x, end_y = end
         adb_command = f"adb -s {self.device} shell input swipe {start_x} {start_x} {end_x} {end_y} {duration}"
         ret = execute_adb(adb_command)
         return ret

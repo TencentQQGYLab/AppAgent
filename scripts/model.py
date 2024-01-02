@@ -68,6 +68,54 @@ def parse_explore_rsp(rsp):
             swipe_dir = swipe_dir.strip()[1:-1]
             dist = dist.strip()[1:-1]
             return [act_name, area, swipe_dir, dist, last_act]
+        elif act_name == "grid":
+            return [act_name]
+        else:
+            print_with_color(f"ERROR: Undefined act {act_name}!", "red")
+            return ["ERROR"]
+    except Exception as e:
+        print_with_color(f"ERROR: an exception occurs while parsing the model response: {e}", "red")
+        print_with_color(rsp, "red")
+        return ["ERROR"]
+
+
+def parse_grid_rsp(rsp):
+    try:
+        msg = rsp["choices"][0]["message"]["content"]
+        observation = re.findall(r"Observation: (.*?)$", msg, re.MULTILINE)[0]
+        think = re.findall(r"Thought: (.*?)$", msg, re.MULTILINE)[0]
+        act = re.findall(r"Action: (.*?)$", msg, re.MULTILINE)[0]
+        last_act = re.findall(r"Summary: (.*?)$", msg, re.MULTILINE)[0]
+        print_with_color("Observation:", "yellow")
+        print_with_color(observation, "magenta")
+        print_with_color("Thought:", "yellow")
+        print_with_color(think, "magenta")
+        print_with_color("Action:", "yellow")
+        print_with_color(act, "magenta")
+        print_with_color("Summary:", "yellow")
+        print_with_color(last_act, "magenta")
+        if "FINISH" in act:
+            return ["FINISH"]
+        act_name = act.split("(")[0]
+        if act_name == "tap":
+            params = re.findall(r"tap\((.*?)\)", act)[0].split(",")
+            area = int(params[0].strip())
+            subarea = params[1].strip()[1:-1]
+            return [act_name + "_grid", area, subarea, last_act]
+        elif act_name == "long_press":
+            params = re.findall(r"long_press\((.*?)\)", act)[0].split(",")
+            area = int(params[0].strip())
+            subarea = params[1].strip()[1:-1]
+            return [act_name + "_grid", area, subarea, last_act]
+        elif act_name == "swipe":
+            params = re.findall(r"swipe\((.*?)\)", act)[0].split(",")
+            start_area = int(params[0].strip())
+            start_subarea = params[1].strip()[1:-1]
+            end_area = int(params[2].strip())
+            end_subarea = params[3].strip()[1:-1]
+            return [act_name + "_grid", start_area, start_subarea, end_area, end_subarea, last_act]
+        elif act_name == "grid":
+            return [act_name]
         else:
             print_with_color(f"ERROR: Undefined act {act_name}!", "red")
             return ["ERROR"]

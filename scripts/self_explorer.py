@@ -141,7 +141,8 @@ while round_count < configs["MAX_ROUNDS"]:
         if act_name == "tap":
             _, area = res
             tl, br = elem_list[area - 1].bbox
-            ret = controller.tap(tl, br)
+            x, y = (tl[0] + br[0]) // 2, (tl[1] + br[1]) // 2
+            ret = controller.tap(x, y)
             if ret == "ERROR":
                 print_with_color("ERROR: tap execution failed", "red")
                 break
@@ -154,16 +155,18 @@ while round_count < configs["MAX_ROUNDS"]:
         elif act_name == "long_press":
             _, area = res
             tl, br = elem_list[area - 1].bbox
-            ret = controller.long_press(tl, br)
+            x, y = (tl[0] + br[0]) // 2, (tl[1] + br[1]) // 2
+            ret = controller.long_press(x, y)
             if ret == "ERROR":
                 print_with_color("ERROR: long press execution failed", "red")
                 break
         elif act_name == "swipe":
             _, area, swipe_dir, dist = res
             tl, br = elem_list[area - 1].bbox
-            ret = controller.swipe(tl, br, swipe_dir, dist)
+            x, y = (tl[0] + br[0]) // 2, (tl[1] + br[1]) // 2
+            ret = controller.swipe(x, y, swipe_dir, dist)
             if ret == "ERROR":
-                print_with_color("ERROR: long press execution failed", "red")
+                print_with_color("ERROR: swipe execution failed", "red")
                 break
         else:
             break

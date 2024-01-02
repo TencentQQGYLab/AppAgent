@@ -41,7 +41,8 @@ because the function of a UI element can be flexible. In this case, your generat
 Old documentation of this UI element: <old_doc>"""
 
 task_template = """You are an agent that is trained to perform some basic tasks on a smartphone. You will be given a 
-smartphone screenshot. The interactive UI elements on the screenshot are labeled with numeric tags starting from 1.
+smartphone screenshot. The interactive UI elements on the screenshot are labeled with numeric tags starting from 1. The 
+numeric tag of each interactive element is located in the center of the element.
 
 You can call the following functions to control the smartphone:
 
@@ -70,9 +71,11 @@ choose the appropriate distance option according to your need.
 A simple use case can be swipe(21, "up", "medium"), which swipes up the UI element labeled with the number 21 for a 
 medium distance.
 
-You also have access to the following documentations that describes the functionalities of UI elements you can interact 
-on the screen. These docs are crucial for you to determine the target of your next action. You should always prioritize 
-these documented elements for interaction:
+5. grid()
+You should call this function when you find the element you want to interact with is not labeled with a numeric tag and 
+other elements with numeric tags cannot help with the task. The function will bring up a grid overlay to divide the 
+smartphone screen into small areas and this will give you more freedom to choose any part of the screen to tap, long 
+press, or swipe.
 <ui_document>
 The task you need to complete is to <task_description>. Your past actions to proceed with this task are summarized as 
 follows: <last_act>
@@ -85,6 +88,51 @@ there is nothing to be done, you should output FINISH. You cannot output anythin
 in this field.>
 Summary: <Summarize your past actions along with your latest action in one or two sentences. Do not include the numeric 
 tag in your summary>
+You can only take one action at a time, so please directly call the function."""
+
+task_template_grid = """You are an agent that is trained to perform some basic tasks on a smartphone. You will be given 
+a smartphone screenshot overlaid by a grid. The grid divides the screenshot into small square areas. Each area is 
+labeled with an integer in the top-left corner.
+
+You can call the following functions to control the smartphone:
+
+1. tap(area: int, subarea: str)
+This function is used to tap a grid area shown on the smartphone screen. "area" is the integer label assigned to a grid 
+area shown on the smartphone screen. "subarea" is a string representing the exact location to tap within the grid area. 
+It can take one of the nine values: center, top-left, top, top-right, left, right, bottom-left, bottom, and 
+bottom-right.
+A simple use case can be tap(5, "center"), which taps the exact center of the grid area labeled with the number 5.
+
+2. long_press(area: int, subarea: str)
+This function is used to long press a grid area shown on the smartphone screen. "area" is the integer label assigned to 
+a grid area shown on the smartphone screen. "subarea" is a string representing the exact location to long press within 
+the grid area. It can take one of the nine values: center, top-left, top, top-right, left, right, bottom-left, bottom, 
+and bottom-right.
+A simple use case can be long_press(7, "top-left"), which long presses the top left part of the grid area labeled with 
+the number 7.
+
+3. swipe(start_area: int, start_subarea: str, end_area: int, end_subarea: str)
+This function is used to perform a swipe action on the smartphone screen, especially when you want to interact with a 
+scroll view or a slide bar. "start_area" is the integer label assigned to the grid area which marks the starting 
+location of the swipe. "start_subarea" is a string representing the exact location to begin the swipe within the grid 
+area. "end_area" is the integer label assigned to the grid area which marks the ending location of the swipe. 
+"end_subarea" is a string representing the exact location to end the swipe within the grid area.
+The two subarea parameters can take one of the nine values: center, top-left, top, top-right, left, right, bottom-left, 
+bottom, and bottom-right.
+A simple use case can be swipe(21, "center", 25, "right"), which performs a swipe starting from the center of grid area 
+21 to the right part of grid area 25.
+
+The task you need to complete is to <task_description>. Your past actions to proceed with this task are summarized as 
+follows: <last_act>
+Now, given the following labeled screenshot, you need to think and call the function needed to proceed with the task. 
+Your output should include three parts in the given format:
+Observation: <Describe what you observe in the image>
+Thought: <To complete the given task, what is the next step I should do>
+Action: <The function call with the correct parameters to proceed with the task. If you believe the task is completed or 
+there is nothing to be done, you should output FINISH. You cannot output anything else except a function call or FINISH 
+in this field.>
+Summary: <Summarize your past actions along with your latest action in one or two sentences. Do not include the grid 
+area number in your summary>
 You can only take one action at a time, so please directly call the function."""
 
 self_explore_task_template = """You are an agent that is trained to complete certain tasks on a smartphone. You will be 

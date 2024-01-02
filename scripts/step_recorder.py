@@ -123,8 +123,12 @@ while True:
         user_input = "xxx"
         while not user_input.isnumeric() or int(user_input) > len(elem_list) or int(user_input) < 1:
             user_input = input()
-        tap_area = elem_list[int(user_input) - 1].bbox
-        controller.tap(tap_area[0], tap_area[1])
+        tl, br = elem_list[int(user_input) - 1].bbox
+        x, y = (tl[0] + br[0]) // 2, (tl[1] + br[1]) // 2
+        ret = controller.tap(x, y)
+        if ret == "ERROR":
+            print_with_color("ERROR: tap execution failed", "red")
+            break
         record_file.write(f"tap({int(user_input)}):::{elem_list[int(user_input) - 1].uid}\n")
     elif user_input.lower() == "text":
         print_with_color(f"Which element do you want to input the text string? Choose a numeric tag from 1 to "
@@ -144,8 +148,12 @@ while True:
         user_input = "xxx"
         while not user_input.isnumeric() or int(user_input) > len(elem_list) or int(user_input) < 1:
             user_input = input()
-        tap_area = elem_list[int(user_input) - 1].bbox
-        controller.long_press(tap_area[0], tap_area[1])
+        tl, br = elem_list[int(user_input) - 1].bbox
+        x, y = (tl[0] + br[0]) // 2, (tl[1] + br[1]) // 2
+        ret = controller.long_press(x, y)
+        if ret == "ERROR":
+            print_with_color("ERROR: long press execution failed", "red")
+            break
         record_file.write(f"long_press({int(user_input)}):::{elem_list[int(user_input) - 1].uid}\n")
     elif user_input.lower() == "swipe":
         print_with_color(f"What is the direction of your swipe? Choose one from the following options:\nup, down, left,"
@@ -157,8 +165,12 @@ while True:
         print_with_color(f"Which element do you want to swipe? Choose a numeric tag from 1 to {len(elem_list)}:")
         while not user_input.isnumeric() or int(user_input) > len(elem_list) or int(user_input) < 1:
             user_input = input()
-        swipe_area = elem_list[int(user_input) - 1].bbox
-        controller.swipe(swipe_area[0], swipe_area[1], swipe_dir)
+        tl, br = elem_list[int(user_input) - 1].bbox
+        x, y = (tl[0] + br[0]) // 2, (tl[1] + br[1]) // 2
+        ret = controller.swipe(x, y, swipe_dir)
+        if ret == "ERROR":
+            print_with_color("ERROR: swipe execution failed", "red")
+            break
         record_file.write(f"swipe({int(user_input)}:sep:{swipe_dir}):::{elem_list[int(user_input) - 1].uid}\n")
     elif user_input.lower() == "stop":
         record_file.write("stop\n")

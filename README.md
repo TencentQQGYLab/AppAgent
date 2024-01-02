@@ -32,7 +32,7 @@ Our framework enables the agent to operate smartphone applications through a sim
 Central to our agent's functionality is its innovative learning method. The agent learns to navigate and use new apps either through autonomous exploration or by observing human demonstrations. This process generates a knowledge base that the agent refers to for executing complex tasks across different applications.
 
 ## 📝 Changelog
-- __[2023.1.2]__: Added an optional method for the agent to bring up a grid overlay on the screen to tap/swipe anywhere on the screen.
+- __[2024.1.2]__: Added an optional method for the agent to bring up a grid overlay on the screen to tap/swipe anywhere on the screen.
 - __[2023.12.26]__: Added [Tips](#tips) section for better use experience; added instruction for using the Android Studio emulator for
   users who do not have Android devices.
 - __[2023.12.21]__: 🔥🔥 Open-sourced the git repository, including the detailed configuration steps to implement our AppAgent!
@@ -53,7 +53,7 @@ https://github.com/mnotgod96/AppAgent/assets/27103154/71603333-274c-46ed-8381-2f
 
 ## 🚀 Quick Start
 
-This section will guide you on how to quickly use gpt-4-vision-preview as an agent to complete specific tasks for you on
+This section will guide you on how to quickly use `gpt-4-vision-preview` as an agent to complete specific tasks for you on
 your Android app.
 
 ### ⚙️ Step 1. Prerequisites

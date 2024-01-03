@@ -20,7 +20,13 @@
 
 ![](./assets/teaser.png)
 
-ℹ️Should you encounter any issues⚠️ while using our project, please feel free to report them on [GitHub Issues](https://github.com/mnotgod96/AppAgent/issues) or reach out to Dr. Chi Zhang via email at dr.zhang.chi@outlook.com.
+ℹ️Should you encounter any issues⚠️ while using our project, please feel free to report them on [GitHub Issues](https://github.com/mnotgod96/AppAgent/issues) or reach out to [Dr. Chi Zhang](https://icoz69.github.io/) via email at dr.zhang.chi@outlook.com.
+
+## 📝 Changelog
+- __[2024.1.2]__: 🔥Added an optional method for the agent to bring up a grid overlay on the screen to **tap/swipe anywhere** on the screen.
+- __[2023.12.26]__: Added [Tips](#tips) section for better use experience; added instruction for using the **Android Studio emulator** for
+  users who do not have Android devices.
+- __[2023.12.21]__: 🔥🔥 Open-sourced the git repository, including the detailed configuration steps to implement our AppAgent!
 
 
 ## 🔆 Introduction
@@ -31,11 +37,6 @@ Our framework enables the agent to operate smartphone applications through a sim
 
 Central to our agent's functionality is its innovative learning method. The agent learns to navigate and use new apps either through autonomous exploration or by observing human demonstrations. This process generates a knowledge base that the agent refers to for executing complex tasks across different applications.
 
-## 📝 Changelog
-- __[2024.1.2]__: Added an optional method for the agent to bring up a grid overlay on the screen to tap/swipe anywhere on the screen.
-- __[2023.12.26]__: Added [Tips](#tips) section for better use experience; added instruction for using the Android Studio emulator for
-  users who do not have Android devices.
-- __[2023.12.21]__: 🔥🔥 Open-sourced the git repository, including the detailed configuration steps to implement our AppAgent!
 
 ## ✨ Demo
 

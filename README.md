@@ -158,8 +158,13 @@ python run.py
   describe the function of the element, manually revising the documentation is also an option.
 
 
+## 📊 Evaluation
+Please refer to  [evaluation benchmark](https://github.com/mnotgod96/AppAgent/blob/main/assets/testset.md).
+
+
 ## 📖 To-Do List
-- [ ] Open source the Benchmark.
+- [ ] Incorporate more LLM APIs into the project.
+- [x] Open source the Benchmark.
 - [x] Open source the configuration.
 
 ## 😉 Citation

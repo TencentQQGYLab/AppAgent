@@ -4,3 +4,5 @@ opencv-python
 pyshine
 pyyaml
 requests
+langchain
+langchain-openai

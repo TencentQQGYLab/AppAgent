@@ -1,46 +1,109 @@
 import re
+from abc import abstractmethod
+from typing import List
+from http import HTTPStatus
+
 import requests
+import dashscope
 
-from config import load_config
-from utils import print_with_color
-
-configs = load_config()
+from utils import print_with_color, encode_image
 
 
-def ask_gpt4v(content):
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {configs['OPENAI_API_KEY']}"
-    }
-    payload = {
-        "model": configs["OPENAI_API_MODEL"],
-        "messages": [
+class BaseModel:
+    def __init__(self):
+        pass
+
+    @abstractmethod
+    def get_model_response(self, prompt: str, images: List[str]) -> (bool, str):
+        pass
+
+
+class OpenAIModel(BaseModel):
+    def __init__(self, base_url: str, api_key: str, model: str, temperature: float, max_tokens: int):
+        super().__init__()
+        self.base_url = base_url
+        self.api_key = api_key
+        self.model = model
+        self.temperature = temperature
+        self.max_tokens = max_tokens
+
+    def get_model_response(self, prompt: str, images: List[str]) -> (bool, str):
+        content = [
+            {
+                "type": "text",
+                "text": prompt
+            }
+        ]
+        for img in images:
+            base64_img = encode_image(img)
+            content.append({
+                "type": "image_url",
+                "image_url": {
+                    "url": f"data:image/jpeg;base64,{base64_img}"
+                }
+            })
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {self.api_key}"
+        }
+        payload = {
+            "model": self.model,
+            "messages": [
+                {
+                    "role": "user",
+                    "content": content
+                }
+            ],
+            "temperature": self.temperature,
+            "max_tokens": self.max_tokens
+        }
+        response = requests.post(self.base_url, headers=headers, json=payload).json()
+        if "error" not in response:
+            usage = response["usage"]
+            prompt_tokens = usage["prompt_tokens"]
+            completion_tokens = usage["completion_tokens"]
+            print_with_color(f"Request cost is "
+                             f"${'{0:.2f}'.format(prompt_tokens / 1000 * 0.01 + completion_tokens / 1000 * 0.03)}",
+                             "yellow")
+        else:
+            return False, response["error"]["message"]
+        return True, response["choices"][0]["message"]["content"]
+
+
+class QwenModel(BaseModel):
+    def __init__(self, api_key: str, model: str):
+        super().__init__()
+        self.model = model
+        dashscope.api_key = api_key
+
+    def get_model_response(self, prompt: str, images: List[str]) -> (bool, str):
+        content = [{
+            "text": prompt
+        }]
+        for img in images:
+            img_path = f"file://{img}"
+            content.append({
+                "image": img_path
+            })
+        messages = [
             {
                 "role": "user",
                 "content": content
             }
-        ],
-        "temperature": configs["TEMPERATURE"],
-        "max_tokens": configs["MAX_TOKENS"]
-    }
-    response = requests.post(configs["OPENAI_API_BASE"], headers=headers, json=payload)
-    if "error" not in response.json():
-        usage = response.json()["usage"]
-        prompt_tokens = usage["prompt_tokens"]
-        completion_tokens = usage["completion_tokens"]
-        print_with_color(f"Request cost is "
-                         f"${'{0:.2f}'.format(prompt_tokens / 1000 * 0.01 + completion_tokens / 1000 * 0.03)}",
-                         "yellow")
-    return response.json()
+        ]
+        response = dashscope.MultiModalConversation.call(model=self.model, messages=messages)
+        if response.status_code == HTTPStatus.OK:
+            return True, response.output.choices[0].message.content[0]["text"]
+        else:
+            return False, response.message
 
 
 def parse_explore_rsp(rsp):
     try:
-        msg = rsp["choices"][0]["message"]["content"]
-        observation = re.findall(r"Observation: (.*?)$", msg, re.MULTILINE)[0]
-        think = re.findall(r"Thought: (.*?)$", msg, re.MULTILINE)[0]
-        act = re.findall(r"Action: (.*?)$", msg, re.MULTILINE)[0]
-        last_act = re.findall(r"Summary: (.*?)$", msg, re.MULTILINE)[0]
+        observation = re.findall(r"Observation: (.*?)$", rsp, re.MULTILINE)[0]
+        think = re.findall(r"Thought: (.*?)$", rsp, re.MULTILINE)[0]
+        act = re.findall(r"Action: (.*?)$", rsp, re.MULTILINE)[0]
+        last_act = re.findall(r"Summary: (.*?)$", rsp, re.MULTILINE)[0]
         print_with_color("Observation:", "yellow")
         print_with_color(observation, "magenta")
         print_with_color("Thought:", "yellow")
@@ -81,11 +144,10 @@ def parse_explore_rsp(rsp):
 
 def parse_grid_rsp(rsp):
     try:
-        msg = rsp["choices"][0]["message"]["content"]
-        observation = re.findall(r"Observation: (.*?)$", msg, re.MULTILINE)[0]
-        think = re.findall(r"Thought: (.*?)$", msg, re.MULTILINE)[0]
-        act = re.findall(r"Action: (.*?)$", msg, re.MULTILINE)[0]
-        last_act = re.findall(r"Summary: (.*?)$", msg, re.MULTILINE)[0]
+        observation = re.findall(r"Observation: (.*?)$", rsp, re.MULTILINE)[0]
+        think = re.findall(r"Thought: (.*?)$", rsp, re.MULTILINE)[0]
+        act = re.findall(r"Action: (.*?)$", rsp, re.MULTILINE)[0]
+        last_act = re.findall(r"Summary: (.*?)$", rsp, re.MULTILINE)[0]
         print_with_color("Observation:", "yellow")
         print_with_color(observation, "magenta")
         print_with_color("Thought:", "yellow")
@@ -127,9 +189,8 @@ def parse_grid_rsp(rsp):
 
 def parse_reflect_rsp(rsp):
     try:
-        msg = rsp["choices"][0]["message"]["content"]
-        decision = re.findall(r"Decision: (.*?)$", msg, re.MULTILINE)[0]
-        think = re.findall(r"Thought: (.*?)$", msg, re.MULTILINE)[0]
+        decision = re.findall(r"Decision: (.*?)$", rsp, re.MULTILINE)[0]
+        think = re.findall(r"Thought: (.*?)$", rsp, re.MULTILINE)[0]
         print_with_color("Decision:", "yellow")
         print_with_color(decision, "magenta")
         print_with_color("Thought:", "yellow")
@@ -137,7 +198,7 @@ def parse_reflect_rsp(rsp):
         if decision == "INEFFECTIVE":
             return [decision, think]
         elif decision == "BACK" or decision == "CONTINUE" or decision == "SUCCESS":
-            doc = re.findall(r"Documentation: (.*?)$", msg, re.MULTILINE)[0]
+            doc = re.findall(r"Documentation: (.*?)$", rsp, re.MULTILINE)[0]
             print_with_color("Documentation:", "yellow")
             print_with_color(doc, "magenta")
             return [decision, think, doc]

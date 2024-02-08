@@ -23,6 +23,7 @@
 ℹ️Should you encounter any issues⚠️ while using our project, please feel free to report them on [GitHub Issues](https://github.com/mnotgod96/AppAgent/issues) or reach out to [Dr. Chi Zhang](https://icoz69.github.io/) via email at dr.zhang.chi@outlook.com.
 
 ## 📝 Changelog
+- __[2024.1.31]__: Released the [evaluation benchmark](https://github.com/mnotgod96/AppAgent/blob/main/assets/testset.md) used during our testing of AppAgent
 - __[2024.1.2]__: 🔥Added an optional method for the agent to bring up a grid overlay on the screen to **tap/swipe anywhere** on the screen.
 - __[2023.12.26]__: Added [Tips](#tips) section for better use experience; added instruction for using the **Android Studio emulator** for
   users who do not have Android devices.
@@ -157,8 +158,13 @@ python run.py
   describe the function of the element, manually revising the documentation is also an option.
 
 
+## 📊 Evaluation
+Please refer to  [evaluation benchmark](https://github.com/mnotgod96/AppAgent/blob/main/assets/testset.md).
+
+
 ## 📖 To-Do List
-- [ ] Open source the Benchmark.
+- [ ] Incorporate more LLM APIs into the project.
+- [x] Open source the Benchmark.
 - [x] Open source the configuration.
 
 ## 😉 Citation

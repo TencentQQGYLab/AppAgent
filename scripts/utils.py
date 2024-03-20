@@ -27,9 +27,17 @@ def print_with_color(text: str, color=""):
     print(Style.RESET_ALL)
 
 
-def draw_bbox_multi(img_path, output_path, elem_list, record_mode=False, dark_mode=False):
+def draw_bbox_multi(img_path, output_path, elem_list, device_width=None, device_height=None, record_mode=False, dark_mode=False):
     imgcv = cv2.imread(img_path)
     count = 1
+    if device_width and device_width <= 360:
+        font_scale = 0.5
+        space = 5
+        thickness = 1
+    else:
+        font_scale = 1
+        space = 10
+        thickness = 2
     for elem in elem_list:
         try:
             top_left = elem.bbox[0]
@@ -45,20 +53,19 @@ def draw_bbox_multi(img_path, output_path, elem_list, record_mode=False, dark_mo
                 else:
                     color = (0, 250, 0)
                 imgcv = ps.putBText(imgcv, label, text_offset_x=(left + right) // 2 + 10, text_offset_y=(top + bottom) // 2 + 10,
-                                    vspace=10, hspace=10, font_scale=1, thickness=2, background_RGB=color,
+                                    vspace=space, hspace=space, font_scale=font_scale, thickness=thickness, background_RGB=color,
                                     text_RGB=(255, 250, 250), alpha=0.5)
             else:
                 text_color = (10, 10, 10) if dark_mode else (255, 250, 250)
                 bg_color = (255, 250, 250) if dark_mode else (10, 10, 10)
                 imgcv = ps.putBText(imgcv, label, text_offset_x=(left + right) // 2 + 10, text_offset_y=(top + bottom) // 2 + 10,
-                                    vspace=10, hspace=10, font_scale=1, thickness=2, background_RGB=bg_color,
+                                    vspace=space, hspace=space, font_scale=font_scale, thickness=thickness, background_RGB=bg_color,
                                     text_RGB=text_color, alpha=0.5)
         except Exception as e:
             print_with_color(f"ERROR: An exception occurs while labeling the image\n{e}", "red")
         count += 1
     cv2.imwrite(output_path, imgcv)
     return imgcv
-
 
 def draw_grid(img_path, output_path):
     def get_unit_len(n):

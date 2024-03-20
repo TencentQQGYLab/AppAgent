@@ -6,3 +6,4 @@ pyyaml
 requests
 langchain
 langchain-openai
+selenium==4.6

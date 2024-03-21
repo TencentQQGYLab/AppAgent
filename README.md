@@ -1,4 +1,4 @@
-# AppAgent-TencentQQGYLab
+# AppAgent-[TencentQQGYLab](https://github.com/TencentQQGYLab)
 
 <div align="center">
 

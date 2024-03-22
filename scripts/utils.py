@@ -5,7 +5,7 @@ import pyshine as ps
 from colorama import Fore, Style
 
 
-def print_with_color(text: str, color=""):
+def print_with_color(text: str, color="", log_file=None, heading_level=None):
     if color == "red":
         print(Fore.RED + text)
     elif color == "green":
@@ -25,6 +25,14 @@ def print_with_color(text: str, color=""):
     else:
         print(text)
     print(Style.RESET_ALL)
+
+    # If a log file is specified, append the message to the file
+    if log_file is not None:
+        # If a heading level is specified, prepend the message with the appropriate number of '#'
+        if heading_level is not None:
+            text = '#' * heading_level + ' ' + text
+        with open(log_file, "a") as f:
+            f.write(text + "\n")
 
 
 def draw_bbox_multi(img_path, output_path, elem_list, device_width=None, device_height=None, record_mode=False, dark_mode=False):

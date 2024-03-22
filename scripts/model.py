@@ -34,21 +34,21 @@ def ask_gpt4v(content):
     return response.json()
 
 
-def parse_explore_rsp(rsp):
+def parse_explore_rsp(rsp, log_file=None):
     try:
         msg = rsp["choices"][0]["message"]["content"]
         observation = re.findall(r"Observation: (.*?)$", msg, re.MULTILINE)[0]
         think = re.findall(r"Thought: (.*?)$", msg, re.MULTILINE)[0]
         act = re.findall(r"Action: (.*?)$", msg, re.MULTILINE)[0]
         last_act = re.findall(r"Summary: (.*?)$", msg, re.MULTILINE)[0]
-        print_with_color("Observation:", "yellow")
-        print_with_color(observation, "magenta")
-        print_with_color("Thought:", "yellow")
-        print_with_color(think, "magenta")
-        print_with_color("Action:", "yellow")
-        print_with_color(act, "magenta")
-        print_with_color("Summary:", "yellow")
-        print_with_color(last_act, "magenta")
+        print_with_color("Observation:", "yellow", log_file, heading_level=3)
+        print_with_color(observation, "magenta", log_file)
+        print_with_color("Thought:", "yellow", log_file, heading_level=3)
+        print_with_color(think, "magenta", log_file)
+        print_with_color("Action:", "yellow", log_file, heading_level=3)
+        print_with_color(act, "magenta", log_file)
+        print_with_color("Summary:", "yellow", log_file, heading_level=3)
+        print_with_color(last_act, "magenta", log_file)
         if "FINISH" in act:
             return ["FINISH"]
         act_name = act.split("(")[0]
@@ -125,15 +125,15 @@ def parse_grid_rsp(rsp):
         return ["ERROR"]
 
 
-def parse_reflect_rsp(rsp):
+def parse_reflect_rsp(rsp, log_file=None):
     try:
         msg = rsp["choices"][0]["message"]["content"]
         decision = re.findall(r"Decision: (.*?)$", msg, re.MULTILINE)[0]
         think = re.findall(r"Thought: (.*?)$", msg, re.MULTILINE)[0]
-        print_with_color("Decision:", "yellow")
-        print_with_color(decision, "magenta")
-        print_with_color("Thought:", "yellow")
-        print_with_color(think, "magenta")
+        print_with_color("Decision:", "yellow", log_file, heading_level=3)
+        print_with_color(decision, "magenta", log_file)
+        print_with_color("Thought:", "yellow", log_file, heading_level=3)
+        print_with_color(think, "magenta", log_file)
         if decision == "INEFFECTIVE":
             return [decision, think]
         elif decision == "BACK" or decision == "CONTINUE" or decision == "SUCCESS":

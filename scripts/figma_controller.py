@@ -51,13 +51,6 @@ def list_all_devices(node_id, nodes):
             list_all_devices(canvas_id, node["children"])
 
 
-# def extract_ui_elements(client, screenshot_path):
-#     # Extract UI elements using the computer vision model
-#     labeled_image = client.infer(screenshot_path, model_id="vins-dataset-no-wire-modified/2")
-
-#     return labeled_image
-
-
 def draw_bbox_multi(img_path, output_path, predictions, dark_mode=False):
     imgcv = cv2.imread(img_path)
     count = 1
@@ -87,6 +80,11 @@ def draw_bbox_multi(img_path, output_path, predictions, dark_mode=False):
     return imgcv
 
 
+def append_to_log(text: str, log_file: str, break_line: bool = True):
+    with open(log_file, "a") as f:
+        f.write(text + ("\n" if break_line else ""))
+
+
 class SeleniumController:
     def __init__(self, url, password):
         self.url = url
@@ -101,8 +99,14 @@ class SeleniumController:
         self.driver.get(self.url)
         time.sleep(2)
 
-        # Find the password form and input the password
-        password_form = self.driver.find_element(By.ID, "link-password-form")
+        # Check if the password form is present
+        try:
+            password_form = self.driver.find_element(By.ID, "link-password-form")
+        except:
+            # If the password form is not present, return
+            return
+
+        # If the password form is present, input the password
         password_input = password_form.find_element(By.NAME, "password")
         password_input.send_keys(self.password)
 
@@ -155,10 +159,6 @@ class SeleniumController:
         # Convert the screenshot to an Image object
         img = Image.open(BytesIO(screenshot))
 
-        # # Draw a rectangle over the specified area
-        # draw = ImageDraw.Draw(img)
-        # draw.rectangle([(x, y), (x + width, y + height)], outline="red")
-
         # Crop the image to the specified area
         cropped_img = img.crop((x, y, x + width, y + height))
 
@@ -210,6 +210,9 @@ class SeleniumController:
 
         return node_id
 
+    def back(self):
+        self.driver.back()
+
     def tap(self, x, y):
         # Create an ActionChains object
         actions = webdriver.ActionChains(self.driver)
@@ -233,13 +236,14 @@ class SeleniumController:
         actions = webdriver.ActionChains(self.driver)
 
         # Move to the position and click and hold
-        actions.move_to_element_with_offset(
-            self.driver.find_element(By.TAG_NAME, "canvas"), x, y
-        ).click_and_hold().perform()
+        actions.move_by_offset(x, y).click_and_hold().perform()
 
         # Wait for the specified duration and release
         time.sleep(duration / 1000)
         actions.release().perform()
+
+        # Reset the pointer position to the original position
+        actions.move_by_offset(-x, -y).perform()
 
     def swipe(self, x, y, direction, dist="medium", quick=False):
 
@@ -261,21 +265,21 @@ class SeleniumController:
         actions = webdriver.ActionChains(self.driver)
 
         # Move to the start position, click and hold, move by the offset, and release
-        actions.move_to_element_with_offset(
-            self.driver.find_element(By.TAG_NAME, "canvas"), x, y
-        ).click_and_hold().move_by_offset(*offset).release().perform()
+        actions.move_by_offset(x, y).click_and_hold().move_by_offset(
+            *offset
+        ).release().perform()
 
     def draw_bounding_box(self, img_path, tl, br, output_path):
         img = cv2.imread(img_path)
         cv2.rectangle(img, tl, br, (0, 255, 0), 2)
         cv2.imwrite(output_path, img)
-        
+
     def get_canvas_bounds(self):
         canvas = self.driver.find_element(By.TAG_NAME, "canvas")
         location = canvas.location
         size = canvas.size
-        tl = (location['x'], location['y'])
-        br = (location['x'] + size['width'], location['y'] + size['height'])
+        tl = (location["x"], location["y"])
+        br = (location["x"] + size["width"], location["y"] + size["height"])
         return tl, br
 
 

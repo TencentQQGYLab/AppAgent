@@ -9,14 +9,15 @@ import dashscope
 from utils import print_with_color, encode_image
 
 
+from typing import List, Tuple
+
 class BaseModel:
     def __init__(self):
         pass
 
     @abstractmethod
-    def get_model_response(self, prompt: str, images: List[str]) -> (bool, str):
+    def get_model_response(self, prompt: str, images: List[str]) -> Tuple[bool, str]:
         pass
-
 
 class OpenAIModel(BaseModel):
     def __init__(self, base_url: str, api_key: str, model: str, temperature: float, max_tokens: int):
@@ -27,7 +28,7 @@ class OpenAIModel(BaseModel):
         self.temperature = temperature
         self.max_tokens = max_tokens
 
-    def get_model_response(self, prompt: str, images: List[str]) -> (bool, str):
+    def get_model_response(self, prompt: str, images: List[str]) -> Tuple[bool, str]:
         content = [
             {
                 "type": "text",
@@ -76,7 +77,7 @@ class QwenModel(BaseModel):
         self.model = model
         dashscope.api_key = api_key
 
-    def get_model_response(self, prompt: str, images: List[str]) -> (bool, str):
+    def get_model_response(self, prompt: str, images: List[str]) -> Tuple[bool, str]:
         content = [{
             "text": prompt
         }]

@@ -9,7 +9,7 @@ import sys
 import ast
 
 from config import load_config
-from utils import print_with_color, draw_bbox_multi, encode_image
+from utils import print_with_color, draw_bbox_multi
 from urllib.parse import unquote
 from figma_controller import (
     SeleniumController,
@@ -20,7 +20,24 @@ from figma_controller import (
 )
 
 import prompts
-from model import ask_gpt4v, parse_explore_rsp, parse_reflect_rsp
+from model import parse_explore_rsp, parse_reflect_rsp, OpenAIModel, QwenModel
+
+
+configs = load_config()
+
+if configs["MODEL"] == "OpenAI":
+    mllm = OpenAIModel(
+        base_url=configs["OPENAI_API_BASE"],
+        api_key=configs["OPENAI_API_KEY"],
+        model=configs["OPENAI_API_MODEL"],
+        temperature=configs["TEMPERATURE"],
+        max_tokens=configs["MAX_TOKENS"],
+    )
+elif configs["MODEL"] == "Qwen":
+    mllm = QwenModel(api_key=configs["DASHSCOPE_API_KEY"], model=configs["QWEN_MODEL"])
+else:
+    print_with_color(f"ERROR: Unsupported model type {configs['MODEL']}!", "red")
+    sys.exit()
 
 
 def get_figma_file_data(file_key, token, data_path):
@@ -44,8 +61,6 @@ def get_figma_file_data(file_key, token, data_path):
             )
             sys.exit(1)
 
-
-configs = load_config()
 
 arg_desc = "AppAgent - Autonomous Exploration for Figma"
 parser = argparse.ArgumentParser(
@@ -100,11 +115,6 @@ if starting_point_node_id_match is None:
 starting_point_node_id = unquote(starting_point_node_id_match.group(1))
 data_path = os.path.join(root_dir, "file.json")
 file = get_figma_file_data(file_key, token, data_path)
-
-# # Initialize the InferenceHTTPClient
-# client = InferenceHTTPClient(
-#     api_url="https://detect.roboflow.com", api_key=configs["ROBOFLOW_API_KEY"]
-# )
 
 # Get device list
 device_list = list_all_devices(starting_point_node_id, file["document"]["children"])
@@ -225,7 +235,6 @@ while round_count < configs["MAX_ROUNDS"]:
     append_to_log(
         f"![Before action labeled](./{round_count}_before_labeled.png)",
         report_log_path,
-        break_line=False,
     )
 
     prompt = re.sub(
@@ -234,22 +243,13 @@ while round_count < configs["MAX_ROUNDS"]:
         prompts.self_explore_task_with_persona_template,
     )
     prompt = re.sub(r"<last_act>", last_act, prompt)
-    base64_img_before = encode_image(
-        os.path.join(task_dir, f"{round_count}_before_labeled.png")
-    )
-    content = [
-        {"type": "text", "text": prompt},
-        {
-            "type": "image_url",
-            "image_url": {"url": f"data:image/jpeg;base64,{base64_img_before}"},
-        },
-    ]
+    base64_img_before = os.path.join(task_dir, f"{round_count}_before_labeled.png")
     print_with_color("Thinking about what to do in the next step...", "yellow")
-    rsp = ask_gpt4v(content)
+    status, rsp = mllm.get_model_response(prompt, [base64_img_before])
 
     # print(rsp)
 
-    if "error" not in rsp:
+    if status:
         with open(explore_log_path, "a") as logfile:
             log_item = {
                 "step": round_count,
@@ -309,7 +309,7 @@ while round_count < configs["MAX_ROUNDS"]:
             break
         time.sleep(configs["REQUEST_INTERVAL"])
     else:
-        print_with_color(rsp["error"]["message"], "red")
+        print_with_color(rsp, "red")
         break
 
     # Take a screenshot
@@ -325,9 +325,7 @@ while round_count < configs["MAX_ROUNDS"]:
         dark_mode=configs["DARK_MODE"],
     )
 
-    base64_img_after = encode_image(
-        os.path.join(task_dir, f"{round_count}_after_labeled.png")
-    )
+    base64_img_after = os.path.join(task_dir, f"{round_count}_after_labeled.png")
 
     if act_name == "tap":
         prompt = re.sub(
@@ -357,20 +355,9 @@ while round_count < configs["MAX_ROUNDS"]:
     prompt = re.sub(r"<task_desc>", task_desc, prompt)
     prompt = re.sub(r"<last_act>", last_act, prompt)
 
-    content = [
-        {"type": "text", "text": prompt},
-        {
-            "type": "image_url",
-            "image_url": {"url": f"data:image/jpeg;base64,{base64_img_before}"},
-        },
-        {
-            "type": "image_url",
-            "image_url": {"url": f"data:image/jpeg;base64,{base64_img_after}"},
-        },
-    ]
     print_with_color("Reflecting on my previous action...", "yellow")
-    rsp = ask_gpt4v(content)
-    if "error" not in rsp:
+    status, rsp = mllm.get_model_response(prompt, [base64_img_before, base64_img_after])
+    if status:
         resource_id = elem_list[int(area) - 1].uid
         with open(reflect_log_path, "a") as logfile:
             log_item = {

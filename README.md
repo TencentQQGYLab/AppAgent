@@ -56,6 +56,9 @@ An example of using the grid overlay to locate a UI element that is not labeled 
 
 https://github.com/mnotgod96/AppAgent/assets/27103154/71603333-274c-46ed-8381-2f9a34cdfc53
 
+*(New)* An example of using the AppAgent to operate a Figma prototype.
+https://www.youtube.com/watch?v=1HuCiL9el3I 
+
 ## 🚀 Quick Start
 
 This section will guide you on how to quickly use `gpt-4-vision-preview` (or `qwen-vl-max`) as an agent to complete specific tasks for you on your Android app or Figma prototype.

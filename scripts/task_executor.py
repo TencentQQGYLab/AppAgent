@@ -10,8 +10,8 @@ import time
 import prompts
 from config import load_config
 from and_controller import list_all_devices, AndroidController, traverse_tree
-from model import ask_gpt4v, parse_explore_rsp, parse_grid_rsp
-from utils import print_with_color, draw_bbox_multi, encode_image, draw_grid
+from model import parse_explore_rsp, parse_grid_rsp, OpenAIModel, QwenModel
+from utils import print_with_color, draw_bbox_multi, draw_grid
 
 arg_desc = "AppAgent Executor"
 parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=arg_desc)
@@ -20,6 +20,19 @@ parser.add_argument("--root_dir", default="./")
 args = vars(parser.parse_args())
 
 configs = load_config()
+
+if configs["MODEL"] == "OpenAI":
+    mllm = OpenAIModel(base_url=configs["OPENAI_API_BASE"],
+                       api_key=configs["OPENAI_API_KEY"],
+                       model=configs["OPENAI_API_MODEL"],
+                       temperature=configs["TEMPERATURE"],
+                       max_tokens=configs["MAX_TOKENS"])
+elif configs["MODEL"] == "Qwen":
+    mllm = QwenModel(api_key=configs["DASHSCOPE_API_KEY"],
+                     model=configs["QWEN_MODEL"])
+else:
+    print_with_color(f"ERROR: Unsupported model type {configs['MODEL']}!", "red")
+    sys.exit()
 
 app = args["app"]
 root_dir = args["root_dir"]
@@ -135,7 +148,7 @@ while round_count < configs["MAX_ROUNDS"]:
         break
     if grid_on:
         rows, cols = draw_grid(screenshot_path, os.path.join(task_dir, f"{dir_name}_{round_count}_grid.png"))
-        base64_img = encode_image(os.path.join(task_dir, f"{dir_name}_{round_count}_grid.png"))
+        image = os.path.join(task_dir, f"{dir_name}_{round_count}_grid.png")
         prompt = prompts.task_template_grid
     else:
         clickable_list = []
@@ -158,14 +171,11 @@ while round_count < configs["MAX_ROUNDS"]:
                 elem_list.append(elem)
         draw_bbox_multi(screenshot_path, os.path.join(task_dir, f"{dir_name}_{round_count}_labeled.png"), elem_list,
                         dark_mode=configs["DARK_MODE"])
-        base64_img = encode_image(os.path.join(task_dir, f"{dir_name}_{round_count}_labeled.png"))
+        image = os.path.join(task_dir, f"{dir_name}_{round_count}_labeled.png")
         if no_doc:
             prompt = re.sub(r"<ui_document>", "", prompts.task_template)
         else:
-            ui_doc = """
-            You also have access to the following documentations that describes the functionalities of UI 
-            elements you can interact on the screen. These docs are crucial for you to determine the target of your 
-            next action. You should always prioritize these documented elements for interaction:"""
+            ui_doc = ""
             for i, elem in enumerate(elem_list):
                 doc_path = os.path.join(docs_dir, f"{elem.uid}.txt")
                 if not os.path.exists(doc_path):
@@ -186,25 +196,17 @@ while round_count < configs["MAX_ROUNDS"]:
                     ui_doc += f"This element can be swiped directly without tapping. You can swipe horizontally on " \
                               f"this UI element. {doc_content['h_swipe']}\n\n"
             print_with_color(f"Documentations retrieved for the current interface:\n{ui_doc}", "magenta")
+            ui_doc = """
+            You also have access to the following documentations that describes the functionalities of UI 
+            elements you can interact on the screen. These docs are crucial for you to determine the target of your 
+            next action. You should always prioritize these documented elements for interaction:""" + ui_doc
             prompt = re.sub(r"<ui_document>", ui_doc, prompts.task_template)
     prompt = re.sub(r"<task_description>", task_desc, prompt)
     prompt = re.sub(r"<last_act>", last_act, prompt)
-    content = [
-        {
-            "type": "text",
-            "text": prompt
-        },
-        {
-            "type": "image_url",
-            "image_url": {
-                "url": f"data:image/jpeg;base64,{base64_img}"
-            }
-        }
-    ]
     print_with_color("Thinking about what to do in the next step...", "yellow")
-    rsp = ask_gpt4v(content)
+    status, rsp = mllm.get_model_response(prompt, [image])
 
-    if "error" not in rsp:
+    if status:
         with open(log_path, "a") as logfile:
             log_item = {"step": round_count, "prompt": prompt, "image": f"{dir_name}_{round_count}_labeled.png",
                         "response": rsp}
@@ -278,7 +280,7 @@ while round_count < configs["MAX_ROUNDS"]:
             grid_on = False
         time.sleep(configs["REQUEST_INTERVAL"])
     else:
-        print_with_color(rsp["error"]["message"], "red")
+        print_with_color(rsp, "red")
         break
 
 if task_complete:

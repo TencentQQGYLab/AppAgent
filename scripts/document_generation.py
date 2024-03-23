@@ -8,8 +8,8 @@ import time
 
 import prompts
 from config import load_config
-from model import ask_gpt4v
-from utils import print_with_color, encode_image
+from model import OpenAIModel, QwenModel
+from utils import print_with_color
 
 arg_desc = "AppAgent - Human Demonstration"
 parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=arg_desc)
@@ -19,6 +19,19 @@ parser.add_argument("--root_dir", default="./")
 args = vars(parser.parse_args())
 
 configs = load_config()
+
+if configs["MODEL"] == "OpenAI":
+    mllm = OpenAIModel(base_url=configs["OPENAI_API_BASE"],
+                       api_key=configs["OPENAI_API_KEY"],
+                       model=configs["OPENAI_API_MODEL"],
+                       temperature=configs["TEMPERATURE"],
+                       max_tokens=configs["MAX_TOKENS"])
+elif configs["MODEL"] == "Qwen":
+    mllm = QwenModel(api_key=configs["DASHSCOPE_API_KEY"],
+                     model=configs["QWEN_MODEL"])
+else:
+    print_with_color(f"ERROR: Unsupported model type {configs['MODEL']}!", "red")
+    sys.exit()
 
 root_dir = args["root_dir"]
 work_dir = os.path.join(root_dir, "apps")
@@ -48,8 +61,8 @@ with open(record_path, "r") as infile:
     step = len(infile.readlines()) - 1
     infile.seek(0)
     for i in range(1, step + 1):
-        img_before = encode_image(os.path.join(labeled_ss_dir, f"{demo_name}_{i}.png"))
-        img_after = encode_image(os.path.join(labeled_ss_dir, f"{demo_name}_{i + 1}.png"))
+        img_before = os.path.join(labeled_ss_dir, f"{demo_name}_{i}.png")
+        img_after = os.path.join(labeled_ss_dir, f"{demo_name}_{i + 1}.png")
         rec = infile.readline().strip()
         action, resource_id = rec.split(":::")
         action_type = action.split("(")[0]
@@ -103,29 +116,9 @@ with open(record_path, "r") as infile:
             }
 
         print_with_color(f"Waiting for GPT-4V to generate documentation for the element {resource_id}", "yellow")
-        content = [
-            {
-                "type": "text",
-                "text": prompt
-            },
-            {
-                "type": "image_url",
-                "image_url": {
-                    "url": f"data:image/jpeg;base64,{img_before}"
-                }
-            },
-            {
-                "type": "image_url",
-                "image_url": {
-                    "url": f"data:image/jpeg;base64,{img_after}"
-                }
-            }
-        ]
-
-        rsp = ask_gpt4v(content)
-        if "error" not in rsp:
-            msg = rsp["choices"][0]["message"]["content"]
-            doc_content[action_type] = msg
+        status, rsp = mllm.get_model_response(prompt, [img_before, img_after])
+        if status:
+            doc_content[action_type] = rsp
             with open(log_path, "a") as logfile:
                 log_item = {"step": i, "prompt": prompt, "image_before": f"{demo_name}_{i}.png",
                             "image_after": f"{demo_name}_{i + 1}.png", "response": rsp}
@@ -135,7 +128,7 @@ with open(record_path, "r") as infile:
             doc_count += 1
             print_with_color(f"Documentation generated and saved to {doc_path}", "yellow")
         else:
-            print_with_color(rsp["error"]["message"], "red")
+            print_with_color(rsp, "red")
         time.sleep(configs["REQUEST_INTERVAL"])
 
 print_with_color(f"Documentation generation phase completed. {doc_count} docs generated.", "yellow")

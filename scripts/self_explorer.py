@@ -10,8 +10,8 @@ import time
 import prompts
 from config import load_config
 from and_controller import list_all_devices, AndroidController, traverse_tree
-from model import ask_gpt4v, parse_explore_rsp, parse_reflect_rsp
-from utils import print_with_color, draw_bbox_multi, encode_image
+from model import parse_explore_rsp, parse_reflect_rsp, OpenAIModel, QwenModel
+from utils import print_with_color, draw_bbox_multi
 
 arg_desc = "AppAgent - Autonomous Exploration"
 parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=arg_desc)
@@ -20,6 +20,19 @@ parser.add_argument("--root_dir", default="./")
 args = vars(parser.parse_args())
 
 configs = load_config()
+
+if configs["MODEL"] == "OpenAI":
+    mllm = OpenAIModel(base_url=configs["OPENAI_API_BASE"],
+                       api_key=configs["OPENAI_API_KEY"],
+                       model=configs["OPENAI_API_MODEL"],
+                       temperature=configs["TEMPERATURE"],
+                       max_tokens=configs["MAX_TOKENS"])
+elif configs["MODEL"] == "Qwen":
+    mllm = QwenModel(api_key=configs["DASHSCOPE_API_KEY"],
+                     model=configs["QWEN_MODEL"])
+else:
+    print_with_color(f"ERROR: Unsupported model type {configs['MODEL']}!", "red")
+    sys.exit()
 
 app = args["app"]
 root_dir = args["root_dir"]
@@ -110,23 +123,11 @@ while round_count < configs["MAX_ROUNDS"]:
 
     prompt = re.sub(r"<task_description>", task_desc, prompts.self_explore_task_template)
     prompt = re.sub(r"<last_act>", last_act, prompt)
-    base64_img_before = encode_image(os.path.join(task_dir, f"{round_count}_before_labeled.png"))
-    content = [
-        {
-            "type": "text",
-            "text": prompt
-        },
-        {
-            "type": "image_url",
-            "image_url": {
-                "url": f"data:image/jpeg;base64,{base64_img_before}"
-            }
-        }
-    ]
+    base64_img_before = os.path.join(task_dir, f"{round_count}_before_labeled.png")
     print_with_color("Thinking about what to do in the next step...", "yellow")
-    rsp = ask_gpt4v(content)
+    status, rsp = mllm.get_model_response(prompt, [base64_img_before])
 
-    if "error" not in rsp:
+    if status:
         with open(explore_log_path, "a") as logfile:
             log_item = {"step": round_count, "prompt": prompt, "image": f"{round_count}_before_labeled.png",
                         "response": rsp}
@@ -172,7 +173,7 @@ while round_count < configs["MAX_ROUNDS"]:
             break
         time.sleep(configs["REQUEST_INTERVAL"])
     else:
-        print_with_color(rsp["error"]["message"], "red")
+        print_with_color(rsp, "red")
         break
 
     screenshot_after = controller.get_screenshot(f"{round_count}_after", task_dir)
@@ -180,7 +181,7 @@ while round_count < configs["MAX_ROUNDS"]:
         break
     draw_bbox_multi(screenshot_after, os.path.join(task_dir, f"{round_count}_after_labeled.png"), elem_list,
                     dark_mode=configs["DARK_MODE"])
-    base64_img_after = encode_image(os.path.join(task_dir, f"{round_count}_after_labeled.png"))
+    base64_img_after = os.path.join(task_dir, f"{round_count}_after_labeled.png")
 
     if act_name == "tap":
         prompt = re.sub(r"<action>", "tapping", prompts.self_explore_reflect_template)
@@ -202,27 +203,9 @@ while round_count < configs["MAX_ROUNDS"]:
     prompt = re.sub(r"<task_desc>", task_desc, prompt)
     prompt = re.sub(r"<last_act>", last_act, prompt)
 
-    content = [
-        {
-            "type": "text",
-            "text": prompt
-        },
-        {
-            "type": "image_url",
-            "image_url": {
-                "url": f"data:image/jpeg;base64,{base64_img_before}"
-            }
-        },
-        {
-            "type": "image_url",
-            "image_url": {
-                "url": f"data:image/jpeg;base64,{base64_img_after}"
-            }
-        }
-    ]
     print_with_color("Reflecting on my previous action...", "yellow")
-    rsp = ask_gpt4v(content)
-    if "error" not in rsp:
+    status, rsp = mllm.get_model_response(prompt, [base64_img_before, base64_img_after])
+    if status:
         resource_id = elem_list[int(area) - 1].uid
         with open(reflect_log_path, "a") as logfile:
             log_item = {"step": round_count, "prompt": prompt, "image_before": f"{round_count}_before_labeled.png",

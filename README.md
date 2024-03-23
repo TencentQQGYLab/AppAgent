@@ -58,10 +58,11 @@ https://github.com/mnotgod96/AppAgent/assets/27103154/71603333-274c-46ed-8381-2f
 
 ## 🚀 Quick Start
 
-This section will guide you on how to quickly use `gpt-4-vision-preview` (or `qwen-vl-max`) as an agent to complete specific tasks for you on
-your Android app.
+This section will guide you on how to quickly use `gpt-4-vision-preview` (or `qwen-vl-max`) as an agent to complete specific tasks for you on your Android app or Figma prototype.
 
-### ⚙️ Step 1. Prerequisites
+### For Android: <a name="for-android"></a>
+
+#### ⚙️ Step 1. Prerequisites
 
 1. On your PC, download and install [Android Debug Bridge](https://developer.android.com/tools/adb) (adb) which is a
    command-line tool that lets you communicate with your Android device from the PC.
@@ -86,7 +87,7 @@ cd AppAgent
 pip install -r requirements.txt
 ```
 
-### 🤖 Step 2. Configure the Agent
+#### 🤖 Step 2. Configure the Agent
 
 AppAgent needs to be powered by a multi-modal model which can receive both text and visual inputs. During our experiment
 , we used `gpt-4-vision-preview` as the model to make decisions on how to take actions to complete a task on the smartphone.
@@ -109,7 +110,7 @@ in the `config.yaml` file. Change the `MODEL` field from `OpenAI` to `Qwen` as w
 
 If you want to test AppAgent using your own models, you should write a new model class in `scripts/model.py` accordingly.
 
-### 🔍 Step 3. Exploration Phase
+#### 🔍 Step 3. Exploration Phase
 
 Our paper proposed a novel solution that involves two phases, exploration, and deployment, to turn GPT-4V into a capable 
 agent that can help users operate their Android phones when a task is given. The exploration phase starts with a task 
@@ -117,7 +118,7 @@ given by you, and you can choose to let the agent either explore the app on its 
 In both cases, the agent generates documentation for elements interacted during the exploration/demonstration and 
 saves them for use in the deployment phase.
 
-#### Option 1: Autonomous Exploration
+##### Option 1: Autonomous Exploration
 
 This solution features a fully autonomous exploration which allows the agent to explore the use of the app by attempting
 the given task without any intervention from humans.
@@ -131,7 +132,7 @@ documentation for the elements explored.
 python learn.py
 ```
 
-#### Option 2: Learning from Human Demonstrations
+##### Option 2: Learning from Human Demonstrations
 
 This solution requires users to demonstrate a similar task first. AppAgent will learn from the demo and generate 
 documentations for UI elements seen during the demo.
@@ -148,7 +149,12 @@ python learn.py
 
 ![](./assets/demo.png)
 
-### 📱 Step 4. Deployment Phase
+##### Option 3: Figma Prototype Autonomous Exploration
+
+This mode allows the agent to autonomously explore a Figma prototype. For more details on how this mode works, please refer to the [Figma Exploration Phase](#figma-autonomous-exploration).
+
+
+#### 📱 Step 4. Deployment Phase
 
 After the exploration phase finishes, you can run `run.py` in the root directory. Follow the prompted instructions to enter 
 the name of the app, select the appropriate documentation base you want the agent to use and provide the task 
@@ -159,6 +165,58 @@ documentation (success rate not guaranteed).
 ```bash
 python run.py
 ```
+
+### For Figma: <a name="for-figma"></a>
+
+This feature is designed for designers and user researchers. It introduces automated user testing for Figma prototypes, aiming to save time and reduce costs associated with user research. We believe this will make the design iteration process more efficient and effective.
+
+#### ⚙️ Step 1. Prerequisites
+
+To use AppAgent with Figma, you first need to download the [Figma desktop client](https://www.figma.com/downloads/) and [Google Chrome browser](https://www.google.com/chrome/). After installing the Figma desktop client and the Chrome browser, generate a personal access token in Figma:
+
+1. From the file browser, click the account menu in the top-left corner and select Settings.
+1. Scroll to the Personal access tokens section.
+1. Enter a name for your new token and press Return / Enter.
+1. Copy the token that is generated
+
+For more details, refer to the [Figma: Manage-personal-access-tokens](https://help.figma.com/hc/en-us/articles/8085703771159-Manage-personal-access-tokens).
+
+(Optional) If you're concerned about the security of the Figma file you want to test, you can set a password for your Figma project:
+
+1. Open the Prototype and click Share in the toolbar.
+1. Update the access setting to Anyone with the link and password.
+1. Enter a password in the Add password field, or click  to generate one. 
+1. Click Set.
+
+Please note that it’s not possible to view a password after it has been set. If you forget to copy the password, you can reset it. For more details, refer to the [Figma: Set-a-password-for-a-File-or-Prototype](https://help.figma.com/hc/en-us/articles/360040531773-Set-a-password-for-a-File-or-Prototype).
+
+#### 🤖 Step 2. Configure the Agent
+
+The configuration process for Figma is similar to that for Android. Refer to the Android guide above for the general process.
+
+For Figma, you need to input the values you obtained in the Prerequisites step. Enter the personal access token you generated in Figma into the `FIGMA_ACCESS_TOKEN` field. If you set a password for your Figma prototype, enter it into the `FIGMA_PROTOTYPE_PASSWORD` field.
+
+#### 🔍 Step 3. Exploration Phase 
+
+In the Figma version of AppAgent, we provide Option 3: Autonomous Exploration for Figma prototypes. The basic operation is similar to the Android version, with the main difference being that the Figma prototype is launched in a separate auto-adjusting web browser for operation.
+
+#### Option 3: Figma Prototype Autonomous Exploration <a name="figma-autonomous-exploration"></a>
+
+This mode allows the agent to autonomously explore a Figma prototype. To start, run `learn.py` in the root directory, select `Option 3` as the operating mode, and provide the Figma prototype link and task description. The agent will then explore the prototype and generate documentation for the elements interacted with.
+
+```bash
+python learn.py
+```
+![figma_demo](./assets/demo_figma.png)
+
+We designed the Figma Autonomous Exploration mode with designers in mind. It's a tool that simplifies user testing and research, providing instant user testing capabilities. For that, it generates a user report in markdown, making it easy to share and understand.
+
+![figma_remore_demo](./assets/demo_markdown.png)
+
+
+#### 📱 Step 4. Deployment Phase
+
+The deployment phase for Figma is identical to that for Android. There are no differences in this step between the two versions. For a detailed understanding of how this works, please refer to the [Android Deployment Phase](#for-android).
 
 ## 💡 Tips<a name="tips"></a>
 - For an improved experience, you might permit AppAgent to undertake a broader range of tasks through autonomous exploration, or you can directly demonstrate more app functions to enhance the app documentation. Generally, the more extensive the documentation provided to the agent, the higher the likelihood of successful task completion.

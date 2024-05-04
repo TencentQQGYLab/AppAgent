@@ -9,14 +9,15 @@ arg_desc = "AppAgent - exploration phase"
 parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=arg_desc)
 parser.add_argument("--app")
 parser.add_argument("--root_dir", default="./")
-parser.add_argument("--url")  # Add url argument
+parser.add_argument("--url")  
+parser.add_argument("--password", type=str, required=None, help="Figma prototype password (optional)")
 
 args = vars(parser.parse_args())
 
 app = args["app"]
 root_dir = args["root_dir"]
-url = args["url"]  # Get url from arguments
-
+url = args["url"]  
+password = args["password"]
 
 print_with_color("Welcome to the exploration phase of AppAgent!\nThe exploration phase aims at generating "
                  "documentations for UI elements through either autonomous exploration or human demonstration. "
@@ -50,4 +51,12 @@ else:  # user_input == "3"
     print_with_color("What is the Figma ProtoType URL?", "blue")
     url = input()
     url = url.strip()
-    os.system(f'python scripts/self_explorer_figma.py --app {app} --url "{url}" --root_dir {root_dir}')  
+    # If password is not provided, prompt the user for it
+    if password is None:
+        print_with_color("If the Figma prototype is password-protected, please enter the password. If not, just press Enter:", "blue")
+        password = input()
+
+    if password:
+        os.system(f'python scripts/self_explorer_figma.py --app {app} --url "{url}" --root_dir {root_dir} --password "{password}"')  
+    else:
+        os.system(f'python scripts/self_explorer_figma.py --app {app} --url "{url}" --root_dir {root_dir}')

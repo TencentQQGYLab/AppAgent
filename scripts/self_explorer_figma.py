@@ -22,7 +22,6 @@ from figma_controller import (
 import prompts
 from model import parse_explore_rsp, parse_reflect_rsp, OpenAIModel, QwenModel
 
-
 configs = load_config()
 
 if configs["MODEL"] == "OpenAI":
@@ -38,7 +37,6 @@ elif configs["MODEL"] == "Qwen":
 else:
     print_with_color(f"ERROR: Unsupported model type {configs['MODEL']}!", "red")
     sys.exit()
-
 
 def get_figma_file_data(file_key, token, data_path):
     if os.path.exists(data_path):
@@ -61,7 +59,6 @@ def get_figma_file_data(file_key, token, data_path):
             )
             sys.exit(1)
 
-
 arg_desc = "AppAgent - Autonomous Exploration for Figma"
 parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter, description=arg_desc
@@ -69,11 +66,19 @@ parser = argparse.ArgumentParser(
 parser.add_argument("--app")
 parser.add_argument("--root_dir", default="./")
 parser.add_argument("--url")
+parser.add_argument("--password", type=str, required=None, help="Figma prototype password")
+parser.add_argument("--task_desc")  
+parser.add_argument("--persona_desc", default=None, help="Description of the user persona") 
+parser.add_argument("--ui", type=bool, default=False, help="Open the report log in markdown viewer")
 args = vars(parser.parse_args())
 
-app = args["app"]
+app = args["app"].replace(" ", "") if args["app"] else None
 root_dir = args["root_dir"]
 url = args["url"]
+password = args["password"]
+task_desc = args["task_desc"].strip('"') if args["task_desc"] else None
+persona_desc = args["persona_desc"].strip('"') if args["persona_desc"] else None
+
 
 if not app:
     print_with_color("What is the name of the target app?", "blue")
@@ -112,6 +117,7 @@ if starting_point_node_id_match is None:
         "ERROR: Failed to extract starting-point-node-id from the URL", "red"
     )
     sys.exit(1)
+
 starting_point_node_id = unquote(starting_point_node_id_match.group(1))
 data_path = os.path.join(root_dir, "file.json")
 file = get_figma_file_data(file_key, token, data_path)
@@ -135,7 +141,7 @@ print_with_color(f"Screen resolution: {width}x{height}", "yellow")
 
 
 # Create a SeleniumController object
-selenium_controller = SeleniumController(url, configs["FIGMA_PROTOTYPE_PASSWORD"])
+selenium_controller = SeleniumController(url, password)
 
 # Open Chrome browser and navigate to the URL
 selenium_controller.execute_selenium()
@@ -151,11 +157,36 @@ x, y = selenium_controller.calculate_position(
 # Print the adjusted width, height, x, and y values
 print_with_color(f"Bounding box: {x, y, width, height}", "yellow")
 
-print_with_color(
-    "Please enter the description of the task you want me to complete in a few sentences:",
-    "blue",
-)
-task_desc = input()
+# Get the task description from the user
+if not task_desc:
+    print_with_color(
+        "Please enter the description of the task you want me to complete in a few sentences:",
+        "blue",
+    )
+    task_desc = input()
+else:
+    print_with_color(
+        f"Task description provided: {task_desc}",
+        "yellow",
+    )
+
+# Get the persona description from the user
+if not args["ui"]:
+    if not persona_desc:
+        print_with_color(
+            "(Optional) Please enter the description of the user persona you'd like me to emulate : ",
+            "blue",
+        )
+        persona_desc = input()
+    else:
+        print_with_color(
+            f"Persona description provided: {persona_desc}",
+            "yellow",
+        )
+else:
+    persona_desc = ""
+
+
 doc_count = 0
 round_count = 0
 last_act = "None"
@@ -168,12 +199,11 @@ append_to_log(task_name, report_log_path)
 append_to_log(f"## Task Description", report_log_path)
 append_to_log(task_desc, report_log_path)
 
-# Get the persona description from the user
-print_with_color(
-    "(Optional) Please enter the description of the user persona you'd like me to emulate : ",
-    "blue",
-)
-persona_desc = input()
+# Open the report log in the markdown viewer if the user specified the --ui flag
+if args["ui"]:
+    os.system(f"open {report_log_path}")
+
+
 # If the user entered a persona description, replace the placeholder with the description
 if persona_desc:
     persona_desc = f"as a person who is {persona_desc}"
@@ -185,7 +215,6 @@ prompt = re.sub(
     persona_desc,
     prompts.self_explore_task_with_persona_template,
 )
-
 
 while round_count < configs["MAX_ROUNDS"]:
     round_count += 1

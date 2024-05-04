@@ -197,11 +197,12 @@ Please note that it’s not possible to view a password after it has been set. I
 
 The configuration process for Figma is similar to that for Android. Refer to the Android guide above for the general process.
 
-For Figma, you need to input the values you obtained in the Prerequisites step. Enter the personal access token you generated in Figma into the `FIGMA_ACCESS_TOKEN` field. If you set a password for your Figma prototype, enter it into the `FIGMA_PROTOTYPE_PASSWORD` field.
+For Figma, you need to input the values you obtained in the Prerequisites step. Enter the personal access token you generated in Figma into the `FIGMA_ACCESS_TOKEN` field.
 
 #### 🔍 Step 3. Exploration Phase 
 
 In the Figma version of AppAgent, we provide Option 3: Autonomous Exploration for Figma prototypes. The basic operation is similar to the Android version, with the main difference being that the Figma prototype is launched in a separate auto-adjusting web browser for operation.
+
 
 #### Option 3: Figma Prototype Autonomous Exploration <a name="figma-autonomous-exploration"></a>
 
@@ -210,13 +211,22 @@ This mode allows the agent to autonomously explore a Figma prototype. To start, 
 ```bash
 python learn.py
 ```
-![figma_demo](./assets/demo_figma.png)
+
+Alternatively, you can also use the GUI version of the Figma Autonomous Exploration mode. This can be done by running `learn_gui.py` or by double-clicking the `run.command` file. This provides a more user-friendly interface for testing.
+
+```bash
+python learn_gui.py
+```
+
+Or double-click the `run.command` file.
+
+![GUI](./assets/GUI.png)
 
 We designed the Figma Autonomous Exploration mode with designers in mind. It's a tool that simplifies user testing and research, providing instant user testing capabilities. For that, it generates a user report in markdown, making it easy to share and understand.
 
 ![figma_remore_demo](./assets/demo_markdown.png)
 
-
+---
 #### 📱 Step 4. Deployment Phase
 
 The deployment phase for Figma is identical to that for Android. There are no differences in this step between the two versions. For a detailed understanding of how this works, please refer to the [Android Deployment Phase](#for-android).

@@ -116,6 +116,18 @@ class SeleniumController:
         )
         continue_button.click()
 
+        # Wait for the page to load after submitting the password
+        time.sleep(2)
+
+        # Check if the password form is still present
+        try:
+            password_form = self.driver.find_element(By.ID, "link-password-form")
+            print("ERROR: The provided password is incorrect.")
+            sys.exit(1)
+        except:
+            # If the password form is not present, continue
+            pass
+
     def get_canvas_size(self):
         # Wait until the <canvas> element is present
         WebDriverWait(self.driver, 20).until(

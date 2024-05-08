@@ -13,17 +13,18 @@ then
 
     if [[ "$ARCHITECTURE" == "arm64" ]]; then
         # Download Miniforge installer for Apple Silicon
-        curl -O https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-MacOSX-arm64.sh
+        curl -LJO https://github.com/conda-forge/miniforge/releases/download/24.3.0-0/Miniforge3-24.3.0-0-MacOSX-arm64.sh
         # Install Miniforge
-        bash Miniforge3-MacOSX-arm64.sh -b
+        bash Miniforge3-24.3.0-0-MacOSX-arm64.sh -b
     else
         # Download Miniforge installer for Intel Mac
-        curl -O https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-MacOSX-x86_64.sh
+        curl -LJO https://github.com/conda-forge/miniforge/releases/download/24.3.0-0/Miniforge3-24.3.0-0-MacOSX-x86_64.sh
         # Install Miniforge
-        bash Miniforge3-MacOSX-x86_64.sh -b
+        bash Miniforge3-24.3.0-0-MacOSX-x86_64.sh -b
     fi
-else
-    echo -e "\033[1;33mConda is already installed.\033[0m"
+
+    # Add conda to PATH
+    export PATH="/Users/$USER/miniforge3/bin:$PATH"
 fi
 
 # Determine the shell of the user

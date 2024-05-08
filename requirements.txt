@@ -7,7 +7,13 @@ pyyaml
 requests
 langchain
 langchain-openai
-selenium==4.6
+selenium
+webdriver_manager
 numpy
 Pillow
 customtkinter
+
+# Add the missing packages
+sounddevice
+matplotlib
+keras

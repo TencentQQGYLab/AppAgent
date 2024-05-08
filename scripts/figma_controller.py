@@ -9,9 +9,11 @@ from io import BytesIO
 import numpy as np
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 def find_canvas_id(node_id, nodes, canvas_id=None):
@@ -95,7 +97,11 @@ class SeleniumController:
         options = Options()
         options.add_argument("--start-maximized")
         options.add_experimental_option("detach", True)
-        self.driver = webdriver.Chrome(options=options)
+
+        # Use webdriver_manager to download and install chromedriver
+        service = Service(ChromeDriverManager().install())
+        self.driver = webdriver.Chrome(service=service, options=options)
+
         self.driver.get(self.url)
         time.sleep(2)
 

@@ -1,6 +1,7 @@
 import sys
 import threading
-from tkinter import messagebox, filedialog
+import time
+from tkinter import messagebox, filedialog, ttk  
 import customtkinter as ctk
 import tkinter as tk
 import subprocess
@@ -66,7 +67,7 @@ class AppAgentGUI(ctk.CTk):
             text_color=("gray10", "gray90"),
             hover_color=("gray70", "gray30"),
             anchor="w",
-            command=None,
+            command=None, 
         )
         self.step3_button.grid(row=3, column=0, sticky="ew")
 
@@ -155,7 +156,22 @@ class AppAgentGUI(ctk.CTk):
     def create_step3_frame(self):
         frame = ctk.CTkFrame(self, corner_radius=0, fg_color="transparent")
         frame.grid_columnconfigure(0, weight=1)
-        frame.grid_rowconfigure(1, weight=1)
+        frame.grid_rowconfigure((0, 1, 2), weight=1)  # Add weights to center widgets vertically
+
+        success_label = ctk.CTkLabel(frame, text="Request successful: Chrome browser will automatically open and perform your task.")
+        success_label.grid(row=0, column=0, padx=20, pady=(20, 5))  # Reduce padding at the bottom
+
+        style = ttk.Style()
+        style.configure("TProgressbar", thickness=50)
+        self.progress = ttk.Progressbar(frame, mode='indeterminate', style="TProgressbar")
+        self.progress.grid(row=1, column=0, padx=20, pady=5)  # Reduce padding on the top and bottom
+
+        quit_button = ctk.CTkButton(
+            frame,
+            text="Quit",
+            command=self.quit_app,
+        )
+        quit_button.grid(row=2, column=0, padx=20, pady=(5, 20))  # Reduce padding at the top
 
         return frame
 
@@ -182,29 +198,23 @@ class AppAgentGUI(ctk.CTk):
 
     def step3_button_event(self):
         self.select_frame_by_name("step3")
-
-        success_label = ctk.CTkLabel(self.step3_frame, text="Request successful: Chrome browser will automatically open and perform your task.")
-        success_label.grid(row=0, column=0, padx=20, pady=20)
+        self.progress.start()
 
         command_text = self.step2_frame.command_text.get("1.0", "end").strip()
         persona_text = self.step2_frame.persona_text.get("1.0", "end").strip()
-
         app = self.step1_frame.app_entry.get()
         url = self.step1_frame.url_entry.get()
         password = self.step1_frame.password_entry.get()
 
-        threading.Timer(2.0, self.run_script, args=[app, url, command_text, persona_text, password]).start()
+        threading.Timer(1.0, self.run_script, args=[app, url, command_text, persona_text, password]).start()
 
     def run_script(self, app, url, command_text, persona_text=None, password=None):
-        
         # Check if the script is running as a PyInstaller bundle
         if getattr(sys, 'frozen', False):
             # If the script is running as a PyInstaller bundle, use the _MEIPASS directory
             root_dir = sys._MEIPASS
             script_path = os.path.join(root_dir, "scripts/self_explorer_figma.py")
             script_args = [script_path, "--app", app, "--url", url, "--task_desc", f'"{command_text}"', "--ui", "True", --root_dir, root_dir]
-
-
         else:
             # If the script is running from a Python interpreter, use without root_dir
             os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -217,6 +227,13 @@ class AppAgentGUI(ctk.CTk):
             script_args.extend(["--persona_desc", f'"{persona_text}"'])
 
         subprocess.run(script_args)
+
+        # Stop the progress bar
+        self.progress.stop()
+
+    def quit_app(self):
+        os._exit(0)
+
 
 if __name__ == "__main__":
     app = AppAgentGUI()

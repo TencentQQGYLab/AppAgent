@@ -214,12 +214,13 @@ class AppAgentGUI(ctk.CTk):
             # If the script is running as a PyInstaller bundle, use the _MEIPASS directory
             root_dir = sys._MEIPASS
             script_path = os.path.join(root_dir, "scripts/self_explorer_figma.py")
-            script_args = [script_path, "--app", app, "--url", url, "--task_desc", f'"{command_text}"', "--ui", "True", --root_dir, root_dir]
+            script_args = [script_path, "--app", app, "--url", url, "--task_desc", f'"{command_text}"', "--ui", "True", "--root_dir", root_dir]
         else:
             # If the script is running from a Python interpreter, use without root_dir
             os.chdir(os.path.dirname(os.path.abspath(__file__)))
             script_path = "scripts/self_explorer_figma.py"
             script_args = ["python", script_path, "--app", app, "--url", url, "--task_desc", f'"{command_text}"', "--ui", "True"]
+
 
         if password:
             script_args.extend(["--password", password])

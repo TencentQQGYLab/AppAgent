@@ -67,7 +67,7 @@ class AppAgentGUI(ctk.CTk):
             text_color=("gray10", "gray90"),
             hover_color=("gray70", "gray30"),
             anchor="w",
-            command=None, 
+            command=self.step3_button_event,  # Change this line
         )
         self.step3_button.grid(row=3, column=0, sticky="ew")
 
@@ -156,22 +156,22 @@ class AppAgentGUI(ctk.CTk):
     def create_step3_frame(self):
         frame = ctk.CTkFrame(self, corner_radius=0, fg_color="transparent")
         frame.grid_columnconfigure(0, weight=1)
-        frame.grid_rowconfigure((0, 1, 2), weight=1)  # Add weights to center widgets vertically
+        frame.grid_rowconfigure(1, weight=1)
 
         success_label = ctk.CTkLabel(frame, text="Request successful: Chrome browser will automatically open and perform your task.")
-        success_label.grid(row=0, column=0, padx=20, pady=(20, 5))  # Reduce padding at the bottom
+        success_label.grid(row=0, column=0, padx=20, pady=20)
 
         style = ttk.Style()
         style.configure("TProgressbar", thickness=50)
         self.progress = ttk.Progressbar(frame, mode='indeterminate', style="TProgressbar")
-        self.progress.grid(row=1, column=0, padx=20, pady=5)  # Reduce padding on the top and bottom
+        self.progress.grid(row=1, column=0, padx=20, pady=20)
 
         quit_button = ctk.CTkButton(
             frame,
             text="Quit",
             command=self.quit_app,
         )
-        quit_button.grid(row=2, column=0, padx=20, pady=(5, 20))  # Reduce padding at the top
+        quit_button.grid(row=2, column=0, sticky="s")
 
         return frame
 
@@ -214,13 +214,12 @@ class AppAgentGUI(ctk.CTk):
             # If the script is running as a PyInstaller bundle, use the _MEIPASS directory
             root_dir = sys._MEIPASS
             script_path = os.path.join(root_dir, "scripts/self_explorer_figma.py")
-            script_args = [script_path, "--app", app, "--url", url, "--task_desc", f'"{command_text}"', "--ui", "True", "--root_dir", root_dir]
+            script_args = [script_path, "--app", app, "--url", url, "--task_desc", f'"{command_text}"', "--ui", "True", --root_dir, root_dir]
         else:
             # If the script is running from a Python interpreter, use without root_dir
             os.chdir(os.path.dirname(os.path.abspath(__file__)))
             script_path = "scripts/self_explorer_figma.py"
             script_args = ["python", script_path, "--app", app, "--url", url, "--task_desc", f'"{command_text}"', "--ui", "True"]
-
 
         if password:
             script_args.extend(["--password", password])

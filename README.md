@@ -218,8 +218,6 @@ Alternatively, you can also use the GUI version of the Figma Autonomous Explorat
 python learn_gui.py
 ```
 
-Or double-click the `run.command` file.
-
 ![GUI](./assets/GUI.png)
 
 We designed the Figma Autonomous Exploration mode with designers in mind. It's a tool that simplifies user testing and research, providing instant user testing capabilities. For that, it generates a user report in markdown, making it easy to share and understand.

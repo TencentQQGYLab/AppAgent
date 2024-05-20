@@ -10,7 +10,7 @@ import time
 import prompts
 from config import load_config
 from and_controller import list_all_devices, AndroidController, traverse_tree
-from model import parse_explore_rsp, parse_reflect_rsp, OpenAIModel, QwenModel
+from model import parse_explore_rsp, parse_reflect_rsp, OpenAIModel, QwenModel, AzureModel
 from utils import print_with_color, draw_bbox_multi
 
 arg_desc = "AppAgent - Autonomous Exploration"
@@ -22,14 +22,23 @@ args = vars(parser.parse_args())
 configs = load_config()
 
 if configs["MODEL"] == "OpenAI":
-    mllm = OpenAIModel(base_url=configs["OPENAI_API_BASE"],
-                       api_key=configs["OPENAI_API_KEY"],
-                       model=configs["OPENAI_API_MODEL"],
-                       temperature=configs["TEMPERATURE"],
-                       max_tokens=configs["MAX_TOKENS"])
+    mllm = OpenAIModel(
+        base_url=configs["OPENAI_API_BASE"],
+        api_key=configs["OPENAI_API_KEY"],
+        model=configs["OPENAI_API_MODEL"],
+        temperature=configs["TEMPERATURE"],
+        max_tokens=configs["MAX_TOKENS"],
+    )
 elif configs["MODEL"] == "Qwen":
-    mllm = QwenModel(api_key=configs["DASHSCOPE_API_KEY"],
-                     model=configs["QWEN_MODEL"])
+    mllm = QwenModel(api_key=configs["DASHSCOPE_API_KEY"], model=configs["QWEN_MODEL"])
+elif configs["MODEL"] == "Azure":
+    mllm = AzureModel(
+        base_url=configs["OPENAI_API_BASE"],
+        api_key=configs["OPENAI_API_KEY"],
+        model=configs["OPENAI_API_MODEL"],
+        temperature=configs["TEMPERATURE"],
+        max_tokens=configs["MAX_TOKENS"],
+    )
 else:
     print_with_color(f"ERROR: Unsupported model type {configs['MODEL']}!", "red")
     sys.exit()

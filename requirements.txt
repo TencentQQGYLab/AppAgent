@@ -17,3 +17,4 @@ customtkinter
 sounddevice
 matplotlib
 keras
+tensorflow

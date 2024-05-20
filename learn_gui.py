@@ -39,7 +39,7 @@ class AppAgentGUI(ctk.CTk):
             text_color=("gray10", "gray90"),
             hover_color=("gray70", "gray30"),
             anchor="w",
-            command=None,
+            command=self.step1_button_event,
         )
         self.step1_button.grid(row=1, column=0, sticky="ew")
 
@@ -48,12 +48,12 @@ class AppAgentGUI(ctk.CTk):
             corner_radius=0,
             height=40,
             border_spacing=10,
-            text="Step 2: Comments & Persona",
+            text="Step 2: Task & Persona",
             fg_color="transparent",
             text_color=("gray10", "gray90"),
             hover_color=("gray70", "gray30"),
             anchor="w",
-            command=None,
+            command=self.step2_button_event,
         )
         self.step2_button.grid(row=2, column=0, sticky="ew")
 
@@ -62,12 +62,12 @@ class AppAgentGUI(ctk.CTk):
             corner_radius=0,
             height=40,
             border_spacing=10,
-            text="Step 3: Results",
+            text="Step 3: Execute Task",
             fg_color="transparent",
             text_color=("gray10", "gray90"),
             hover_color=("gray70", "gray30"),
             anchor="w",
-            command=self.step3_button_event,  # Change this line
+            command=self.step3_button_event,  
         )
         self.step3_button.grid(row=3, column=0, sticky="ew")
 
@@ -156,22 +156,26 @@ class AppAgentGUI(ctk.CTk):
     def create_step3_frame(self):
         frame = ctk.CTkFrame(self, corner_radius=0, fg_color="transparent")
         frame.grid_columnconfigure(0, weight=1)
+        frame.grid_rowconfigure(0, weight=1)
         frame.grid_rowconfigure(1, weight=1)
+        frame.grid_rowconfigure(2, weight=1)
+        frame.grid_rowconfigure(3, weight=1)
+        frame.grid_rowconfigure(4, weight=1)
 
         success_label = ctk.CTkLabel(frame, text="Request successful: Chrome browser will automatically open and perform your task.")
-        success_label.grid(row=0, column=0, padx=20, pady=20)
+        success_label.grid(row=1, column=0, padx=20, pady=20)
 
         style = ttk.Style()
         style.configure("TProgressbar", thickness=50)
         self.progress = ttk.Progressbar(frame, mode='indeterminate', style="TProgressbar")
-        self.progress.grid(row=1, column=0, padx=20, pady=20)
+        self.progress.grid(row=2, column=0, padx=20, pady=20)
 
         quit_button = ctk.CTkButton(
             frame,
             text="Quit",
             command=self.quit_app,
         )
-        quit_button.grid(row=2, column=0, sticky="s")
+        quit_button.grid(row=3, column=0, sticky="s")
 
         return frame
 
@@ -192,7 +196,9 @@ class AppAgentGUI(ctk.CTk):
             self.step3_frame.grid(row=0, column=1, sticky="nsew")
         else:
             self.step3_frame.grid_forget()
-
+    def step1_button_event(self):
+        self.select_frame_by_name("step1")
+        
     def step2_button_event(self):
         self.select_frame_by_name("step2")
 

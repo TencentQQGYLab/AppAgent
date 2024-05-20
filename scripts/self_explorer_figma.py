@@ -46,7 +46,8 @@ else:
     print_with_color(f"ERROR: Unsupported model type {configs['MODEL']}!", "red")
     sys.exit()
 
-def get_figma_file_data(file_key, token, data_path):
+def get_figma_file_data(file_key, token, root_dir):
+    data_path = os.path.join(root_dir, f"{file_key}.json")
     if os.path.exists(data_path):
         with open(data_path, "r") as f:
             return json.load(f)
@@ -127,8 +128,7 @@ if starting_point_node_id_match is None:
     sys.exit(1)
 
 starting_point_node_id = unquote(starting_point_node_id_match.group(1))
-data_path = os.path.join(root_dir, "file.json")
-file = get_figma_file_data(file_key, token, data_path)
+file = get_figma_file_data(file_key, token, root_dir)
 
 # Get device list
 device_list = list_all_devices(starting_point_node_id, file["document"]["children"])

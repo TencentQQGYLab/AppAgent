@@ -18,3 +18,4 @@ sounddevice
 matplotlib
 keras
 tensorflow
+openai

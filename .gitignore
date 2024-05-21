@@ -1,7 +1,6 @@
-
-file.json
 /__pycache__
 /apps
 /scripts/__pycache__
 /build
 /dist
+/*.json

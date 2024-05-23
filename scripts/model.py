@@ -139,17 +139,21 @@ class AzureModel(BaseModel):
             "max_tokens": self.max_tokens
         }
         response = requests.post(self.base_url, headers=headers, json=payload).json()
-        if "error" not in response:
+        # print(response)
+        if isinstance(response, dict) and "error" in response:
+            if isinstance(response["error"], dict) and "message" in response["error"]:
+                return False, response["error"]["message"]
+            else:
+                return False, "Unknown error"
+        else:
             usage = response["usage"]
             prompt_tokens = usage["prompt_tokens"]
             completion_tokens = usage["completion_tokens"]
             print_with_color(f"Request cost is "
                              f"${'{0:.2f}'.format(prompt_tokens / 1000 * 0.01 + completion_tokens / 1000 * 0.03)}",
                              "yellow")
-        else:
-            return False, response["error"]["message"]
-        return True, response["choices"][0]["message"]["content"]
-
+            return True, response["choices"][0]["message"]["content"]
+        
 def parse_explore_rsp(rsp, log_file=None):
     try:
         observation = re.findall(r"Observation: (.*?)$", rsp, re.MULTILINE)[0]

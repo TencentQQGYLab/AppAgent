@@ -16,6 +16,6 @@ customtkinter
 # Add the missing packages
 sounddevice
 matplotlib
-keras
+soundfile
 tensorflow
 openai

@@ -95,19 +95,23 @@ class SeleniumController:
 
     def execute_selenium(self):
         options = Options()
+        options.add_argument("user-data-dir=./User_Data")
+        options.add_argument("disable-blink-features=AutomationControlled")
         options.add_argument("--start-maximized")
         options.add_experimental_option("detach", True)
 
-        # Use webdriver_manager to download and install chromedriver
         service = Service(ChromeDriverManager().install())
         self.driver = webdriver.Chrome(service=service, options=options)
 
         self.driver.get(self.url)
-        time.sleep(2)
+
+        # Create a wait object with a timeout
+        wait = WebDriverWait(self.driver, 10)  # Wait for up to 10 seconds
 
         # Check if the password form is present
         try:
-            password_form = self.driver.find_element(By.ID, "link-password-form")
+            # Use explicit wait to wait for the password form to appear
+            password_form = wait.until(EC.presence_of_element_located((By.ID, "link-password-form")))
         except:
             # If the password form is not present, return
             return
@@ -122,17 +126,19 @@ class SeleniumController:
         )
         continue_button.click()
 
-        # Wait for the page to load after submitting the password
-        time.sleep(2)
+        # Use explicit wait for a condition after submitting the password
+        # Example: Wait until a specific element is loaded after login
+        # wait.until(EC.presence_of_element_located((By.ID, "some_element_after_login")))
 
         # Check if the password form is still present
         try:
-            password_form = self.driver.find_element(By.ID, "link-password-form")
+            password_form = wait.until(EC.presence_of_element_located((By.ID, "link-password-form")))
             print("ERROR: The provided password is incorrect.")
             sys.exit(1)
         except:
             # If the password form is not present, continue
             pass
+
 
     def get_canvas_size(self):
         # Wait until the <canvas> element is present

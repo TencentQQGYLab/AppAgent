@@ -97,8 +97,6 @@ class QwenModel(BaseModel):
         else:
             return False, response.message
 
-from openai import AzureOpenAI
-
 class AzureModel(BaseModel):
     def __init__(self, base_url: str, api_key: str, model: str, temperature: float, max_tokens: int):
         super().__init__()

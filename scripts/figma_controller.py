@@ -217,6 +217,37 @@ class SeleniumController:
         img = cv2.imread(img_path)
         cv2.circle(img, (int(x), int(y)), r, (0, 0, 255), thickness)
         cv2.imwrite(img_path, img)
+    
+    def draw_arrow(self, x, y, direction, dist, image_path, arrow_color=(0, 255, 0), thickness=2):
+        img = cv2.imread(image_path)
+        
+        # Calculate the arrow length based on the screen width and dist
+        screen_width = img.shape[1]
+        unit_dist = int(screen_width / 10)
+        if dist == "long":
+            arrow_length = 3 * unit_dist
+        elif dist == "medium":
+            arrow_length = 2 * unit_dist
+        else:
+            arrow_length = unit_dist
+        
+        # Define the arrow directions
+        if direction == "up":
+            end_point = (x, y - arrow_length)
+        elif direction == "down":
+            end_point = (x, y + arrow_length)
+        elif direction == "left":
+            end_point = (x - arrow_length, y)
+        elif direction == "right":
+            end_point = (x + arrow_length, y)
+        else:
+            raise ValueError(f"Invalid direction: {direction}")
+        
+        # Draw the arrow
+        cv2.arrowedLine(img, (x, y), end_point, arrow_color, thickness)
+        
+        # Save the modified image
+        cv2.imwrite(image_path, img)
 
     def get_current_node_id(self):
         # Get the current URL
@@ -368,8 +399,8 @@ class UIElement:
         while nodes_to_process:
             node = nodes_to_process.pop()
 
-            # If the node is of type FRAME, INSTANCE, or COMPONENT, convert it to a UIElement
-            if node["type"] in ["FRAME", "INSTANCE", "COMPONENT"]:
+            # If the node is of type FRAME, INSTANCE, GROUP, or COMPONENT, convert it to a UIElement
+            if node["type"] in ["FRAME", "INSTANCE", "COMPONENT, GROUP"]:
                 elem = convert_node_to_UIElement(node)
                 elem_list.append(elem)
 

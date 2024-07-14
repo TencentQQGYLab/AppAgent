@@ -195,10 +195,10 @@ else:
     persona_desc = ""
 
 
-doc_count = 0
 round_count = 0
-last_act = "None"
+doc_count = 0
 useless_list = set()
+last_act = "None"
 task_complete = False
 
 # Write the report markdown file
@@ -284,8 +284,6 @@ while round_count < configs["MAX_ROUNDS"]:
     print_with_color("Thinking about what to do in the next step...", "yellow")
     status, rsp = mllm.get_model_response(prompt, [base64_img_before])
 
-    # print(rsp)
-
     if status:
         with open(explore_log_path, "a") as logfile:
             log_item = {
@@ -315,33 +313,45 @@ while round_count < configs["MAX_ROUNDS"]:
             center_x += x
             center_y += y
 
-            if act_name == "tap":
-                # Draw a bounding box on the canvas image and save it
-                screenshot_before_actioned = os.path.join(
-                    task_dir, f"{round_count}_before_labeled_action.png"
-                )
-                selenium_controller.take_canvas_screenshot(
-                    x, y, tl, br, screenshot_before_actioned
-                )
+            # Draw a bounding box on the canvas image and save it
+            screenshot_before_actioned = os.path.join(
+                task_dir, f"{round_count}_before_labeled_action.png"
+            )
+            selenium_controller.take_canvas_screenshot(
+                x, y, tl, br, screenshot_before_actioned
+            )
 
+            if act_name == "tap":
                 selenium_controller.draw_circle(
                     center_x, center_y, screenshot_before_actioned
                 )
-
-                # Add the actioned image to the report markdown file
-                append_to_log(
-                    f"![Before action labeled action](./{round_count}_before_labeled_action.png)",
-                    report_log_path,
-                )
-
-                selenium_controller.tap(center_x, center_y)
-
+                ret = selenium_controller.tap(center_x, center_y)
+                if ret == "ERROR":
+                    print_with_color("ERROR: tap execution failed", "red")
+                    break
             elif act_name == "long_press":
-                selenium_controller.long_press(center_x, center_y)
-
+                selenium_controller.draw_circle(
+                    center_x, center_y, screenshot_before_actioned
+                )
+                ret = selenium_controller.long_press(center_x, center_y)
+                if ret == "ERROR":
+                    print_with_color("ERROR: long press execution failed", "red")
+                    break
             elif act_name == "swipe":
                 _, swipe_dir, dist = res
-                selenium_controller.swipe(center_x, center_y, swipe_dir, dist)
+                selenium_controller.draw_arrow(
+                    center_x, center_y, swipe_dir, dist, screenshot_before_actioned
+                )
+                ret = selenium_controller.swipe(center_x, center_y, swipe_dir, dist)
+                if ret == "ERROR":
+                    print_with_color("ERROR: swipe execution failed", "red")
+                    break
+
+            # Add the actioned image to the report markdown file
+            append_to_log(
+                f"![Before action labeled action](./{round_count}_before_labeled_action.png)",
+                report_log_path,
+            )
         else:
             break
         time.sleep(configs["REQUEST_INTERVAL"])

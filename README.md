@@ -184,14 +184,8 @@ To use AppAgent with Figma, you first need to download the [Figma desktop client
 
 For more details, refer to the [Figma: Manage-personal-access-tokens](https://help.figma.com/hc/en-us/articles/8085703771159-Manage-personal-access-tokens).
 
-(Optional) If you're concerned about the security of the Figma file you want to test, you can set a password for your Figma project:
-
-1. Open the Prototype and click Share in the toolbar.
-1. Update the access setting to Anyone with the link and password.
-1. Enter a password in the Add password field, or click  to generate one. 
-1. Click Set.
-
-Please note that it’s not possible to view a password after it has been set. If you forget to copy the password, you can reset it. For more details, refer to the [Figma: Set-a-password-for-a-File-or-Prototype](https://help.figma.com/hc/en-us/articles/360040531773-Set-a-password-for-a-File-or-Prototype).
+> **Save the login user data**
+> AppAgent uses the Chrome browser's API, which is autopilot. Since it's a different browser than yours, you'll need to authorize it once by logging in. If you check Remember login details, the next time you run it, you will be taken directly to the prototype screen without logging in.
 
 #### 🤖 Step 2. Configure the Agent
 
@@ -212,7 +206,7 @@ This mode allows the agent to autonomously explore a Figma prototype. To start, 
 python learn.py
 ```
 
-Alternatively, you can also use the GUI version of the Figma Autonomous Exploration mode. This can be done by running `learn_gui.py` or by double-clicking the `run.command` file. This provides a more user-friendly interface for testing.
+Alternatively, you can also use the GUI version of the Figma Autonomous Exploration mode. This can be done by running `learn_gui.py`. This provides a more user-friendly interface for testing.
 
 ```bash
 python learn_gui.py

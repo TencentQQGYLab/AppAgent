@@ -14,7 +14,6 @@ from urllib.parse import unquote
 from figma_controller import (
     SeleniumController,
     UIElement,
-    list_all_devices,
     find_node_by_id,
     append_to_log,
 )
@@ -130,20 +129,14 @@ if starting_point_node_id_match is None:
 starting_point_node_id = unquote(starting_point_node_id_match.group(1))
 file = get_figma_file_data(file_key, token, root_dir)
 
-# Get device list
-device_list = list_all_devices(starting_point_node_id, file["document"]["children"])
+starting_point_node = find_node_by_id(starting_point_node_id, file["document"]["children"])
 
-# Declare width and height as global variables
-width, height = 0, 0
+if starting_point_node is None:
+    print_with_color("ERROR: Failed to find the starting point node!", "red")
+    sys.exit(1)
 
-if not device_list or device_list[0]["type"] != "PRESET":
-    print_with_color("ERROR: No device found!", "red")
-    sys.exit()
-else:
-    device = device_list[0]
-    width = int(device["size"]["width"])
-    height = int(device["size"]["height"])
-    print_with_color(f"Device selected: {device['presetIdentifier']}", "yellow")
+width = int(starting_point_node["absoluteBoundingBox"]["width"])
+height = int(starting_point_node["absoluteBoundingBox"]["height"])
 
 print_with_color(f"Screen resolution: {width}x{height}", "yellow")
 

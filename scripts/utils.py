@@ -1,3 +1,4 @@
+import os
 import base64
 import cv2
 import pyshine as ps
@@ -98,3 +99,40 @@ def draw_grid(img_path, output_path):
 def encode_image(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
+
+
+def get_image_megabyte_size(image_path: str) -> int:
+    '''
+    Get image size (Megabyte).
+    '''
+    return  os.stat(image_path).st_size / 1000 / 1000
+
+
+def compress_image_size(image_path: str, expect_megabyte: int) -> str:
+    '''
+    Compress image size.
+    Compress image size to reduce prompt volume, and decrease AI(openai, qwen, etc...) interface RT.
+
+    Args:
+        image_path (str): image original abs path.
+        expect_megabyte (int): expect compress size in mega byte.
+
+    Returns:
+        str: compressed image path.
+    '''
+
+    quality: int = 95
+    
+    image_reader = cv2.imread(image_path)
+
+    compressed_image_path: str = os.path.splitext(image_path)[0]+'_compression.jpg'
+
+    while quality > 10:
+        cv2.imwrite(compressed_image_path, image_reader, [cv2.IMWRITE_JPEG_QUALITY, quality])
+        current_megabyte_size: int = get_image_megabyte_size(compressed_image_path)
+        print_with_color(f'compress image size to: {get_image_megabyte_size(compressed_image_path)} MB.')
+        if get_image_megabyte_size(compressed_image_path) <= expect_megabyte:
+            break
+        quality -= 10 if current_megabyte_size >= 6.5 else 5
+    open(compressed_image_path, 'rb')
+    return compressed_image_path

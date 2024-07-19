@@ -6,7 +6,12 @@ from http import HTTPStatus
 import requests
 import dashscope
 
-from utils import print_with_color, encode_image
+from config import load_config
+configs = load_config()
+DEFAULT_SNAPSHOT_MEGABYTES = configs["SNAPSHOT_COMPRESS_MEGABYTE_SIZE"]
+
+
+from utils import print_with_color, encode_image, compress_image_size
 
 
 class BaseModel:
@@ -35,7 +40,7 @@ class OpenAIModel(BaseModel):
             }
         ]
         for img in images:
-            base64_img = encode_image(img)
+            base64_img = encode_image(compress_image_size(img, DEFAULT_SNAPSHOT_MEGABYTES)) 
             content.append({
                 "type": "image_url",
                 "image_url": {

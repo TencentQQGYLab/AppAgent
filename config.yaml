@@ -17,4 +17,5 @@ DOC_REFINE: false  # Set this to true will make the agent refine existing docume
 MAX_ROUNDS: 20  # Set the round limit for the agent to complete the task
 DARK_MODE: false  # Set this to true if your app is in dark mode to enhance the element labeling
 MIN_DIST: 30  # The minimum distance between elements to prevent overlapping during the labeling process
+USE_SNAPSHOT_COMPRESS: true # compress the snapshot image size, will help the interface respond quickly.
 SNAPSHOT_COMPRESS_MEGABYTE_SIZE: 0.5  # The expected size (Megabyte) of screenshot compression will be uploaded to LLM, and compressing the image will help the interface respond quickly.

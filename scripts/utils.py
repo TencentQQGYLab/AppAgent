@@ -119,6 +119,18 @@ def compress_image_size(image_path: str, expect_megabyte: int) -> str:
 
     Returns:
         str: compressed image path.
+
+    Example:
+
+        ```
+        ls -al '/Users/.../github/appAgentFork/AppAgent/apps/X/demos/self_explore_2024-07-19_11-49-26'  total 8440
+        drwxr-xr-x@ 6 youngfreefjs  staff      192  7 19 11:49 .
+        drwxr-xr-x@ 4 youngfreefjs  staff      128  7 19 11:50 ..
+        -rw-r--r--@ 1 youngfreefjs  staff    92927  7 19 11:49 1.xml
+        -rw-r--r--@ 1 youngfreefjs  staff  1703275  7 19 11:49 1_before.png
+        -rw-r--r--@ 1 youngfreefjs  staff  1995296  7 19 11:49 1_before_labeled.png
+        -rw-r--r--@ 1 youngfreefjs  staff   459612  7 19 11:50 1_before_labeled_compression.jpg
+        ```
     '''
 
     quality: int = 95

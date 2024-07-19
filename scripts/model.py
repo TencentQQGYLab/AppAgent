@@ -8,7 +8,8 @@ import dashscope
 
 from config import load_config
 configs = load_config()
-DEFAULT_SNAPSHOT_MEGABYTES = configs["SNAPSHOT_COMPRESS_MEGABYTE_SIZE"]
+DEFAULT_SNAPSHOT_MEGABYTES: int = configs["SNAPSHOT_COMPRESS_MEGABYTE_SIZE"]
+USE_SNAPSHOT_COMPRESS: bool = configs["USE_SNAPSHOT_COMPRESS"]
 
 
 from utils import print_with_color, encode_image, compress_image_size
@@ -40,7 +41,10 @@ class OpenAIModel(BaseModel):
             }
         ]
         for img in images:
-            base64_img = encode_image(compress_image_size(img, DEFAULT_SNAPSHOT_MEGABYTES)) 
+            if USE_SNAPSHOT_COMPRESS:
+                base64_img = encode_image(compress_image_size(img, DEFAULT_SNAPSHOT_MEGABYTES))
+            else:
+                base64_img = encode_image(img)
             content.append({
                 "type": "image_url",
                 "image_url": {

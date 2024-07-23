@@ -1,0 +1,7 @@
+/__pycache__
+/apps
+/scripts/__pycache__
+/build
+/dist
+/*.json
+/User_Data

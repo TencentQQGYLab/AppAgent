@@ -30,9 +30,10 @@ print_with_color("Welcome to the exploration phase of AppAgent!\nThe exploration
                  "main interface of the app on your phone.", "yellow")
 print_with_color("Choose from the following modes:\n1. autonomous exploration (Android)\n2. human demonstration (Android)\n"
                  "3. autonomous exploration (Figma ProtoType)\n"
-                 "Type 1, 2, or 3.", "blue")
+                 "4. autonomous exploration (Figma Prototype with Flask server)\n"
+                 "Type 1, 2, 3, or 4.", "blue")
 user_input = ""
-while user_input not in ["1", "2", "3"]:
+while user_input not in ["1", "2", "3", "4"]:
     user_input = input()
 
 if not app:
@@ -47,7 +48,7 @@ elif user_input == "2":
     demo_name = datetime.datetime.fromtimestamp(demo_timestamp).strftime(f"demo_{app}_%Y-%m-%d_%H-%M-%S")
     os.system(f"python scripts/step_recorder.py --app {app} --demo {demo_name} --root_dir {root_dir}")
     os.system(f"python scripts/document_generation.py --app {app} --demo {demo_name} --root_dir {root_dir}")
-else:  # user_input == "3"
+elif user_input == "3":
     print_with_color("What is the Figma ProtoType URL?", "blue")
     url = input()
     url = url.strip()
@@ -60,3 +61,5 @@ else:  # user_input == "3"
         os.system(f'python scripts/self_explorer_figma.py --app {app} --url "{url}" --root_dir {root_dir} --password "{password}"')  
     else:
         os.system(f'python scripts/self_explorer_figma.py --app {app} --url "{url}" --root_dir {root_dir}')
+elif user_input == "4":
+    os.system(f"python scripts/self_explorer_server.py")

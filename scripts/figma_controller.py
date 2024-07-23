@@ -141,18 +141,24 @@ class SeleniumController:
 
 
     def get_canvas_size(self):
-        # Wait until the <canvas> element is present
         WebDriverWait(self.driver, 20).until(
             EC.presence_of_element_located((By.TAG_NAME, "canvas"))
         )
 
         canvas = self.driver.find_element(By.TAG_NAME, "canvas")
         style = canvas.get_attribute("style")
-        width = re.search(r"width: (\d+)px", style).group(1)
-        height = re.search(r"height: (\d+)px", style).group(1)
+        print(f"Canvas style: {style}")  # 스타일 속성 출력
 
-        # Make sure to return canvas size as integers
-        return int(width), int(height)
+        width_match = re.search(r"width: (\d+(?:\.\d+)?)px", style)
+        height_match = re.search(r"height: (\d+(?:\.\d+)?)px", style)
+
+        if width_match is None or height_match is None:
+            raise ValueError("Cannot find width or height in the style attribute")
+
+        width = width_match.group(1)
+        height = height_match.group(1)
+
+        return int(float(width)), int(float(height))
 
     def calculate_position(
         self, device_width, device_height, canvas_width, canvas_height

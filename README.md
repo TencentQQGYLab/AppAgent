@@ -206,14 +206,6 @@ This mode allows the agent to autonomously explore a Figma prototype. To start, 
 python learn.py
 ```
 
-Alternatively, you can also use the GUI version of the Figma Autonomous Exploration mode. This can be done by running `learn_gui.py`. This provides a more user-friendly interface for testing.
-
-```bash
-python learn_gui.py
-```
-
-![GUI](./assets/GUI.png)
-
 We designed the Figma Autonomous Exploration mode with designers in mind. It's a tool that simplifies user testing and research, providing instant user testing capabilities. For that, it generates a user report in markdown, making it easy to share and understand.
 
 ![figma_remore_demo](./assets/demo_markdown.png)

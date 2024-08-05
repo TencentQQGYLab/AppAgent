@@ -1,6 +1,9 @@
 import os
+import shutil
 import subprocess
 import xml.etree.ElementTree as ET
+
+import cv2
 
 from config import load_config
 from utils import print_with_color
@@ -85,6 +88,9 @@ def traverse_tree(xml_path, elem_list, attrib, add_index=False):
         if event == 'end':
             path.pop()
 
+def append_to_log(text: str, log_file: str, break_line: bool = True):
+    with open(log_file, "a") as f:
+        f.write(text + ("\n" if break_line else ""))
 
 class AndroidController:
     def __init__(self, device):
@@ -128,6 +134,80 @@ class AndroidController:
                 return os.path.join(save_dir, prefix + ".xml")
             return result
         return result
+    
+    def get_screenshot_with_bbox(self, screenshot_before, save_dir, tl, br):
+        # Copy the screenshot_before image
+        img_path = save_dir
+        shutil.copy(screenshot_before, img_path)
+
+        # Load the copied image
+        img = cv2.imread(img_path)
+
+        # Draw the bounding box on the image
+        cv2.rectangle(img, (int(tl[0]), int(tl[1])), (int(br[0]), int(br[1])), (0, 255, 0), 2)
+
+        # Save the image with the bounding box
+        cv2.imwrite(img_path, img)
+
+        return img_path
+
+
+    def draw_circle(self, x, y, img_path, r=10, thickness=2):
+        img = cv2.imread(img_path)
+        cv2.circle(img, (int(x), int(y)), r, (0, 0, 255), thickness)
+        cv2.imwrite(img_path, img)
+
+    def draw_arrow(x, y, direction, image_path, arrow_length=50, arrow_color=(0, 255, 0), thickness=2):
+        img = cv2.imread(image_path)
+        
+        # Define the arrow directions
+        if direction == "up":
+            end_point = (x, y - arrow_length)
+        elif direction == "down":
+            end_point = (x, y + arrow_length)
+        elif direction == "left":
+            end_point = (x - arrow_length, y)
+        elif direction == "right":
+            end_point = (x + arrow_length, y)
+        else:
+            raise ValueError(f"Invalid direction: {direction}")
+        
+        # Draw the arrow
+        cv2.arrowedLine(img, (x, y), end_point, arrow_color, thickness)
+        
+        # Save the modified image
+        cv2.imwrite(image_path, img)
+
+    def draw_arrow(self, x, y, direction, dist, image_path, arrow_color=(0, 255, 0), thickness=2):
+        img = cv2.imread(image_path)
+        
+        # Calculate the arrow length based on the screen width and dist
+        screen_width = img.shape[1]
+        unit_dist = int(screen_width / 10)
+        if dist == "long":
+            arrow_length = 3 * unit_dist
+        elif dist == "medium":
+            arrow_length = 2 * unit_dist
+        else:
+            arrow_length = unit_dist
+        
+        # Define the arrow directions
+        if direction == "up":
+            end_point = (x, y - arrow_length)
+        elif direction == "down":
+            end_point = (x, y + arrow_length)
+        elif direction == "left":
+            end_point = (x - arrow_length, y)
+        elif direction == "right":
+            end_point = (x + arrow_length, y)
+        else:
+            raise ValueError(f"Invalid direction: {direction}")
+        
+        # Draw the arrow
+        cv2.arrowedLine(img, (x, y), end_point, arrow_color, thickness)
+        
+        # Save the modified image
+        cv2.imwrite(image_path, img)
 
     def back(self):
         adb_command = f"adb -s {self.device} shell input keyevent KEYCODE_BACK"

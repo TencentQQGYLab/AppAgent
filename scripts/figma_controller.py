@@ -410,13 +410,15 @@ class UIElement:
         while nodes_to_process:
             node = nodes_to_process.pop()
 
-            # If the node is of type FRAME, INSTANCE, GROUP, or COMPONENT, convert it to a UIElement
-            if node["type"] in ["FRAME", "INSTANCE", "COMPONENT, GROUP"]:
-                elem = convert_node_to_UIElement(node)
-                elem_list.append(elem)
+            # Check if the node is visible
+            if node.get("visible", True) != False:
+                # If the node is of type FRAME, INSTANCE, GROUP, or COMPONENT, convert it to a UIElement
+                if node["type"] in ["FRAME", "INSTANCE", "COMPONENT", "GROUP"]:
+                    elem = convert_node_to_UIElement(node)
+                    elem_list.append(elem)
 
-            # If the node has children, add them to the list of nodes to process
-            if "children" in node:
-                nodes_to_process.extend(node["children"])
+                # If the node has children, add them to the list of nodes to process
+                if "children" in node:
+                    nodes_to_process.extend(node["children"])
 
         return elem_list

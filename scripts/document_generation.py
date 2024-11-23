@@ -10,7 +10,7 @@ import prompts
 from config import load_config
 from utils import print_with_color
 
-from .parser import parse as model_parse
+from model_parser import parse as model_parse
 
 arg_desc = "AppAgent - Human Demonstration"
 parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=arg_desc)

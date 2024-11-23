@@ -12,7 +12,7 @@ from config import load_config
 from and_controller import list_all_devices, AndroidController, traverse_tree
 from model import parse_explore_rsp, parse_grid_rsp
 from utils import print_with_color, draw_bbox_multi, draw_grid
-from .parser import parse as model_parse
+from model_parser import parse as model_parse
 
 arg_desc = "AppAgent Executor"
 parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=arg_desc)

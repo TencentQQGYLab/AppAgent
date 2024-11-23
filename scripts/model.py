@@ -1,3 +1,4 @@
+import json
 import re
 from abc import abstractmethod
 from typing import List
@@ -209,3 +210,39 @@ def parse_reflect_rsp(rsp):
         print_with_color(f"ERROR: an exception occurs while parsing the model response: {e}", "red")
         print_with_color(rsp, "red")
         return ["ERROR"]
+
+
+class OllamaModel(BaseModel):
+    def __init__(self, base_url: str, model: str):
+        super().__init__()
+        self.base_url = base_url
+        self.model = model
+
+    def get_model_response(self, prompt: str, images: List[str]) -> (bool, str):
+        for idx, img in enumerate(images):
+            base64_img = encode_image(img)
+            images[idx] = base64_img
+        headers = {
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "model": self.model,
+            "messages": [
+                {
+                    "role": "user",
+                    "content": prompt,
+                    'images': images
+                }
+            ],
+            "stream": False
+        }
+        response = requests.post(self.base_url, headers=headers, json=payload).json()
+        print('get_model_response:', json.dumps(response, indent=2))
+        if "error" not in response:
+            total_duration = response["total_duration"]
+            print_with_color(f"Request duration is "
+                             f"{'{0:.2f}'.format(total_duration / 10 ** 9)}s",
+                             "yellow")
+        else:
+            return False, response["error"]
+        return True, response["message"]["content"]

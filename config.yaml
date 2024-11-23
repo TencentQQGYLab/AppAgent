@@ -1,4 +1,4 @@
-MODEL: "ollama"  # The type of multi-modal LLM you would like to use to power the AppAgent, must be either OpenAI or Qwen
+MODEL: "Ollama"  # The type of multi-modal LLM you would like to use to power the AppAgent, must be either OpenAI or Qwen
 
 # OLLAMA
 OLLAMA_API_BASE: "http://localhost:11434/api/chat"

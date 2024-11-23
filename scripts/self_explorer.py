@@ -12,11 +12,12 @@ from config import load_config
 from and_controller import list_all_devices, AndroidController, traverse_tree
 from model import parse_explore_rsp, parse_reflect_rsp
 from utils import print_with_color, draw_bbox_multi
-from .parser import parse as model_parse
+from model_parser import parse as model_parse
 
 arg_desc = "AppAgent - Autonomous Exploration"
 parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=arg_desc)
 parser.add_argument("--app")
+parser.add_argument("--task_desc")
 parser.add_argument("--root_dir", default="./")
 args = vars(parser.parse_args())
 
@@ -69,8 +70,10 @@ if not width and not height:
     sys.exit()
 print_with_color(f"Screen resolution of {device}: {width}x{height}", "yellow")
 
-print_with_color("Please enter the description of the task you want me to complete in a few sentences:", "blue")
-task_desc = input()
+task_desc = args['task_desc']
+if not task_desc:
+    print_with_color("Please enter the description of the task you want me to complete in a few sentences:", "blue")
+    task_desc = input()
 
 round_count = 0
 doc_count = 0

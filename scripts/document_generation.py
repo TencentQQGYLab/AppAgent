@@ -8,8 +8,9 @@ import time
 
 import prompts
 from config import load_config
-from model import OpenAIModel, QwenModel
 from utils import print_with_color
+
+from .parser import parse as model_parse
 
 arg_desc = "AppAgent - Human Demonstration"
 parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=arg_desc)
@@ -20,18 +21,7 @@ args = vars(parser.parse_args())
 
 configs = load_config()
 
-if configs["MODEL"] == "OpenAI":
-    mllm = OpenAIModel(base_url=configs["OPENAI_API_BASE"],
-                       api_key=configs["OPENAI_API_KEY"],
-                       model=configs["OPENAI_API_MODEL"],
-                       temperature=configs["TEMPERATURE"],
-                       max_tokens=configs["MAX_TOKENS"])
-elif configs["MODEL"] == "Qwen":
-    mllm = QwenModel(api_key=configs["DASHSCOPE_API_KEY"],
-                     model=configs["QWEN_MODEL"])
-else:
-    print_with_color(f"ERROR: Unsupported model type {configs['MODEL']}!", "red")
-    sys.exit()
+mllm = model_parse(configs)
 
 root_dir = args["root_dir"]
 work_dir = os.path.join(root_dir, "apps")

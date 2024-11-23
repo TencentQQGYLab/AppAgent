@@ -1,5 +1,10 @@
-MODEL: "OpenAI"  # The type of multi-modal LLM you would like to use to power the AppAgent, must be either OpenAI or Qwen
+MODEL: "ollama"  # The type of multi-modal LLM you would like to use to power the AppAgent, must be either OpenAI or Qwen
 
+# OLLAMA
+OLLAMA_API_BASE: "http://localhost:11434/api/chat"
+OLLAMA_API_MODEL: "llava:13b"
+
+# OPENAI
 OPENAI_API_BASE: "https://api.openai.com/v1/chat/completions"
 OPENAI_API_KEY: "sk-"  # Set the value to sk-xxx if you host the openai interface for open llm model
 OPENAI_API_MODEL: "gpt-4-vision-preview"  # The only OpenAI model by now that accepts visual input

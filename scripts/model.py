@@ -101,10 +101,10 @@ class QwenModel(BaseModel):
 
 def parse_explore_rsp(rsp):
     try:
-        observation = re.findall(r"Observation: (.*?)$", rsp, re.MULTILINE)[0]
-        think = re.findall(r"Thought: (.*?)$", rsp, re.MULTILINE)[0]
-        act = re.findall(r"Action: (.*?)$", rsp, re.MULTILINE)[0]
-        last_act = re.findall(r"Summary: (.*?)$", rsp, re.MULTILINE)[0]
+        observation = rsp['Observation']
+        think = rsp['Thought']
+        act = rsp['Action']
+        last_act = rsp['Summary']
         print_with_color("Observation:", "yellow")
         print_with_color(observation, "magenta")
         print_with_color("Thought:", "yellow")
@@ -138,7 +138,7 @@ def parse_explore_rsp(rsp):
             print_with_color(f"ERROR: Undefined act {act_name}!", "red")
             return ["ERROR"]
     except Exception as e:
-        print_with_color(f"ERROR: an exception occurs while parsing the model response: {e}", "red")
+        print_with_color(f"ERROR: an exception occurs while parsing the model response: {e.with_traceback()}", "red")
         print_with_color(rsp, "red")
         return ["ERROR"]
 
@@ -190,8 +190,8 @@ def parse_grid_rsp(rsp):
 
 def parse_reflect_rsp(rsp):
     try:
-        decision = re.findall(r"Decision: (.*?)$", rsp, re.MULTILINE)[0]
-        think = re.findall(r"Thought: (.*?)$", rsp, re.MULTILINE)[0]
+        decision = rsp['Decision']
+        think = rsp['Thought']
         print_with_color("Decision:", "yellow")
         print_with_color(decision, "magenta")
         print_with_color("Thought:", "yellow")
@@ -199,7 +199,7 @@ def parse_reflect_rsp(rsp):
         if decision == "INEFFECTIVE":
             return [decision, think]
         elif decision == "BACK" or decision == "CONTINUE" or decision == "SUCCESS":
-            doc = re.findall(r"Documentation: (.*?)$", rsp, re.MULTILINE)[0]
+            doc = rsp['Documentation']
             print_with_color("Documentation:", "yellow")
             print_with_color(doc, "magenta")
             return [decision, think, doc]
@@ -234,15 +234,17 @@ class OllamaModel(BaseModel):
                     'images': images
                 }
             ],
-            "stream": False
+            "stream": False,
+            "format": "json",
         }
+        # print('get_model_request:\n', prompt)
         response = requests.post(self.base_url, headers=headers, json=payload).json()
-        print('get_model_response:', json.dumps(response, indent=2))
+        print('get_model_response:\n', json.dumps(response, indent=2))
         if "error" not in response:
             total_duration = response["total_duration"]
             print_with_color(f"Request duration is "
                              f"{'{0:.2f}'.format(total_duration / 10 ** 9)}s",
                              "yellow")
         else:
-            return False, response["error"]
-        return True, response["message"]["content"]
+            return False, response['error']
+        return True, json.loads(response["message"]["content"])

@@ -168,6 +168,7 @@ medium distance.
 
 The task you need to complete is to <task_description>. Your past actions to proceed with this task are summarized as 
 follows: <last_act>
+
 Now, given the following labeled screenshot, you need to think and call the function needed to proceed with the task. 
 Your output should include the exact four parts (Observation, Thought, Action and Summary) in the following JSON format:
 {
@@ -180,7 +181,8 @@ Observation: <Describe what you observe in the image>
 Thought: <To complete the given task, what is the next step I should do>
 Action: <The function call with the correct parameters to proceed with the task. If you believe the task is completed or 
 there is nothing to be done, you should output FINISH. You cannot output anything else except a function call defined 
-above or FINISH in this field. You can only take one action at a time, so please directly call the function>
+above or FINISH in this field. You can only take one action at a time, so please directly call the function in python 
+syntax>
 Summary: <Summarize your past actions along with your latest action in one or two sentences. Do not include the numeric 
 tag in your summary>
 """
@@ -199,7 +201,7 @@ observing the difference between the two screenshots. Notice that your descripti
 the general function. Never include the numeric tag of the UI element in your description. You can use pronouns such as 
 "the UI element" to refer to the element. Your output should be in the following JSON format:
 {
-    "Decision": "your decision",
+    "Decision": "BACK",
     "Thought": "your thought",
     "Documentation": "your documentation"
 }
@@ -211,7 +213,7 @@ If you find the action changed nothing on the screen (screenshots before and aft
 should continue to interact with other elements on the screen. Notice that if you find the location of the cursor 
 changed between the two screenshots, then they are not identical. Your output should be in the following JSON format:
 {
-    "Decision": "your decision",
+    "Decision": "INEFFECTIVE",
     "Thought": "your thought"
 }
 Decision: INEFFECTIVE
@@ -224,7 +226,7 @@ two screenshots. Notice that your description of the UI element should focus on 
 numeric tag of the UI element in your description. You can use pronouns such as "the UI element" to refer to the 
 element. Your output should be in the following JSON format:
 {
-    "Decision": "your decision",
+    "Decision": "CONTINUE",
     "Thought": "your thought",
     "Documentation": "your documentation"
 }
@@ -238,7 +240,7 @@ describe the functionality of the UI element concisely in one or two sentences. 
 element should focus on the general function. Never include the numeric tag of the UI element in your description. You 
 can use pronouns such as "the UI element" to refer to the element. Your output should be in the following JSON format:
 {
-    "Decision": "your decision",
+    "Decision": "SUCCESS",
     "Thought": "your thought",
     "Documentation": "your documentation"
 }

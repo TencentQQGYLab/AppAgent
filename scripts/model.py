@@ -239,7 +239,7 @@ class OllamaModel(BaseModel):
         }
         # print('get_model_request:\n', prompt)
         response = requests.post(self.base_url, headers=headers, json=payload).json()
-        print('get_model_response:\n', json.dumps(response, indent=2))
+        # print('get_model_response:\n', json.dumps(response, indent=2))
         if "error" not in response:
             total_duration = response["total_duration"]
             print_with_color(f"Request duration is "

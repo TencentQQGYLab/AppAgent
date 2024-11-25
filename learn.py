@@ -7,9 +7,9 @@ from scripts.utils import print_with_color
 
 arg_desc = "AppAgent - exploration phase"
 parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=arg_desc)
-parser.add_argument("--app")
-parser.add_argument("--user_input")
-parser.add_argument("--task_desc")
+parser.add_argument("--app", default="Chrome")
+parser.add_argument("--user_input", default="1")
+parser.add_argument("--task_desc", default="open the baidu.com website")
 parser.add_argument("--root_dir", default="./")
 args = vars(parser.parse_args())
 

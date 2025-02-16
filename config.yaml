@@ -2,7 +2,7 @@ MODEL: "Ollama"  # The type of multi-modal LLM you would like to use to power th
 
 # OLLAMA
 OLLAMA_API_BASE: "http://localhost:11434/api/chat"
-OLLAMA_API_MODEL: "llava:13b"
+OLLAMA_API_MODEL: "llama3.2-vision:11b"
 
 # OPENAI
 OPENAI_API_BASE: "https://api.openai.com/v1/chat/completions"

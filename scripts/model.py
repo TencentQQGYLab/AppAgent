@@ -15,7 +15,7 @@ class BaseModel:
         pass
 
     @abstractmethod
-    def get_model_response(self, prompt: str, images: List[str]) -> (bool, str):
+    def get_model_response(self, prompt: str, images: List[str], form='json') -> (bool, str):
         pass
 
 
@@ -28,7 +28,7 @@ class OpenAIModel(BaseModel):
         self.temperature = temperature
         self.max_tokens = max_tokens
 
-    def get_model_response(self, prompt: str, images: List[str]) -> (bool, str):
+    def get_model_response(self, prompt: str, images: List[str], form='json') -> (bool, str):
         content = [
             {
                 "type": "text",
@@ -77,7 +77,7 @@ class QwenModel(BaseModel):
         self.model = model
         dashscope.api_key = api_key
 
-    def get_model_response(self, prompt: str, images: List[str]) -> (bool, str):
+    def get_model_response(self, prompt: str, images: List[str], form='json') -> (bool, str):
         content = [{
             "text": prompt
         }]
@@ -218,7 +218,7 @@ class OllamaModel(BaseModel):
         self.base_url = base_url
         self.model = model
 
-    def get_model_response(self, prompt: str, images: List[str]) -> (bool, str):
+    def get_model_response(self, prompt: str, images: List[str], form='json') -> (bool, str):
         for idx, img in enumerate(images):
             base64_img = encode_image(img)
             images[idx] = base64_img
@@ -235,11 +235,13 @@ class OllamaModel(BaseModel):
                 }
             ],
             "stream": False,
-            "format": "json",
+            "format": form,
         }
+        if len(form) == 0:
+            del payload['format']
         # print('get_model_request:\n', prompt)
         response = requests.post(self.base_url, headers=headers, json=payload).json()
-        # print('get_model_response:\n', json.dumps(response, indent=2))
+        print('get_model_response:\n', json.dumps(response, indent=2))
         if "error" not in response:
             total_duration = response["total_duration"]
             print_with_color(f"Request duration is "
@@ -247,4 +249,7 @@ class OllamaModel(BaseModel):
                              "yellow")
         else:
             return False, response['error']
-        return True, json.loads(response["message"]["content"])
+        content = response["message"]["content"]
+        if form:
+            content = json.loads(content)
+        return True, content

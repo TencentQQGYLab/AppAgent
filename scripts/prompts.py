@@ -139,7 +139,7 @@ self_explore_task_template = """You are an agent that is trained to complete cer
 given a screenshot of a smartphone app. The interactive UI elements on the screenshot are labeled with numeric tags 
 starting from 1. 
 
-You can call the following functions to interact with those labeled elements to control the smartphone:
+You can call the following functions (in python syntax) to interact with those labeled elements to control the smartphone:
 
 1. tap(element: int)
 This function is used to tap an UI element shown on the smartphone screen.
@@ -147,10 +147,10 @@ This function is used to tap an UI element shown on the smartphone screen.
 A simple use case can be tap(5), which taps the UI element labeled with the number 5.
 
 2. text(text_input: str)
-This function is used to insert text input in an input field/box. text_input is the string you want to insert and must 
-be wrapped with double quotation marks. A simple use case can be text("Hello, world!"), which inserts the string 
-"Hello, world!" into the input area on the smartphone screen. This function is only callable when you see a keyboard 
-showing in the lower half of the screen.
+This function is used to insert text input in an input field/box when a keyboard shows up below the screen. text_input 
+is the string you want to insert and must be wrapped with double quotation marks. A simple use case can be 
+text("Hello, world!"), which inserts the string "Hello, world!" into the input area on the smartphone screen. This 
+function is ONLY callable when you see a KEYBOARD showing in the lower half of the screen.
 
 3. long_press(element: int)
 This function is used to long press an UI element shown on the smartphone screen.
@@ -179,10 +179,10 @@ Your output should include the exact four parts (Observation, Thought, Action an
 }
 Observation: <Describe what you observe in the image>
 Thought: <To complete the given task, what is the next step I should do>
-Action: <The function call with the correct parameters to proceed with the task. If you believe the task is completed or 
+Action: <The function call (in python syntax) with the correct parameters to proceed with the task. If you believe the task is completed or 
 there is nothing to be done, you should output FINISH. You cannot output anything else except a function call defined 
-above or FINISH in this field. You can only take one action at a time, so please directly call the function in python 
-syntax>
+above or FINISH in this field. You can only take one action at a time, so please directly call the 
+function>
 Summary: <Summarize your past actions along with your latest action in one or two sentences. Do not include the numeric 
 tag in your summary>
 """

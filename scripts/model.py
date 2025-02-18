@@ -1,3 +1,4 @@
+import json
 import re
 from abc import abstractmethod
 from typing import List
@@ -14,7 +15,7 @@ class BaseModel:
         pass
 
     @abstractmethod
-    def get_model_response(self, prompt: str, images: List[str]) -> (bool, str):
+    def get_model_response(self, prompt: str, images: List[str], form='json') -> (bool, str):
         pass
 
 
@@ -27,7 +28,7 @@ class OpenAIModel(BaseModel):
         self.temperature = temperature
         self.max_tokens = max_tokens
 
-    def get_model_response(self, prompt: str, images: List[str]) -> (bool, str):
+    def get_model_response(self, prompt: str, images: List[str], form='json') -> (bool, str):
         content = [
             {
                 "type": "text",
@@ -76,7 +77,7 @@ class QwenModel(BaseModel):
         self.model = model
         dashscope.api_key = api_key
 
-    def get_model_response(self, prompt: str, images: List[str]) -> (bool, str):
+    def get_model_response(self, prompt: str, images: List[str], form='json') -> (bool, str):
         content = [{
             "text": prompt
         }]
@@ -100,10 +101,10 @@ class QwenModel(BaseModel):
 
 def parse_explore_rsp(rsp):
     try:
-        observation = re.findall(r"Observation: (.*?)$", rsp, re.MULTILINE)[0]
-        think = re.findall(r"Thought: (.*?)$", rsp, re.MULTILINE)[0]
-        act = re.findall(r"Action: (.*?)$", rsp, re.MULTILINE)[0]
-        last_act = re.findall(r"Summary: (.*?)$", rsp, re.MULTILINE)[0]
+        observation = rsp['Observation']
+        think = rsp['Thought']
+        act = rsp['Action']
+        last_act = rsp['Summary']
         print_with_color("Observation:", "yellow")
         print_with_color(observation, "magenta")
         print_with_color("Thought:", "yellow")
@@ -137,7 +138,7 @@ def parse_explore_rsp(rsp):
             print_with_color(f"ERROR: Undefined act {act_name}!", "red")
             return ["ERROR"]
     except Exception as e:
-        print_with_color(f"ERROR: an exception occurs while parsing the model response: {e}", "red")
+        print_with_color(f"ERROR: an exception occurs while parsing the model response: {e.with_traceback()}", "red")
         print_with_color(rsp, "red")
         return ["ERROR"]
 
@@ -189,8 +190,8 @@ def parse_grid_rsp(rsp):
 
 def parse_reflect_rsp(rsp):
     try:
-        decision = re.findall(r"Decision: (.*?)$", rsp, re.MULTILINE)[0]
-        think = re.findall(r"Thought: (.*?)$", rsp, re.MULTILINE)[0]
+        decision = rsp['Decision']
+        think = rsp['Thought']
         print_with_color("Decision:", "yellow")
         print_with_color(decision, "magenta")
         print_with_color("Thought:", "yellow")
@@ -198,7 +199,7 @@ def parse_reflect_rsp(rsp):
         if decision == "INEFFECTIVE":
             return [decision, think]
         elif decision == "BACK" or decision == "CONTINUE" or decision == "SUCCESS":
-            doc = re.findall(r"Documentation: (.*?)$", rsp, re.MULTILINE)[0]
+            doc = rsp['Documentation']
             print_with_color("Documentation:", "yellow")
             print_with_color(doc, "magenta")
             return [decision, think, doc]
@@ -209,3 +210,46 @@ def parse_reflect_rsp(rsp):
         print_with_color(f"ERROR: an exception occurs while parsing the model response: {e}", "red")
         print_with_color(rsp, "red")
         return ["ERROR"]
+
+
+class OllamaModel(BaseModel):
+    def __init__(self, base_url: str, model: str):
+        super().__init__()
+        self.base_url = base_url
+        self.model = model
+
+    def get_model_response(self, prompt: str, images: List[str], form='json') -> (bool, str):
+        for idx, img in enumerate(images):
+            base64_img = encode_image(img)
+            images[idx] = base64_img
+        headers = {
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "model": self.model,
+            "messages": [
+                {
+                    "role": "user",
+                    "content": prompt,
+                    'images': images
+                }
+            ],
+            "stream": False,
+            "format": form,
+        }
+        if len(form) == 0:
+            del payload['format']
+        # print('get_model_request:\n', prompt)
+        response = requests.post(self.base_url, headers=headers, json=payload).json()
+        print('get_model_response:\n', json.dumps(response, indent=2))
+        if "error" not in response:
+            total_duration = response["total_duration"]
+            print_with_color(f"Request duration is "
+                             f"{'{0:.2f}'.format(total_duration / 10 ** 9)}s",
+                             "yellow")
+        else:
+            return False, response['error']
+        content = response["message"]["content"]
+        if form:
+            content = json.loads(content)
+        return True, content

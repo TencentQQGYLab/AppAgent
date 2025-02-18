@@ -139,7 +139,7 @@ self_explore_task_template = """You are an agent that is trained to complete cer
 given a screenshot of a smartphone app. The interactive UI elements on the screenshot are labeled with numeric tags 
 starting from 1. 
 
-You can call the following functions to interact with those labeled elements to control the smartphone:
+You can call the following functions (in python syntax) to interact with those labeled elements to control the smartphone:
 
 1. tap(element: int)
 This function is used to tap an UI element shown on the smartphone screen.
@@ -147,10 +147,10 @@ This function is used to tap an UI element shown on the smartphone screen.
 A simple use case can be tap(5), which taps the UI element labeled with the number 5.
 
 2. text(text_input: str)
-This function is used to insert text input in an input field/box. text_input is the string you want to insert and must 
-be wrapped with double quotation marks. A simple use case can be text("Hello, world!"), which inserts the string 
-"Hello, world!" into the input area on the smartphone screen. This function is only callable when you see a keyboard 
-showing in the lower half of the screen.
+This function is used to insert text input in an input field/box when a keyboard shows up below the screen. text_input 
+is the string you want to insert and must be wrapped with double quotation marks. A simple use case can be 
+text("Hello, world!"), which inserts the string "Hello, world!" into the input area on the smartphone screen. This 
+function is ONLY callable when you see a KEYBOARD showing in the lower half of the screen.
 
 3. long_press(element: int)
 This function is used to long press an UI element shown on the smartphone screen.
@@ -168,16 +168,24 @@ medium distance.
 
 The task you need to complete is to <task_description>. Your past actions to proceed with this task are summarized as 
 follows: <last_act>
+
 Now, given the following labeled screenshot, you need to think and call the function needed to proceed with the task. 
-Your output should include three parts in the given format:
+Your output should include the exact four parts (Observation, Thought, Action and Summary) in the following JSON format:
+{
+    "Observation": "your observation",
+    "Thought": "your thought",
+    "Action": "text('text')",
+    "Summary": "your summary"
+}
 Observation: <Describe what you observe in the image>
 Thought: <To complete the given task, what is the next step I should do>
-Action: <The function call with the correct parameters to proceed with the task. If you believe the task is completed or 
-there is nothing to be done, you should output FINISH. You cannot output anything else except a function call or FINISH 
-in this field.>
+Action: <The function call (in python syntax) with the correct parameters to proceed with the task. If you believe the task is completed or 
+there is nothing to be done, you should output FINISH. You cannot output anything else except a function call defined 
+above or FINISH in this field. You can only take one action at a time, so please directly call the 
+function>
 Summary: <Summarize your past actions along with your latest action in one or two sentences. Do not include the numeric 
 tag in your summary>
-You can only take one action at a time, so please directly call the function."""
+"""
 
 self_explore_reflect_template = """I will give you screenshots of a mobile app before and after <action> the UI 
 element labeled with the number '<ui_element>' on the first screenshot. The numeric tag of each element is located at 
@@ -185,20 +193,29 @@ the center of the element. The action of <action> this UI element was described 
 <last_act>
 The action was also an attempt to proceed with a larger task, which is to <task_desc>. Your job is to carefully analyze 
 the difference between the two screenshots to determine if the action is in accord with the description above and at 
-the same time effectively moved the task forward. Your output should be determined based on the following situations:
+the same time effectively moved the task forward. Your output should be  determined based on the following situations:
 1. BACK
 If you think the action navigated you to a page where you cannot proceed with the given task, you should go back to the 
 previous interface. At the same time, describe the functionality of the UI element concisely in one or two sentences by 
 observing the difference between the two screenshots. Notice that your description of the UI element should focus on 
 the general function. Never include the numeric tag of the UI element in your description. You can use pronouns such as 
-"the UI element" to refer to the element. Your output should be in the following format:
+"the UI element" to refer to the element. Your output should be in the following JSON format:
+{
+    "Decision": "BACK",
+    "Thought": "your thought",
+    "Documentation": "your documentation"
+}
 Decision: BACK
 Thought: <explain why you think the last action is wrong and you should go back to the previous interface>
 Documentation: <describe the function of the UI element>
 2. INEFFECTIVE
 If you find the action changed nothing on the screen (screenshots before and after the action are identical), you 
 should continue to interact with other elements on the screen. Notice that if you find the location of the cursor 
-changed between the two screenshots, then they are not identical. Your output should be in the following format:
+changed between the two screenshots, then they are not identical. Your output should be in the following JSON format:
+{
+    "Decision": "INEFFECTIVE",
+    "Thought": "your thought"
+}
 Decision: INEFFECTIVE
 Thought: <explain why you made this decision>
 3. CONTINUE
@@ -207,7 +224,12 @@ move the given task forward, you should continue to interact with other elements
 describe the functionality of the UI element concisely in one or two sentences by observing the difference between the 
 two screenshots. Notice that your description of the UI element should focus on the general function. Never include the 
 numeric tag of the UI element in your description. You can use pronouns such as "the UI element" to refer to the 
-element. Your output should be in the following format:
+element. Your output should be in the following JSON format:
+{
+    "Decision": "CONTINUE",
+    "Thought": "your thought",
+    "Documentation": "your documentation"
+}
 Decision: CONTINUE
 Thought: <explain why you think the action does not reflect the action description above and did not move the given 
 task forward>
@@ -216,7 +238,12 @@ Documentation: <describe the function of the UI element>
 If you think the action successfully moved the task forward (even though it did not completed the task), you should 
 describe the functionality of the UI element concisely in one or two sentences. Notice that your description of the UI 
 element should focus on the general function. Never include the numeric tag of the UI element in your description. You 
-can use pronouns such as "the UI element" to refer to the element. Your output should be in the following format:
+can use pronouns such as "the UI element" to refer to the element. Your output should be in the following JSON format:
+{
+    "Decision": "SUCCESS",
+    "Thought": "your thought",
+    "Documentation": "your documentation"
+}
 Decision: SUCCESS
 Thought: <explain why you think the action successfully moved the task forward>
 Documentation: <describe the function of the UI element>

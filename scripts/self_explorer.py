@@ -10,29 +10,20 @@ import time
 import prompts
 from config import load_config
 from and_controller import list_all_devices, AndroidController, traverse_tree
-from model import parse_explore_rsp, parse_reflect_rsp, OpenAIModel, QwenModel
+from model import parse_explore_rsp, parse_reflect_rsp
 from utils import print_with_color, draw_bbox_multi
+from model_parser import parse as model_parse
 
 arg_desc = "AppAgent - Autonomous Exploration"
 parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=arg_desc)
 parser.add_argument("--app")
+parser.add_argument("--task_desc")
 parser.add_argument("--root_dir", default="./")
 args = vars(parser.parse_args())
 
 configs = load_config()
 
-if configs["MODEL"] == "OpenAI":
-    mllm = OpenAIModel(base_url=configs["OPENAI_API_BASE"],
-                       api_key=configs["OPENAI_API_KEY"],
-                       model=configs["OPENAI_API_MODEL"],
-                       temperature=configs["TEMPERATURE"],
-                       max_tokens=configs["MAX_TOKENS"])
-elif configs["MODEL"] == "Qwen":
-    mllm = QwenModel(api_key=configs["DASHSCOPE_API_KEY"],
-                     model=configs["QWEN_MODEL"])
-else:
-    print_with_color(f"ERROR: Unsupported model type {configs['MODEL']}!", "red")
-    sys.exit()
+mllm = model_parse(configs)
 
 app = args["app"]
 root_dir = args["root_dir"]
@@ -79,8 +70,10 @@ if not width and not height:
     sys.exit()
 print_with_color(f"Screen resolution of {device}: {width}x{height}", "yellow")
 
-print_with_color("Please enter the description of the task you want me to complete in a few sentences:", "blue")
-task_desc = input()
+task_desc = args['task_desc']
+if not task_desc:
+    print_with_color("Please enter the description of the task you want me to complete in a few sentences:", "blue")
+    task_desc = input()
 
 round_count = 0
 doc_count = 0

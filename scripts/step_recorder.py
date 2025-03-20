@@ -9,7 +9,7 @@ import time
 
 from and_controller import list_all_devices, AndroidController, traverse_tree
 from config import load_config
-from utils import print_with_color, draw_bbox_multi
+from utils import print_with_color, draw_bbox_multi, get_screen_size
 
 arg_desc = "AppAgent - Human Demonstration"
 parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=arg_desc)
@@ -72,6 +72,7 @@ if not width and not height:
     print_with_color("ERROR: Invalid device size!", "red")
     sys.exit()
 print_with_color(f"Screen resolution of {device}: {width}x{height}", "yellow")
+_, screen_height = get_screen_size()
 
 print_with_color("Please state the goal of your following demo actions clearly, e.g. send a message to John", "blue")
 task_desc = input()
@@ -109,6 +110,9 @@ while True:
             elem_list.append(elem)
     labeled_img = draw_bbox_multi(screenshot_path, os.path.join(labeled_ss_dir, f"{demo_name}_{step}.png"), elem_list,
                                   True)
+    cv2.namedWindow('image', cv2.WINDOW_NORMAL)
+    cv2.setWindowProperty('image', cv2.WND_PROP_TOPMOST, 1)
+    cv2.resizeWindow('image', int(screen_height * width / height), screen_height)
     cv2.imshow("image", labeled_img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()

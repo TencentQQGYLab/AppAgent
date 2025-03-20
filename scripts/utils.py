@@ -3,6 +3,7 @@ import cv2
 import pyshine as ps
 
 from colorama import Fore, Style
+from tkinter import Tk
 
 
 def print_with_color(text: str, color=""):
@@ -98,3 +99,11 @@ def draw_grid(img_path, output_path):
 def encode_image(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
+
+
+def get_screen_size():
+    root = Tk()
+    width = root.winfo_screenwidth()
+    height = root.winfo_screenheight()
+    root.destroy()
+    return width, height

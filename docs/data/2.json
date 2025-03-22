@@ -1,0 +1,35 @@
+{
+    "200": {
+        "file_id": 13,
+        "content": "            if record_mode:\n                if elem.attrib == \"clickable\":\n                    color = (250, 0, 0)\n                elif elem.attrib == \"focusable\":\n                    color = (0, 0, 250)\n                else:\n                    color = (0, 250, 0)\n                imgcv = ps.putBText(imgcv, label, text_offset_x=(left + right) // 2 + 10, text_offset_y=(top + bottom) // 2 + 10,\n                                    vspace=10, hspace=10, font_scale=1, thickness=2, background_RGB=color,\n                                    text_RGB=(255, 250, 250), alpha=0.5)\n            else:\n                text_color = (10, 10, 10) if dark_mode else (255, 250, 250)\n                bg_color = (255, 250, 250) if dark_mode else (10, 10, 10)\n                imgcv = ps.putBText(imgcv, label, text_offset_x=(left + right) // 2 + 10, text_offset_y=(top + bottom) // 2 + 10,\n                                    vspace=10, hspace=10, font_scale=1, thickness=2, background_RGB=bg_color,\n                                    text_RGB=text_color, alpha=0.5)",
+        "type": "code",
+        "location": "/scripts/utils.py:40-55"
+    },
+    "201": {
+        "file_id": 13,
+        "content": "Code checks if record mode is active and assigns a color based on whether the element is clickable or focusable. If not in record mode, it sets colors depending on dark/light mode. Then, puts bounding text on the image with specified colors and positions.",
+        "type": "comment"
+    },
+    "202": {
+        "file_id": 13,
+        "content": "        except Exception as e:\n            print_with_color(f\"ERROR: An exception occurs while labeling the image\\n{e}\", \"red\")\n        count += 1\n    cv2.imwrite(output_path, imgcv)\n    return imgcv\ndef draw_grid(img_path, output_path):\n    def get_unit_len(n):\n        for i in range(1, n + 1):\n            if n % i == 0 and 120 <= i <= 180:\n                return i\n        return -1\n    image = cv2.imread(img_path)\n    height, width, _ = image.shape\n    color = (255, 116, 113)\n    unit_height = get_unit_len(height)\n    if unit_height < 0:\n        unit_height = 120\n    unit_width = get_unit_len(width)\n    if unit_width < 0:\n        unit_width = 120\n    thick = int(unit_width // 50)\n    rows = height // unit_height\n    cols = width // unit_width\n    for i in range(rows):\n        for j in range(cols):\n            label = i * cols + j + 1\n            left = int(j * unit_width)\n            top = int(i * unit_height)\n            right = int((j + 1) * unit_width)\n            bottom = int((i + 1) * unit_height)\n            cv2.rectangle(image, (left, top), (right, bottom), color, thick // 2)",
+        "type": "code",
+        "location": "/scripts/utils.py:56-89"
+    },
+    "203": {
+        "file_id": 13,
+        "content": "This code reads an image and draws grid lines on it, dividing the image into equally sized squares. The size of the squares can be customized based on the image's width and height. If any exceptions occur while labeling the image, it will print an error message in red color.",
+        "type": "comment"
+    },
+    "204": {
+        "file_id": 13,
+        "content": "            cv2.putText(image, str(label), (left + int(unit_width * 0.05) + 3, top + int(unit_height * 0.3) + 3), 0,\n                        int(0.01 * unit_width), (0, 0, 0), thick)\n            cv2.putText(image, str(label), (left + int(unit_width * 0.05), top + int(unit_height * 0.3)), 0,\n                        int(0.01 * unit_width), color, thick)\n    cv2.imwrite(output_path, image)\n    return rows, cols\ndef encode_image(image_path):\n    with open(image_path, \"rb\") as image_file:\n        return base64.b64encode(image_file.read()).decode('utf-8')",
+        "type": "code",
+        "location": "/scripts/utils.py:90-100"
+    },
+    "205": {
+        "file_id": 13,
+        "content": "This code is used to draw text on an image and then save the modified image using OpenCV's putText function. The image is then encoded in base64 format.",
+        "type": "comment"
+    }
+}

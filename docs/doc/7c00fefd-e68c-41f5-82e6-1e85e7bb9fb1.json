@@ -1,0 +1,10 @@
+{
+    "summary": "Code imports necessary modules, sets up an argument parser, and retrieves app name from user input before executing a task.",
+    "details": [
+        {
+            "comment": "Code imports necessary modules, sets up an argument parser, and retrieves app name from user input before executing a task.",
+            "location": "\"/media/root/Toshiba XG3/works/AppAgent/docs/src/run.py\":0-24",
+            "content": "import argparse\nimport os\nfrom scripts.utils import print_with_color\narg_desc = \"AppAgent - deployment phase\"\nparser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=arg_desc)\nparser.add_argument(\"--app\")\nparser.add_argument(\"--root_dir\", default=\"./\")\nargs = vars(parser.parse_args())\napp = args[\"app\"]\nroot_dir = args[\"root_dir\"]\nprint_with_color(\"Welcome to the deployment phase of AppAgent!\\nBefore giving me the task, you should first tell me \"\n                 \"the name of the app you want me to operate and what documentation base you want me to use. I will \"\n                 \"try my best to complete the task without your intervention. First, please enter the main interface \"\n                 \"of the app on your phone and provide the following information.\", \"yellow\")\nif not app:\n    print_with_color(\"What is the name of the target app?\", \"blue\")\n    app = input()\n    app = app.replace(\" \", \"\")\nos.system(f\"python scripts/task_executor.py --app {app} --root_dir {root_dir}\")"
+        }
+    ]
+}

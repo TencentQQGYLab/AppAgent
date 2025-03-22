@@ -1,0 +1,80 @@
+{
+    "url": {
+        "full": "https://github.com/mnotgod96/AppAgent",
+        "partial": "mnotgod96/AppAgent"
+    },
+    "file_mapping": {
+        "0": {
+            "filepath": "/README.md",
+            "entry_id": 0,
+            "language_id": "plain-text"
+        },
+        "1": {
+            "filepath": "/config.yaml",
+            "entry_id": 22,
+            "language_id": "yaml"
+        },
+        "2": {
+            "filepath": "/learn.py",
+            "entry_id": 28,
+            "language_id": "python"
+        },
+        "3": {
+            "filepath": "/requirements.txt",
+            "entry_id": 36,
+            "language_id": "plain-text"
+        },
+        "4": {
+            "filepath": "/run.py",
+            "entry_id": 40,
+            "language_id": "python"
+        },
+        "5": {
+            "filepath": "/scripts/and_controller.py",
+            "entry_id": 44,
+            "language_id": "python"
+        },
+        "6": {
+            "filepath": "/scripts/config.py",
+            "entry_id": 60,
+            "language_id": "python"
+        },
+        "7": {
+            "filepath": "/scripts/document_generation.py",
+            "entry_id": 64,
+            "language_id": "python"
+        },
+        "8": {
+            "filepath": "/scripts/model.py",
+            "entry_id": 78,
+            "language_id": "python"
+        },
+        "9": {
+            "filepath": "/scripts/prompts.py",
+            "entry_id": 92,
+            "language_id": "python"
+        },
+        "10": {
+            "filepath": "/scripts/self_explorer.py",
+            "entry_id": 128,
+            "language_id": "python"
+        },
+        "11": {
+            "filepath": "/scripts/step_recorder.py",
+            "entry_id": 152,
+            "language_id": "python"
+        },
+        "12": {
+            "filepath": "/scripts/task_executor.py",
+            "entry_id": 170,
+            "language_id": "python"
+        },
+        "13": {
+            "filepath": "/scripts/utils.py",
+            "entry_id": 196,
+            "language_id": "python"
+        }
+    },
+    "project_name": "AppAgent",
+    "split_count": 3
+}

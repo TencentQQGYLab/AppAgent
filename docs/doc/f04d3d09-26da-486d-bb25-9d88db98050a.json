@@ -1,0 +1,10 @@
+{
+    "summary": "List of dependencies for the project: argparse, colorama, opencv-python, pyshtine, pyyaml, requests",
+    "details": [
+        {
+            "comment": "List of dependencies for the project: argparse, colorama, opencv-python, pyshtine, pyyaml, requests",
+            "location": "\"/media/root/Toshiba XG3/works/AppAgent/docs/src/requirements.txt\":0-5",
+            "content": "argparse\ncolorama\nopencv-python\npyshine\npyyaml\nrequests"
+        }
+    ]
+}

@@ -1,0 +1,542 @@
+{
+    "0": {
+        "file_id": 0,
+        "content": "/README.md",
+        "type": "filepath"
+    },
+    "1": {
+        "file_id": 0,
+        "content": "AppAgent is an open-source project with MIT License offering overlay grid features for Android Studio emulators. It uses multimodal learning and human demonstrations to enable smartphone app operations, and provides instructions on running and improving its experience, suggesting open-sourcing Benchmark and config files, and citing a 2023 research paper with arXiv ID 2312.13771.",
+        "type": "summary"
+    },
+    "2": {
+        "file_id": 0,
+        "content": "# AppAgent\n<div align=\"center\">\n<a href='https://arxiv.org/abs/2312.13771'><img src='https://img.shields.io/badge/arXiv-2312.13771-b31b1b.svg'></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n <a href='https://appagent-official.github.io'><img src='https://img.shields.io/badge/Project-Page-Green'></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n <a href='https://github.com/buaacyw/GaussianEditor/blob/master/LICENSE.txt'><img src='https://img.shields.io/badge/License-MIT-blue'></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n <a href=\"https://twitter.com/dr_chizhang\"><img src=\"https://img.shields.io/twitter/follow/dr_chizhang?style=social\" alt=\"Twitter Follow\"></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n <br><br>\n <!-- [![Model](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Model-blue)](https://huggingface.co/listen2you002/ChartLlama-13b) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \n[![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Dataset-blue)](https://huggingface.co/datasets/listen2you002/ChartLlama-Dataset) -->\n[**Ch",
+        "type": "code",
+        "location": "/README.md:1-13"
+    },
+    "3": {
+        "file_id": 0,
+        "content": "# AppAgent\n- ArXiv link (2312.13771)\n- Project page link\n- MIT License\n- Twitter handle for Dr. Chizhang\n- (Incomplete: Model and Dataset badges missing)",
+        "type": "comment"
+    },
+    "4": {
+        "file_id": 0,
+        "content": "i Zhang***†](https://icoz69.github.io/), [**Zhao Yang***](https://github.com/yz93), [**Jiaxuan Liu***](https://www.linkedin.com/in/jiaxuan-liu-9051b7105/), [Yucheng Han](http://tingxueronghua.github.io), [Xin Chen](https://chenxin.tech/), [Zebiao Huang](),\n<br>\n[Bin Fu](https://openreview.net/profile?id=~BIN_FU2), [Gang Yu✦](https://www.skicyyu.org/)\n<br>\n(* equal contributions, † Project Leader, ✦ Corresponding Author )\n</div>\n![](./assets/teaser.png)\nℹ️Should you encounter any issues⚠️ while using our project, please feel free to report them on [GitHub Issues](https://github.com/mnotgod96/AppAgent/issues) or reach out to [Dr. Chi Zhang](https://icoz69.github.io/) via email at dr.zhang.chi@outlook.com.\n## 📝 Changelog\n- __[2024.1.2]__: 🔥Added an optional method for the agent to bring up a grid overlay on the screen to **tap/swipe anywhere** on the screen.\n- __[2023.12.26]__: Added [Tips](#tips) section for better use experience; added instruction for using the **Android Studio emulator** for\n  users who do not have Android devices.",
+        "type": "code",
+        "location": "/README.md:13-28"
+    },
+    "5": {
+        "file_id": 0,
+        "content": "This code appears to be a README file for a project called \"AppAgent\". It lists the contributors and provides instructions on how to use the project. The most recent updates include adding an optional method for bringing up a grid overlay on the screen and providing tips for better user experience, including instructions for using the Android Studio emulator for users without Android devices.",
+        "type": "comment"
+    },
+    "6": {
+        "file_id": 0,
+        "content": "- __[2023.12.21]__: 🔥🔥 Open-sourced the git repository, including the detailed configuration steps to implement our AppAgent!\n## 🔆 Introduction\nWe introduce a novel LLM-based multimodal agent framework designed to operate smartphone applications. \nOur framework enables the agent to operate smartphone applications through a simplified action space, mimicking human-like interactions such as tapping and swiping. This novel approach bypasses the need for system back-end access, thereby broadening its applicability across diverse apps.\nCentral to our agent's functionality is its innovative learning method. The agent learns to navigate and use new apps either through autonomous exploration or by observing human demonstrations. This process generates a knowledge base that the agent refers to for executing complex tasks across different applications.\n## ✨ Demo\nThe demo video shows the process of using AppAgent to follow a user on X (Twitter) in the deployment phase.\nhttps://github.com/mnotgod96/AppAgent/assets/40715314/db99d650-dec1-4531-b4b2-e085bfcadfb7",
+        "type": "code",
+        "location": "/README.md:29-45"
+    },
+    "7": {
+        "file_id": 0,
+        "content": "This code provides an introduction to AppAgent, a multimodal agent framework for operating smartphone applications through a simplified action space. The agent can learn by autonomous exploration or human demonstrations and has a demo video available.",
+        "type": "comment"
+    },
+    "8": {
+        "file_id": 0,
+        "content": "An interesting experiment showing AppAgent's ability to pass CAPTCHA.\nhttps://github.com/mnotgod96/AppAgent/assets/27103154/5cc7ba50-dbab-42a0-a411-a9a862482548\nAn example of using the grid overlay to locate a UI element that is not labeled with a numeric tag.\nhttps://github.com/mnotgod96/AppAgent/assets/27103154/71603333-274c-46ed-8381-2f9a34cdfc53\n## 🚀 Quick Start\nThis section will guide you on how to quickly use `gpt-4-vision-preview` as an agent to complete specific tasks for you on\nyour Android app.\n### ⚙️ Step 1. Prerequisites\n1. On your PC, download and install [Android Debug Bridge](https://developer.android.com/tools/adb) (adb) which is a\n   command-line tool that lets you communicate with your Android device from the PC.\n2. Get an Android device and enable the USB debugging that can be found in Developer Options in Settings.\n3. Connect your device to your PC using a USB cable.\n4. (Optional) If you do not have an Android device but still want to try AppAgent. We recommend you download\n   [",
+        "type": "code",
+        "location": "/README.md:47-70"
+    },
+    "9": {
+        "file_id": 0,
+        "content": "This code is providing quick start instructions for using the gpt-4-vision-preview as an agent to complete tasks on Android apps. It requires installing Android Debug Bridge, enabling USB debugging on the device, and connecting the device to a PC via USB. An optional method for those without an Android device is also suggested.",
+        "type": "comment"
+    },
+    "10": {
+        "file_id": 0,
+        "content": "Android Studio](https://developer.android.com/studio/run/emulator) and use the emulator that comes with it.\n   The emulator can be found in the device manager of Android Studio. You can install apps on an emulator by\n   downloading APK files from the internet and dragging them to the emulator.\n   AppAgent can detect the emulated device and operate apps on it just like operating a real device.\n   <img width=\"570\" alt=\"Screenshot 2023-12-26 at 22 25 42\" src=\"https://github.com/mnotgod96/AppAgent/assets/27103154/5d76b810-1f42-44c8-b024-d63ec7776789\">\n5. Clone this repo and install the dependencies. All scripts in this project are written in Python 3 so make sure you\n   have installed it.\n```bash\ncd AppAgent\npip install -r requirements.txt\n```\n### 🤖 Step 2. Configure the Agent\nAppAgent needs to be powered by a multi-modal model which can receive both text and visual inputs. During our experiment\n, we used `gpt-4-vision-preview` as the model to make decisions on how to take actions to complete a task on the smartphone.",
+        "type": "code",
+        "location": "/README.md:70-88"
+    },
+    "11": {
+        "file_id": 0,
+        "content": "Android Studio is mentioned as a tool for running the code and using the emulator. The emulator can be found in Android Studio's device manager, and APK files from the internet can be installed on it. AppAgent can detect an emulated device and function like a real device.\n\nTo use this code, clone the repository and install Python 3 dependencies by running pip install -r requirements.txt in the project directory.",
+        "type": "comment"
+    },
+    "12": {
+        "file_id": 0,
+        "content": "To configure your requests to GPT-4V, you should modify `config.yaml` in the root directory.\nThere are two key parameters that must be configured to try AppAgent:\n1. OpenAI API key: you must purchase an eligible API key from OpenAI so that you can have access to GPT-4V.\n2. Request interval: this is the time interval in seconds between consecutive GPT-4V requests to control the frequency \nof your requests to GPT-4V. Adjust this value according to the status of your account.\nOther parameters in `config.yaml` are well commented. Modify them as you need.\n> Be aware that GPT-4V is not free. Each request/response pair involved in this project costs around $0.03. Use it wisely.\nIf you want to test AppAgent using your own models, you should modify the `ask_gpt_4v` function in `scripts/model.py` \naccordingly.\n### 🔍 Step 3. Exploration Phase\nOur paper proposed a novel solution that involves two phases, exploration, and deployment, to turn GPT-4V into a capable \nagent that can help users operate their Android phones when a task is given. The exploration phase starts with a task ",
+        "type": "code",
+        "location": "/README.md:90-106"
+    },
+    "13": {
+        "file_id": 0,
+        "content": "Configure requests to GPT-4V by modifying `config.yaml` in the root directory. Provide an eligible OpenAI API key and set request interval to control frequency of GPT-4V requests. Other parameters are well commented, adjust as needed. Be aware that GPT-4V is not free; each request costs around $0.03. Test AppAgent with custom models by modifying `ask_gpt_4v` in `scripts/model.py`.",
+        "type": "comment"
+    },
+    "14": {
+        "file_id": 0,
+        "content": "given by you, and you can choose to let the agent either explore the app on its own or learn from your demonstration. \nIn both cases, the agent generates documentation for elements interacted during the exploration/demonstration and \nsaves them for use in the deployment phase.\n#### Option 1: Autonomous Exploration\nThis solution features a fully autonomous exploration which allows the agent to explore the use of the app by attempting\nthe given task without any intervention from humans.\nTo start, run `learn.py` in the root directory. Follow the prompted instructions to select `autonomous exploration` \nas the operating mode and provide the app name and task description. Then, your agent will do the job for you. Under \nthis mode, AppAgent will reflect on its previous action making sure its action adheres to the given task and generate \ndocumentation for the elements explored.\n```bash\npython learn.py\n```\n#### Option 2: Learning from Human Demonstrations\nThis solution requires users to demonstrate a similar task first. AppAgent will learn from the demo and generate ",
+        "type": "code",
+        "location": "/README.md:107-127"
+    },
+    "15": {
+        "file_id": 0,
+        "content": "The code describes two options for using the AppAgent. Option 1 is autonomous exploration, where the agent can explore and learn from the app without human intervention. Option 2 involves learning from a human demonstration. Both methods generate documentation for elements interacted during exploration/demonstration for use in deployment. To start with Option 1, run \"learn.py\" and follow prompts to select autonomous exploration, provide the app name and task description.",
+        "type": "comment"
+    },
+    "16": {
+        "file_id": 0,
+        "content": "documentations for UI elements seen during the demo.\nTo start human demonstration, you should run `learn.py` in the root directory. Follow the prompted instructions to select \n`human demonstration` as the operating mode and provide the app name and task description. A screenshot of your phone \nwill be captured and all interactive elements shown on the screen will be labeled with numeric tags. You need to follow \nthe prompts to determine your next action and the target of the action. When you believe the demonstration is finished, \ntype `stop` to end the demo.\n```bash\npython learn.py\n```\n![](./assets/demo.png)\n### 📱 Step 4. Deployment Phase\nAfter the exploration phase finishes, you can run `run.py` in the root directory. Follow the prompted instructions to enter \nthe name of the app, select the appropriate documentation base you want the agent to use and provide the task \ndescription. Then, your agent will do the job for you. The agent will automatically detect if there is documentation \nbase generat",
+        "type": "code",
+        "location": "/README.md:128-147"
+    },
+    "17": {
+        "file_id": 0,
+        "content": "This code is providing instructions on how to run the human demonstration and the agent for an app using `learn.py` and `run.py` scripts in the root directory. The user needs to follow prompts to provide the app name, task description, and documentation base for the agent to function properly.",
+        "type": "comment"
+    },
+    "18": {
+        "file_id": 0,
+        "content": "ed before for the app; if there is no documentation found, you can also choose to run the agent without any \ndocumentation (success rate not guaranteed).\n```bash\npython run.py\n```\n## 💡 Tips<a name=\"tips\"></a>\n- For an improved experience, you might permit AppAgent to undertake a broader range of tasks through autonomous exploration, or you can directly demonstrate more app functions to enhance the app documentation. Generally, the more extensive the documentation provided to the agent, the higher the likelihood of successful task completion.\n- It is always a good practice to inspect the documentation generated by the agent. When you find some documentation not accurately\n  describe the function of the element, manually revising the documentation is also an option.\n## 📖 To-Do List\n- [ ] Open source the Benchmark.\n- [x] Open source the configuration.\n## 😉 Citation\n```bib\n@misc{yang2023appagent,\n      title={AppAgent: Multimodal Agents as Smartphone Users}, \n      author={Chi Zhang and Zhao Yang and Jiaxuan Liu and Yucheng Han and Xin Chen and Zebiao Huang and Bin Fu and Gang Yu},",
+        "type": "code",
+        "location": "/README.md:147-168"
+    },
+    "19": {
+        "file_id": 0,
+        "content": "This code is providing instructions on how to run the AppAgent and its associated tasks. The code suggests that for a better experience, users can permit AppAgent to explore more tasks autonomously or demonstrate more app functions to improve documentation. It also recommends inspecting the generated documentation by the agent and manually revising it if needed. Additionally, the code mentions open-sourcing the Benchmark and configuration files. Lastly, it provides a citation for AppAgent in the form of BibTeX format.",
+        "type": "comment"
+    },
+    "20": {
+        "file_id": 0,
+        "content": "      year={2023},\n      eprint={2312.13771},\n      archivePrefix={arXiv},\n      primaryClass={cs.CV}\n}\n```\n## Star History\n[![Star History Chart](https://api.star-history.com/svg?repos=mnotgod96/AppAgent&type=Date)](https://star-history.com/#mnotgod96/AppAgent&Date)\n## License\nThe [MIT license](./assets/license.txt).",
+        "type": "code",
+        "location": "/README.md:169-182"
+    },
+    "21": {
+        "file_id": 0,
+        "content": "The code specifies the publication details for a research paper. It includes the year (2023), eprint ID (2312.13771), archive prefix (arXiv), and primary class (cs.CV).",
+        "type": "comment"
+    },
+    "22": {
+        "file_id": 1,
+        "content": "/config.yaml",
+        "type": "filepath"
+    },
+    "23": {
+        "file_id": 1,
+        "content": "The code configures OpenAI API settings, GPT-4V request interval, Android screenshot and XML directories for an app agent. It also sets a round limit, dark mode, and minimum distance between elements for element labeling in the configuration file.",
+        "type": "summary"
+    },
+    "24": {
+        "file_id": 1,
+        "content": "OPENAI_API_BASE: \"https://api.openai.com/v1/chat/completions\"\nOPENAI_API_KEY: \"sk-\"  # Set the value to sk-xxx if you host the openai interface for open llm model\nOPENAI_API_MODEL: \"gpt-4-vision-preview\"  # The only OpenAI model by now that accepts visual input\nMAX_TOKENS: 300  # The max token limit for the response completion\nTEMPERATURE: 0.0  # The temperature of the model: the lower the value, the more consistent the output of the model\nREQUEST_INTERVAL: 10  # Time in seconds between consecutive GPT-4V requests\nANDROID_SCREENSHOT_DIR: \"/sdcard/Pictures/Screenshots\"  # Set the directory on your Android device to store the intermediate screenshots. Make sure the directory EXISTS on your phone!\nANDROID_XML_DIR: \"/sdcard\"  # Set the directory on your Android device to store the intermediate XML files used for determining locations of UI elements on your screen. Make sure the directory EXISTS on your phone!\nDOC_REFINE: false  # Set this to true will make the agent refine existing documentation b",
+        "type": "code",
+        "location": "/config.yaml:1-11"
+    },
+    "25": {
+        "file_id": 1,
+        "content": "This code is configuring OpenAI API settings, GPT-4V request interval, Android screenshot and XML directories for an app agent.",
+        "type": "comment"
+    },
+    "26": {
+        "file_id": 1,
+        "content": "ased on the latest demonstration; otherwise, the agent will not regenerate a new documentation for elements with the same resource ID.\nMAX_ROUNDS: 20  # Set the round limit for the agent to complete the task\nDARK_MODE: false  # Set this to true if your app is in dark mode to enhance the element labeling\nMIN_DIST: 30  # The minimum distance between elements to prevent overlapping during the labeling process",
+        "type": "code",
+        "location": "/config.yaml:11-14"
+    },
+    "27": {
+        "file_id": 1,
+        "content": "The configuration file sets round limit, dark mode, and minimum distance between elements for agent's element labeling.",
+        "type": "comment"
+    },
+    "28": {
+        "file_id": 2,
+        "content": "/learn.py",
+        "type": "filepath"
+    },
+    "29": {
+        "file_id": 2,
+        "content": "The code is for an argument parser in the exploration phase of AppAgent, enabling users to select between autonomous or human demonstration mode and specifying required parameters. It also includes a document generation script for running specified apps and demos.",
+        "type": "summary"
+    },
+    "30": {
+        "file_id": 2,
+        "content": "import argparse\nimport datetime\nimport os\nimport time\nfrom scripts.utils import print_with_color\narg_desc = \"AppAgent - exploration phase\"\nparser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=arg_desc)\nparser.add_argument(\"--app\")\nparser.add_argument(\"--root_dir\", default=\"./\")\nargs = vars(parser.parse_args())\napp = args[\"app\"]\nroot_dir = args[\"root_dir\"]\nprint_with_color(\"Welcome to the exploration phase of AppAgent!\\nThe exploration phase aims at generating \"\n                 \"documentations for UI elements through either autonomous exploration or human demonstration. \"\n                 \"Both options are task-oriented, which means you need to give a task description. During \"\n                 \"autonomous exploration, the agent will try to complete the task by interacting with possible \"\n                 \"elements on the UI within limited rounds. Documentations will be generated during the process of \"\n                 \"interacting with the correct elements to proceed with the task. Human demonstration relies on \"",
+        "type": "code",
+        "location": "/learn.py:1-23"
+    },
+    "31": {
+        "file_id": 2,
+        "content": "This code is for an argument parser in the exploration phase of AppAgent. It allows users to input app and root directory, then provides a description of the phase's purpose: generating documentations for UI elements through autonomous exploration or human demonstration. The task-oriented approach requires giving task descriptions.",
+        "type": "comment"
+    },
+    "32": {
+        "file_id": 2,
+        "content": "                 \"the user to show the agent how to complete the given task, and the agent will generate \"\n                 \"documentations for the elements interacted during the human demo. To start, please enter the \"\n                 \"main interface of the app on your phone.\", \"yellow\")\nprint_with_color(\"Choose from the following modes:\\n1. autonomous exploration\\n2. human demonstration\\n\"\n                 \"Type 1 or 2.\", \"blue\")\nuser_input = \"\"\nwhile user_input != \"1\" and user_input != \"2\":\n    user_input = input()\nif not app:\n    print_with_color(\"What is the name of the target app?\", \"blue\")\n    app = input()\n    app = app.replace(\" \", \"\")\nif user_input == \"1\":\n    os.system(f\"python scripts/self_explorer.py --app {app} --root_dir {root_dir}\")\nelse:\n    demo_timestamp = int(time.time())\n    demo_name = datetime.datetime.fromtimestamp(demo_timestamp).strftime(f\"demo_{app}_%Y-%m-%d_%H-%M-%S\")\n    os.system(f\"python scripts/step_recorder.py --app {app} --demo {demo_name} --root_dir {root_dir}\")\n    o",
+        "type": "code",
+        "location": "/learn.py:24-44"
+    },
+    "33": {
+        "file_id": 2,
+        "content": "This code asks the user to choose between autonomous exploration or human demonstration mode for the app agent. If \"1\" is entered, it starts autonomous exploration using specific script with app and root_dir parameters. If \"2\" is entered, it begins a human demonstration by creating a demo name and running another script for step recording with app, demo name, and root_dir parameters.",
+        "type": "comment"
+    },
+    "34": {
+        "file_id": 2,
+        "content": "s.system(f\"python scripts/document_generation.py --app {app} --demo {demo_name} --root_dir {root_dir}\")",
+        "type": "code",
+        "location": "/learn.py:44-44"
+    },
+    "35": {
+        "file_id": 2,
+        "content": "Running document generation script for specified app and demo.",
+        "type": "comment"
+    },
+    "36": {
+        "file_id": 3,
+        "content": "/requirements.txt",
+        "type": "filepath"
+    },
+    "37": {
+        "file_id": 3,
+        "content": "List of dependencies for the project: argparse, colorama, opencv-python, pyshtine, pyyaml, requests",
+        "type": "summary"
+    },
+    "38": {
+        "file_id": 3,
+        "content": "argparse\ncolorama\nopencv-python\npyshine\npyyaml\nrequests",
+        "type": "code",
+        "location": "/requirements.txt:1-6"
+    },
+    "39": {
+        "file_id": 3,
+        "content": "List of dependencies for the project: argparse, colorama, opencv-python, pyshtine, pyyaml, requests",
+        "type": "comment"
+    },
+    "40": {
+        "file_id": 4,
+        "content": "/run.py",
+        "type": "filepath"
+    },
+    "41": {
+        "file_id": 4,
+        "content": "Code imports necessary modules, sets up an argument parser, and retrieves app name from user input before executing a task.",
+        "type": "summary"
+    },
+    "42": {
+        "file_id": 4,
+        "content": "import argparse\nimport os\nfrom scripts.utils import print_with_color\narg_desc = \"AppAgent - deployment phase\"\nparser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=arg_desc)\nparser.add_argument(\"--app\")\nparser.add_argument(\"--root_dir\", default=\"./\")\nargs = vars(parser.parse_args())\napp = args[\"app\"]\nroot_dir = args[\"root_dir\"]\nprint_with_color(\"Welcome to the deployment phase of AppAgent!\\nBefore giving me the task, you should first tell me \"\n                 \"the name of the app you want me to operate and what documentation base you want me to use. I will \"\n                 \"try my best to complete the task without your intervention. First, please enter the main interface \"\n                 \"of the app on your phone and provide the following information.\", \"yellow\")\nif not app:\n    print_with_color(\"What is the name of the target app?\", \"blue\")\n    app = input()\n    app = app.replace(\" \", \"\")\nos.system(f\"python scripts/task_executor.py --app {app} --root_dir {root_dir}\")",
+        "type": "code",
+        "location": "/run.py:1-25"
+    },
+    "43": {
+        "file_id": 4,
+        "content": "Code imports necessary modules, sets up an argument parser, and retrieves app name from user input before executing a task.",
+        "type": "comment"
+    },
+    "44": {
+        "file_id": 5,
+        "content": "/scripts/and_controller.py",
+        "type": "filepath"
+    },
+    "45": {
+        "file_id": 5,
+        "content": "The code involves Android class definitions, adb command execution, unique identifier generation from XML attributes, and swipe actions with precision and duration options.",
+        "type": "summary"
+    },
+    "46": {
+        "file_id": 5,
+        "content": "import os\nimport subprocess\nimport xml.etree.ElementTree as ET\nfrom config import load_config\nfrom utils import print_with_color\nconfigs = load_config()\nclass AndroidElement:\n    def __init__(self, uid, bbox, attrib):\n        self.uid = uid\n        self.bbox = bbox\n        self.attrib = attrib\ndef execute_adb(adb_command):\n    # print(adb_command)\n    result = subprocess.run(adb_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)\n    if result.returncode == 0:\n        return result.stdout.strip()\n    print_with_color(f\"Command execution failed: {adb_command}\", \"red\")\n    print_with_color(result.stderr, \"red\")\n    return \"ERROR\"\ndef list_all_devices():\n    adb_command = \"adb devices\"\n    device_list = []\n    result = execute_adb(adb_command)\n    if result != \"ERROR\":\n        devices = result.split(\"\\n\")[1:]\n        for d in devices:\n            device_list.append(d.split()[0])\n    return device_list\ndef get_id_from_element(elem):\n    bounds = elem.attrib[\"bounds\"][1:-1].split(\"][\")\n    x1, y1 = map(int, bounds[0].split(\",\"))",
+        "type": "code",
+        "location": "/scripts/and_controller.py:1-43"
+    },
+    "47": {
+        "file_id": 5,
+        "content": "Imports required libraries and defines a class for Android elements, function to execute ADB commands, lists all connected devices, and extracts ID from an Android element's bounds.",
+        "type": "comment"
+    },
+    "48": {
+        "file_id": 5,
+        "content": "    x2, y2 = map(int, bounds[1].split(\",\"))\n    elem_w, elem_h = x2 - x1, y2 - y1\n    if \"resource-id\" in elem.attrib and elem.attrib[\"resource-id\"]:\n        elem_id = elem.attrib[\"resource-id\"].replace(\":\", \".\").replace(\"/\", \"_\")\n    else:\n        elem_id = f\"{elem.attrib['class']}_{elem_w}_{elem_h}\"\n    if \"content-desc\" in elem.attrib and elem.attrib[\"content-desc\"] and len(elem.attrib[\"content-desc\"]) < 20:\n        content_desc = elem.attrib['content-desc'].replace(\"/\", \"_\").replace(\" \", \"\").replace(\":\", \"_\")\n        elem_id += f\"_{content_desc}\"\n    return elem_id\ndef traverse_tree(xml_path, elem_list, attrib, add_index=False):\n    path = []\n    for event, elem in ET.iterparse(xml_path, ['start', 'end']):\n        if event == 'start':\n            path.append(elem)\n            if attrib in elem.attrib and elem.attrib[attrib] == \"true\":\n                parent_prefix = \"\"\n                if len(path) > 1:\n                    parent_prefix = get_id_from_element(path[-2])\n                bounds = elem.attrib[\"bounds\"][1:-1].split(\"][\")",
+        "type": "code",
+        "location": "/scripts/and_controller.py:44-65"
+    },
+    "49": {
+        "file_id": 5,
+        "content": "This code snippet is parsing an XML file and generating unique identifiers for elements within the file. It extracts attributes such as resource-id, class, content-desc, and dimensions of each element to form the identifier. The function \"get_id_from_element\" generates the identifier based on these attributes, and the \"traverse_tree\" function traverses the XML tree, applying certain conditions to generate identifiers for elements that meet those criteria.",
+        "type": "comment"
+    },
+    "50": {
+        "file_id": 5,
+        "content": "                x1, y1 = map(int, bounds[0].split(\",\"))\n                x2, y2 = map(int, bounds[1].split(\",\"))\n                center = (x1 + x2) // 2, (y1 + y2) // 2\n                elem_id = get_id_from_element(elem)\n                if parent_prefix:\n                    elem_id = parent_prefix + \"_\" + elem_id\n                if add_index:\n                    elem_id += f\"_{elem.attrib['index']}\"\n                close = False\n                for e in elem_list:\n                    bbox = e.bbox\n                    center_ = (bbox[0][0] + bbox[1][0]) // 2, (bbox[0][1] + bbox[1][1]) // 2\n                    dist = (abs(center[0] - center_[0]) ** 2 + abs(center[1] - center_[1]) ** 2) ** 0.5\n                    if dist <= configs[\"MIN_DIST\"]:\n                        close = True\n                        break\n                if not close:\n                    elem_list.append(AndroidElement(elem_id, ((x1, y1), (x2, y2)), attrib))\n        if event == 'end':\n            path.pop()\nclass AndroidController:\n    def __init__(self, device):",
+        "type": "code",
+        "location": "/scripts/and_controller.py:66-90"
+    },
+    "51": {
+        "file_id": 5,
+        "content": "Functionality: This code creates Android elements based on their bounding box coordinates and appends them to a list.\n\nExplanation: The code checks if the given element is close enough to an existing element in the list by comparing their bounding box centers' distance. If it's not close, it creates a new AndroidElement object with the provided ID, bounding box coordinates, and attributes, and appends it to the list. If it's already close, it skips creating a new element. At the end of the event (presumably loop), if 'end' is reached, the code removes the top element from the path stack.",
+        "type": "comment"
+    },
+    "52": {
+        "file_id": 5,
+        "content": "        self.device = device\n        self.screenshot_dir = configs[\"ANDROID_SCREENSHOT_DIR\"]\n        self.xml_dir = configs[\"ANDROID_XML_DIR\"]\n        self.width, self.height = self.get_device_size()\n        self.backslash = \"\\\\\"\n    def get_device_size(self):\n        adb_command = f\"adb -s {self.device} shell wm size\"\n        result = execute_adb(adb_command)\n        if result != \"ERROR\":\n            return map(int, result.split(\": \")[1].split(\"x\"))\n        return 0, 0\n    def get_screenshot(self, prefix, save_dir):\n        cap_command = f\"adb -s {self.device} shell screencap -p \" \\\n                      f\"{os.path.join(self.screenshot_dir, prefix + '.png').replace(self.backslash, '/')}\"\n        pull_command = f\"adb -s {self.device} pull \" \\\n                       f\"{os.path.join(self.screenshot_dir, prefix + '.png').replace(self.backslash, '/')} \" \\\n                       f\"{os.path.join(save_dir, prefix + '.png')}\"\n        result = execute_adb(cap_command)\n        if result != \"ERROR\":\n            result = execute_adb(pull_command)",
+        "type": "code",
+        "location": "/scripts/and_controller.py:91-112"
+    },
+    "53": {
+        "file_id": 5,
+        "content": "This code is part of an Android controller that handles device-related operations. It sets the device, screenshot directory, XML directory, and gets the device's width and height. The `get_device_size` function retrieves the screen size using the ADB command, and `get_screenshot` takes a prefix and save directory to capture and save a screenshot.",
+        "type": "comment"
+    },
+    "54": {
+        "file_id": 5,
+        "content": "            if result != \"ERROR\":\n                return os.path.join(save_dir, prefix + \".png\")\n            return result\n        return result\n    def get_xml(self, prefix, save_dir):\n        dump_command = f\"adb -s {self.device} shell uiautomator dump \" \\\n                       f\"{os.path.join(self.xml_dir, prefix + '.xml').replace(self.backslash, '/')}\"\n        pull_command = f\"adb -s {self.device} pull \" \\\n                       f\"{os.path.join(self.xml_dir, prefix + '.xml').replace(self.backslash, '/')} \" \\\n                       f\"{os.path.join(save_dir, prefix + '.xml')}\"\n        result = execute_adb(dump_command)\n        if result != \"ERROR\":\n            result = execute_adb(pull_command)\n            if result != \"ERROR\":\n                return os.path.join(save_dir, prefix + \".xml\")\n            return result\n        return result\n    def back(self):\n        adb_command = f\"adb -s {self.device} shell input keyevent KEYCODE_BACK\"\n        ret = execute_adb(adb_command)\n        return ret\n    def tap(self, x, y):",
+        "type": "code",
+        "location": "/scripts/and_controller.py:113-137"
+    },
+    "55": {
+        "file_id": 5,
+        "content": "This code defines a class with three methods. The `and_controller` class allows executing commands on an Android device using adb (Android Debug Bridge).\n\nThe `back()` method sends the back key event to the device.\n\nThe `get_xml(prefix, save_dir)` method dumps and pulls an XML file from the device to the specified save directory, returning the saved file path if successful; otherwise, it returns any error message.\n\nThe `execute_adb(command)` function is used to execute adb commands but its implementation is not shown in this code block.",
+        "type": "comment"
+    },
+    "56": {
+        "file_id": 5,
+        "content": "        adb_command = f\"adb -s {self.device} shell input tap {x} {y}\"\n        ret = execute_adb(adb_command)\n        return ret\n    def text(self, input_str):\n        input_str = input_str.replace(\" \", \"%s\")\n        input_str = input_str.replace(\"'\", \"\")\n        adb_command = f\"adb -s {self.device} shell input text {input_str}\"\n        ret = execute_adb(adb_command)\n        return ret\n    def long_press(self, x, y, duration=1000):\n        adb_command = f\"adb -s {self.device} shell input swipe {x} {y} {x} {y} {duration}\"\n        ret = execute_adb(adb_command)\n        return ret\n    def swipe(self, x, y, direction, dist=\"medium\", quick=False):\n        unit_dist = int(self.width / 10)\n        if dist == \"long\":\n            unit_dist *= 3\n        elif dist == \"medium\":\n            unit_dist *= 2\n        if direction == \"up\":\n            offset = 0, -2 * unit_dist\n        elif direction == \"down\":\n            offset = 0, 2 * unit_dist\n        elif direction == \"left\":\n            offset = -1 * unit_dist, 0\n        elif direction == \"right\":",
+        "type": "code",
+        "location": "/scripts/and_controller.py:138-166"
+    },
+    "57": {
+        "file_id": 5,
+        "content": "The code above contains four methods: \"tap\", \"text\", \"long_press\", and \"swipe\". Each method takes specific arguments such as (x, y) coordinates for taps and swipes, input text for text input, and duration for long press. The methods execute adb commands on a connected device to perform the specified action.",
+        "type": "comment"
+    },
+    "58": {
+        "file_id": 5,
+        "content": "            offset = unit_dist, 0\n        else:\n            return \"ERROR\"\n        duration = 100 if quick else 400\n        adb_command = f\"adb -s {self.device} shell input swipe {x} {y} {x+offset[0]} {y+offset[1]} {duration}\"\n        ret = execute_adb(adb_command)\n        return ret\n    def swipe_precise(self, start, end, duration=400):\n        start_x, start_y = start\n        end_x, end_y = end\n        adb_command = f\"adb -s {self.device} shell input swipe {start_x} {start_x} {end_x} {end_y} {duration}\"\n        ret = execute_adb(adb_command)\n        return ret",
+        "type": "code",
+        "location": "/scripts/and_controller.py:167-180"
+    },
+    "59": {
+        "file_id": 5,
+        "content": "Code performs swipe actions on a device using ADB (Android Debug Bridge) commands. It allows for different swipe durations based on the \"quick\" parameter and has two functions: \"swipe\" and \"swipe_precise\".",
+        "type": "comment"
+    },
+    "60": {
+        "file_id": 6,
+        "content": "/scripts/config.py",
+        "type": "filepath"
+    },
+    "61": {
+        "file_id": 6,
+        "content": "Function to load configuration from a YAML file, merging it with environment variables.",
+        "type": "summary"
+    },
+    "62": {
+        "file_id": 6,
+        "content": "import os\nimport yaml\ndef load_config(config_path=\"./config.yaml\"):\n    configs = dict(os.environ)\n    with open(config_path, \"r\") as file:\n        yaml_data = yaml.safe_load(file)\n    configs.update(yaml_data)\n    return configs",
+        "type": "code",
+        "location": "/scripts/config.py:1-10"
+    },
+    "63": {
+        "file_id": 6,
+        "content": "Function to load configuration from a YAML file, merging it with environment variables.",
+        "type": "comment"
+    },
+    "64": {
+        "file_id": 7,
+        "content": "/scripts/document_generation.py",
+        "type": "filepath"
+    },
+    "65": {
+        "file_id": 7,
+        "content": "The code sets up arguments for the \"AppAgent - Human Demonstration\" program, creates directories, processes lines from a record file, encodes images and extracts action types and parameters. It handles user actions by generating prompts with regular expressions and includes an else block to check for existing documents and refine them if enabled. The code waits for GPT-4V to generate documentation, constructs content including prompts and images, updates `doc_content`, logs entries, handles errors, and sleeps between requests.",
+        "type": "summary"
+    },
+    "66": {
+        "file_id": 7,
+        "content": "import argparse\nimport ast\nimport json\nimport os\nimport re\nimport sys\nimport time\nimport prompts\nfrom config import load_config\nfrom model import ask_gpt4v\nfrom utils import print_with_color, encode_image\narg_desc = \"AppAgent - Human Demonstration\"\nparser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=arg_desc)\nparser.add_argument(\"--app\", required=True)\nparser.add_argument(\"--demo\", required=True)\nparser.add_argument(\"--root_dir\", default=\"./\")\nargs = vars(parser.parse_args())\nconfigs = load_config()\nroot_dir = args[\"root_dir\"]\nwork_dir = os.path.join(root_dir, \"apps\")\nif not os.path.exists(work_dir):\n    os.mkdir(work_dir)\napp = args[\"app\"]\nwork_dir = os.path.join(work_dir, app)\ndemo_dir = os.path.join(work_dir, \"demos\")\ndemo_name = args[\"demo\"]\ntask_dir = os.path.join(demo_dir, demo_name)\nxml_dir = os.path.join(task_dir, \"xml\")\nlabeled_ss_dir = os.path.join(task_dir, \"labeled_screenshots\")\nrecord_path = os.path.join(task_dir, \"record.txt\")\ntask_desc_path = os.path.join(task_dir, \"task_desc.txt\")",
+        "type": "code",
+        "location": "/scripts/document_generation.py:1-35"
+    },
+    "67": {
+        "file_id": 7,
+        "content": "This code is setting up arguments for a program called \"AppAgent - Human Demonstration\". It specifies required parameters such as the app and demo to be used. The code also creates directories if they do not exist, and defines paths for various files and directories related to the task at hand.",
+        "type": "comment"
+    },
+    "68": {
+        "file_id": 7,
+        "content": "if not os.path.exists(task_dir) or not os.path.exists(xml_dir) or not os.path.exists(labeled_ss_dir) \\\n        or not os.path.exists(record_path) or not os.path.exists(task_desc_path):\n    sys.exit()\nlog_path = os.path.join(task_dir, f\"log_{app}_{demo_name}.txt\")\ndocs_dir = os.path.join(work_dir, \"demo_docs\")\nif not os.path.exists(docs_dir):\n    os.mkdir(docs_dir)\nprint_with_color(f\"Starting to generate documentations for the app {app} based on the demo {demo_name}\", \"yellow\")\ndoc_count = 0\nwith open(record_path, \"r\") as infile:\n    step = len(infile.readlines()) - 1\n    infile.seek(0)\n    for i in range(1, step + 1):\n        img_before = encode_image(os.path.join(labeled_ss_dir, f\"{demo_name}_{i}.png\"))\n        img_after = encode_image(os.path.join(labeled_ss_dir, f\"{demo_name}_{i + 1}.png\"))\n        rec = infile.readline().strip()\n        action, resource_id = rec.split(\":::\")\n        action_type = action.split(\"(\")[0]\n        action_param = re.findall(r\"\\((.*?)\\)\", action)[0]\n        if action_type == \"tap\":",
+        "type": "code",
+        "location": "/scripts/document_generation.py:36-57"
+    },
+    "69": {
+        "file_id": 7,
+        "content": "Code is checking if certain directories exist and creating a directory for document generation. It then reads from a record file, processes each line, encoding images before_and_after the step, extracting action type and parameters.",
+        "type": "comment"
+    },
+    "70": {
+        "file_id": 7,
+        "content": "            prompt_template = prompts.tap_doc_template\n            prompt = re.sub(r\"<ui_element>\", action_param, prompt_template)\n        elif action_type == \"text\":\n            input_area, input_text = action_param.split(\":sep:\")\n            prompt_template = prompts.text_doc_template\n            prompt = re.sub(r\"<ui_element>\", input_area, prompt_template)\n        elif action_type == \"long_press\":\n            prompt_template = prompts.long_press_doc_template\n            prompt = re.sub(r\"<ui_element>\", action_param, prompt_template)\n        elif action_type == \"swipe\":\n            swipe_area, swipe_dir = action_param.split(\":sep:\")\n            if swipe_dir == \"up\" or swipe_dir == \"down\":\n                action_type = \"v_swipe\"\n            elif swipe_dir == \"left\" or swipe_dir == \"right\":\n                action_type = \"h_swipe\"\n            prompt_template = prompts.swipe_doc_template\n            prompt = re.sub(r\"<swipe_dir>\", swipe_dir, prompt_template)\n            prompt = re.sub(r\"<ui_element>\", swipe_area, prompt)",
+        "type": "code",
+        "location": "/scripts/document_generation.py:58-75"
+    },
+    "71": {
+        "file_id": 7,
+        "content": "This code handles different user actions and generates prompts based on the action type. It uses regular expressions to replace placeholders in prompt templates with specific action parameters.",
+        "type": "comment"
+    },
+    "72": {
+        "file_id": 7,
+        "content": "        else:\n            break\n        task_desc = open(task_desc_path, \"r\").read()\n        prompt = re.sub(r\"<task_desc>\", task_desc, prompt)\n        doc_name = resource_id + \".txt\"\n        doc_path = os.path.join(docs_dir, doc_name)\n        if os.path.exists(doc_path):\n            doc_content = ast.literal_eval(open(doc_path).read())\n            if doc_content[action_type]:\n                if configs[\"DOC_REFINE\"]:\n                    suffix = re.sub(r\"<old_doc>\", doc_content[action_type], prompts.refine_doc_suffix)\n                    prompt += suffix\n                    print_with_color(f\"Documentation for the element {resource_id} already exists. The doc will be \"\n                                     f\"refined based on the latest demo.\", \"yellow\")\n                else:\n                    print_with_color(f\"Documentation for the element {resource_id} already exists. Turn on DOC_REFINE \"\n                                     f\"in the config file if needed.\", \"yellow\")\n                    continue\n        else:",
+        "type": "code",
+        "location": "/scripts/document_generation.py:76-96"
+    },
+    "73": {
+        "file_id": 7,
+        "content": "Else block: checks if a document for the current task already exists and refines it if DOC_REFINE is enabled in the config file.",
+        "type": "comment"
+    },
+    "74": {
+        "file_id": 7,
+        "content": "            doc_content = {\n                \"tap\": \"\",\n                \"text\": \"\",\n                \"v_swipe\": \"\",\n                \"h_swipe\": \"\",\n                \"long_press\": \"\"\n            }\n        print_with_color(f\"Waiting for GPT-4V to generate documentation for the element {resource_id}\", \"yellow\")\n        content = [\n            {\n                \"type\": \"text\",\n                \"text\": prompt\n            },\n            {\n                \"type\": \"image_url\",\n                \"image_url\": {\n                    \"url\": f\"data:image/jpeg;base64,{img_before}\"\n                }\n            },\n            {\n                \"type\": \"image_url\",\n                \"image_url\": {\n                    \"url\": f\"data:image/jpeg;base64,{img_after}\"\n                }\n            }\n        ]\n        rsp = ask_gpt4v(content)\n        if \"error\" not in rsp:\n            msg = rsp[\"choices\"][0][\"message\"][\"content\"]\n            doc_content[action_type] = msg\n            with open(log_path, \"a\") as logfile:\n                log_item = {\"step\": i, \"prompt\": prompt, \"image_before\": f\"{demo_name}_{i}.png\",",
+        "type": "code",
+        "location": "/scripts/document_generation.py:97-130"
+    },
+    "75": {
+        "file_id": 7,
+        "content": "The code is waiting for GPT-4V to generate documentation for an element with the resource ID. It then constructs content, possibly a prompt and two images before and after an action on the element. If there are no errors in the response from GPT-4V, it updates the `doc_content` dictionary with the generated message, and writes a log entry with the step number, prompt, and image names.",
+        "type": "comment"
+    },
+    "76": {
+        "file_id": 7,
+        "content": "                            \"image_after\": f\"{demo_name}_{i + 1}.png\", \"response\": rsp}\n                logfile.write(json.dumps(log_item) + \"\\n\")\n            with open(doc_path, \"w\") as outfile:\n                outfile.write(str(doc_content))\n            doc_count += 1\n            print_with_color(f\"Documentation generated and saved to {doc_path}\", \"yellow\")\n        else:\n            print_with_color(rsp[\"error\"][\"message\"], \"red\")\n        time.sleep(configs[\"REQUEST_INTERVAL\"])\nprint_with_color(f\"Documentation generation phase completed. {doc_count} docs generated.\", \"yellow\")",
+        "type": "code",
+        "location": "/scripts/document_generation.py:131-141"
+    },
+    "77": {
+        "file_id": 7,
+        "content": "Generates and saves documents, writes log entries, handles errors with colorful output, sleeps for a specified interval between requests.",
+        "type": "comment"
+    },
+    "78": {
+        "file_id": 8,
+        "content": "/scripts/model.py",
+        "type": "filepath"
+    },
+    "79": {
+        "file_id": 8,
+        "content": "The code imports modules, loads configuration, defines functions for requesting OpenAI API, parsing response JSON, extracting information, printing with color formatting, handling model responses and exceptions, and deciding/formatting actions based on the act name.",
+        "type": "summary"
+    },
+    "80": {
+        "file_id": 8,
+        "content": "import re\nimport requests\nfrom config import load_config\nfrom utils import print_with_color\nconfigs = load_config()\ndef ask_gpt4v(content):\n    headers = {\n        \"Content-Type\": \"application/json\",\n        \"Authorization\": f\"Bearer {configs['OPENAI_API_KEY']}\"\n    }\n    payload = {\n        \"model\": configs[\"OPENAI_API_MODEL\"],\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": content\n            }\n        ],\n        \"temperature\": configs[\"TEMPERATURE\"],\n        \"max_tokens\": configs[\"MAX_TOKENS\"]\n    }\n    response = requests.post(configs[\"OPENAI_API_BASE\"], headers=headers, json=payload)\n    if \"error\" not in response.json():\n        usage = response.json()[\"usage\"]\n        prompt_tokens = usage[\"prompt_tokens\"]\n        completion_tokens = usage[\"completion_tokens\"]\n        print_with_color(f\"Request cost is \"\n                         f\"${'{0:.2f}'.format(prompt_tokens / 1000 * 0.01 + completion_tokens / 1000 * 0.03)}\",\n                         \"yellow\")\n    return response.json()",
+        "type": "code",
+        "location": "/scripts/model.py:1-34"
+    },
+    "81": {
+        "file_id": 8,
+        "content": "This code imports necessary modules and loads configuration from a file. It then defines a function `ask_gpt4v` that sends a request to an OpenAI API using provided configuration, returns the response JSON, and prints the request cost if there is no error in the response.",
+        "type": "comment"
+    },
+    "82": {
+        "file_id": 8,
+        "content": "def parse_explore_rsp(rsp):\n    try:\n        msg = rsp[\"choices\"][0][\"message\"][\"content\"]\n        observation = re.findall(r\"Observation: (.*?)$\", msg, re.MULTILINE)[0]\n        think = re.findall(r\"Thought: (.*?)$\", msg, re.MULTILINE)[0]\n        act = re.findall(r\"Action: (.*?)$\", msg, re.MULTILINE)[0]\n        last_act = re.findall(r\"Summary: (.*?)$\", msg, re.MULTILINE)[0]\n        print_with_color(\"Observation:\", \"yellow\")\n        print_with_color(observation, \"magenta\")\n        print_with_color(\"Thought:\", \"yellow\")\n        print_with_color(think, \"magenta\")\n        print_with_color(\"Action:\", \"yellow\")\n        print_with_color(act, \"magenta\")\n        print_with_color(\"Summary:\", \"yellow\")\n        print_with_color(last_act, \"magenta\")\n        if \"FINISH\" in act:\n            return [\"FINISH\"]\n        act_name = act.split(\"(\")[0]\n        if act_name == \"tap\":\n            area = int(re.findall(r\"tap\\((.*?)\\)\", act)[0])\n            return [act_name, area, last_act]\n        elif act_name == \"text\":\n            input_str = re.findall(r\"text\\((.*?)\\)\", act)[0][1:-1]",
+        "type": "code",
+        "location": "/scripts/model.py:37-59"
+    },
+    "83": {
+        "file_id": 8,
+        "content": "Function `parse_explore_rsp` parses a response and extracts observation, thought, action, and summary. It then prints observation, thought, action, and summary with colors, and returns the action name, area (if action is 'tap'), and last_act (if action is 'text') or finishes if \"FINISH\" found in action.",
+        "type": "comment"
+    },
+    "84": {
+        "file_id": 8,
+        "content": "            return [act_name, input_str, last_act]\n        elif act_name == \"long_press\":\n            area = int(re.findall(r\"long_press\\((.*?)\\)\", act)[0])\n            return [act_name, area, last_act]\n        elif act_name == \"swipe\":\n            params = re.findall(r\"swipe\\((.*?)\\)\", act)[0]\n            area, swipe_dir, dist = params.split(\",\")\n            area = int(area)\n            swipe_dir = swipe_dir.strip()[1:-1]\n            dist = dist.strip()[1:-1]\n            return [act_name, area, swipe_dir, dist, last_act]\n        elif act_name == \"grid\":\n            return [act_name]\n        else:\n            print_with_color(f\"ERROR: Undefined act {act_name}!\", \"red\")\n            return [\"ERROR\"]\n    except Exception as e:\n        print_with_color(f\"ERROR: an exception occurs while parsing the model response: {e}\", \"red\")\n        print_with_color(rsp, \"red\")\n        return [\"ERROR\"]\ndef parse_grid_rsp(rsp):\n    try:\n        msg = rsp[\"choices\"][0][\"message\"][\"content\"]\n        observation = re.findall(r\"Observation: (.*?)$\", msg, re.MULTILINE)[0]",
+        "type": "code",
+        "location": "/scripts/model.py:60-85"
+    },
+    "85": {
+        "file_id": 8,
+        "content": "This code is parsing a response from a model and returns different information based on the type of action specified in the response. If an undefined action or error occurs, it prints an error message. The \"parse_grid_rsp\" function specifically handles grid actions.",
+        "type": "comment"
+    },
+    "86": {
+        "file_id": 8,
+        "content": "        think = re.findall(r\"Thought: (.*?)$\", msg, re.MULTILINE)[0]\n        act = re.findall(r\"Action: (.*?)$\", msg, re.MULTILINE)[0]\n        last_act = re.findall(r\"Summary: (.*?)$\", msg, re.MULTILINE)[0]\n        print_with_color(\"Observation:\", \"yellow\")\n        print_with_color(observation, \"magenta\")\n        print_with_color(\"Thought:\", \"yellow\")\n        print_with_color(think, \"magenta\")\n        print_with_color(\"Action:\", \"yellow\")\n        print_with_color(act, \"magenta\")\n        print_with_color(\"Summary:\", \"yellow\")\n        print_with_color(last_act, \"magenta\")\n        if \"FINISH\" in act:\n            return [\"FINISH\"]\n        act_name = act.split(\"(\")[0]\n        if act_name == \"tap\":\n            params = re.findall(r\"tap\\((.*?)\\)\", act)[0].split(\",\")\n            area = int(params[0].strip())\n            subarea = params[1].strip()[1:-1]\n            return [act_name + \"_grid\", area, subarea, last_act]\n        elif act_name == \"long_press\":\n            params = re.findall(r\"long_press\\((.*?)\\)\", act)[0].split(\",\")",
+        "type": "code",
+        "location": "/scripts/model.py:86-106"
+    },
+    "87": {
+        "file_id": 8,
+        "content": "Extracts observation, thought, action, and summary from the message string. Displays them with color formatting. If \"FINISH\" is found in the action, it returns [\"FINISH\"]. For actions \"tap\", extracts grid area and subarea parameters. If \"long_press\" found, extracts the parameters.",
+        "type": "comment"
+    },
+    "88": {
+        "file_id": 8,
+        "content": "            area = int(params[0].strip())\n            subarea = params[1].strip()[1:-1]\n            return [act_name + \"_grid\", area, subarea, last_act]\n        elif act_name == \"swipe\":\n            params = re.findall(r\"swipe\\((.*?)\\)\", act)[0].split(\",\")\n            start_area = int(params[0].strip())\n            start_subarea = params[1].strip()[1:-1]\n            end_area = int(params[2].strip())\n            end_subarea = params[3].strip()[1:-1]\n            return [act_name + \"_grid\", start_area, start_subarea, end_area, end_subarea, last_act]\n        elif act_name == \"grid\":\n            return [act_name]\n        else:\n            print_with_color(f\"ERROR: Undefined act {act_name}!\", \"red\")\n            return [\"ERROR\"]\n    except Exception as e:\n        print_with_color(f\"ERROR: an exception occurs while parsing the model response: {e}\", \"red\")\n        print_with_color(rsp, \"red\")\n        return [\"ERROR\"]\ndef parse_reflect_rsp(rsp):\n    try:\n        msg = rsp[\"choices\"][0][\"message\"][\"content\"]\n        decision = re.findall(r\"Decision: (.*?)$\", msg, re.MULTILINE)[0]",
+        "type": "code",
+        "location": "/scripts/model.py:107-131"
+    },
+    "89": {
+        "file_id": 8,
+        "content": "This code is parsing the response from a model and determines the appropriate action based on the act name. It returns a specific grid if the act is 'grid'. If the act name is undefined, it prints an error message in red color. If any exception occurs while parsing the response, it also prints an error message with details of the exception.",
+        "type": "comment"
+    },
+    "90": {
+        "file_id": 8,
+        "content": "        think = re.findall(r\"Thought: (.*?)$\", msg, re.MULTILINE)[0]\n        print_with_color(\"Decision:\", \"yellow\")\n        print_with_color(decision, \"magenta\")\n        print_with_color(\"Thought:\", \"yellow\")\n        print_with_color(think, \"magenta\")\n        if decision == \"INEFFECTIVE\":\n            return [decision, think]\n        elif decision == \"BACK\" or decision == \"CONTINUE\" or decision == \"SUCCESS\":\n            doc = re.findall(r\"Documentation: (.*?)$\", msg, re.MULTILINE)[0]\n            print_with_color(\"Documentation:\", \"yellow\")\n            print_with_color(doc, \"magenta\")\n            return [decision, think, doc]\n        else:\n            print_with_color(f\"ERROR: Undefined decision {decision}!\", \"red\")\n            return [\"ERROR\"]\n    except Exception as e:\n        print_with_color(f\"ERROR: an exception occurs while parsing the model response: {e}\", \"red\")\n        print_with_color(rsp, \"red\")\n        return [\"ERROR\"]",
+        "type": "code",
+        "location": "/scripts/model.py:132-150"
+    },
+    "91": {
+        "file_id": 8,
+        "content": "This code extracts decision, thought, and documentation from a message using regular expressions. It then prints them with colored formatting and returns the information as a list. If an undefined decision or exception occurs, it returns an error message.",
+        "type": "comment"
+    },
+    "92": {
+        "file_id": 9,
+        "content": "/scripts/prompts.py",
+        "type": "filepath"
+    },
+    "93": {
+        "file_id": 9,
+        "content": "The code showcases mobile app UI templates for touch interactions, and instructs in describing UI elements task-oriented manner with pronouns, specifying output format as \"Decision: SUCCESS\" followed by an explanation of the action's impact on the task.",
+        "type": "summary"
+    },
+    "94": {
+        "file_id": 9,
+        "content": "tap_doc_template = \"\"\"I will give you the screenshot of a mobile app before and after tapping the UI element labeled \nwith the number <ui_element> on the screen. The numeric tag of each element is located at the center of the element. \nTapping this UI element is a necessary part of proceeding with a larger task, which is to <task_desc>. Your task is to \ndescribe the functionality of the UI element concisely in one or two sentences. Notice that your description of the UI \nelement should focus on the general function. For example, if the UI element is used to navigate to the chat window \nwith John, your description should not include the name of the specific person. Just say: \"Tapping this area will \nnavigate the user to the chat window\". Never include the numeric tag of the UI element in your description. You can use \npronouns such as \"the UI element\" to refer to the element.\"\"\"\ntext_doc_template = \"\"\"I will give you the screenshot of a mobile app before and after typing in the input area labeled",
+        "type": "code",
+        "location": "/scripts/prompts.py:1-10"
+    },
+    "95": {
+        "file_id": 9,
+        "content": "ap_doc_template: Describes a mobile app screenshot before and after tapping a UI element with a number, focusing on the general function without mentioning numeric tag or specific details.",
+        "type": "comment"
+    },
+    "96": {
+        "file_id": 9,
+        "content": "with the number <ui_element> on the screen. The numeric tag of each element is located at the center of the element. \nTyping in this UI element is a necessary part of proceeding with a larger task, which is to <task_desc>. Your task is \nto describe the functionality of the UI element concisely in one or two sentences. Notice that your description of the \nUI element should focus on the general function. For example, if the change of the screenshot shows that the user typed \n\"How are you?\" in the chat box, you do not need to mention the actual text. Just say: \"This input area is used for the \nuser to type a message to send to the chat window.\". Never include the numeric tag of the UI element in your \ndescription. You can use pronouns such as \"the UI element\" to refer to the element.\"\"\"\nlong_press_doc_template = \"\"\"I will give you the screenshot of a mobile app before and after long pressing the UI \nelement labeled with the number <ui_element> on the screen. The numeric tag of each element is located at the center of ",
+        "type": "code",
+        "location": "/scripts/prompts.py:11-20"
+    },
+    "97": {
+        "file_id": 9,
+        "content": "Long press documentation template for a mobile app UI element. Provides screenshot comparison before and after long pressing.",
+        "type": "comment"
+    },
+    "98": {
+        "file_id": 9,
+        "content": "the element. Long pressing this UI element is a necessary part of proceeding with a larger task, which is to \n<task_desc>. Your task is to describe the functionality of the UI element concisely in one or two sentences. Notice \nthat your description of the UI element should focus on the general function. For example, if long pressing the UI \nelement redirects the user to the chat window with John, your description should not include the name of the specific \nperson. Just say: \"Long pressing this area will redirect the user to the chat window\". Never include the numeric tag of \nthe UI element in your description. You can use pronouns such as \"the UI element\" to refer to the element.\"\"\"\nswipe_doc_template = \"\"\"I will give you the screenshot of a mobile app before and after swiping <swipe_dir> the UI \nelement labeled with the number <ui_element> on the screen. The numeric tag of each element is located at the center of \nthe element. Swiping this UI element is a necessary part of proceeding with a larger task, which is to <task_desc>. ",
+        "type": "code",
+        "location": "/scripts/prompts.py:21-30"
+    },
+    "99": {
+        "file_id": 9,
+        "content": "This code is generating a template for describing the functionality of swiping a specific UI element in a mobile app. The description should focus on the general function, without including the numeric tag or name of the person related to the task.",
+        "type": "comment"
+    }
+}

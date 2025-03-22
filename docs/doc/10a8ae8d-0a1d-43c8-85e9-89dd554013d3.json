@@ -1,0 +1,10 @@
+{
+    "summary": "Function to load configuration from a YAML file, merging it with environment variables.",
+    "details": [
+        {
+            "comment": "Function to load configuration from a YAML file, merging it with environment variables.",
+            "location": "\"/media/root/Toshiba XG3/works/AppAgent/docs/src/scripts/config.py\":0-9",
+            "content": "import os\nimport yaml\ndef load_config(config_path=\"./config.yaml\"):\n    configs = dict(os.environ)\n    with open(config_path, \"r\") as file:\n        yaml_data = yaml.safe_load(file)\n    configs.update(yaml_data)\n    return configs"
+        }
+    ]
+}

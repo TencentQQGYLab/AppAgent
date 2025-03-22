@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="github-markdown.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <title>Project structure of: mnotgod96/AppAgent</title>
+    <style>
+        .directory:hover {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        :target {
+            background-color: yellow !important;
+        }
+
+        .folded::before {
+            content: '\25B6';
+            margin-right: 8px;
+            /* Add space between marker and text */
+        }
+
+        .expanded::before {
+            content: '\25BC';
+            margin-right: 8px;
+            /* Add space between marker and text */
+        }
+    </style>
+    <script>
+        function toggleVisibility(element) {
+            let mclass = element.getAttribute("class");
+            if (mclass == "expanded") {
+                element.setAttribute('class', 'folded');
+            } else {
+                element.setAttribute('class', 'expanded');
+            }
+            const siblings = element.parentNode.children;
+            for (const sibling of siblings) {
+                if (sibling !== element) {
+                    sibling.style.display = (sibling.style.display === 'none') ? 'block' : 'none';
+                }
+            }
+        }
+    </script>
+    <style>
+        .markdown-body {
+            box-sizing: border-box;
+            min-width: 200px;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 45px;
+        }
+
+        @media (max-width: 767px) {
+            .markdown-body {
+                padding: 15px;
+            }
+
+            .partial-repository-url {
+                display: none;
+            }
+        }
+
+        ul {
+            list-style: none;
+        }
+        #feeling-lucky:hover{
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <article class="markdown-body">
+        <h2>Project structure<span hierarchy="0" class="partial-repository-url"> of: mnotgod96/AppAgent</span><div style="float: right;"><a title="Document index" style="margin:3.5px;" href="index.html"><i class="bi bi-search"></i></a><a title="Feeling lucky" style="margin:3.5px;" id="feeling-lucky" href="#"><i class="bi bi-dice-3"></i></a><a title="Expand tree" style="margin:3.5px;" href="tree.html?full=true" id="expand-tree"><i class="bi bi-caret-down-square"></i></a></div></h2>
+<ul>
+<li><span hierarchy="0" class="expanded" onclick="toggleVisibility(this)" ><strong class="directory" id="/"><code>AppAgent</code></strong> <em>Autonomous Android emulator tool with OpenAI integration</em></span><ul>
+<li><a class="file_link" href="index.html?q=/config.yaml" id="/config.yaml"><code>config&period;yaml</code></a> <em>OpenAI API, GPT settings, Android screenshots config.</em></li>
+<li><a class="file_link" href="index.html?q=/learn.py" id="/learn.py"><code>learn&period;py</code></a> <em>Learn.py: Argument parser for AppAgent modes and params.</em></li>
+<li><a class="file_link" href="index.html?q=/README.md" id="/README.md"><code>README&period;md</code></a> <em>Open-source Android Studio emulator overlay grid tool.</em></li>
+<li><a class="file_link" href="index.html?q=/requirements.txt" id="/requirements.txt"><code>requirements&period;txt</code></a> <em>Project dependencies: argparse, colorama, opencv-python, pyshtine, pyyaml, requests</em></li>
+<li><a class="file_link" href="index.html?q=/run.py" id="/run.py"><code>run&period;py</code></a> <em>Import, Parse, Execute - /run.py</em></li>
+<li><span hierarchy="1" class="expanded" onclick="toggleVisibility(this)" ><strong class="directory" id="/scripts/"><code>scripts</code></strong> <em>Autonomous exploration, document generation, control script, UI templates, task automation, and utility functions.</em></span><ul>
+<li><a class="file_link" href="index.html?q=/scripts/and_controller.py" id="/scripts/and_controller.py"><code>and&UnderBar;controller&period;py</code></a> <em>Android control script with adb, ID generation, and swipe actions</em></li>
+<li><a class="file_link" href="index.html?q=/scripts/config.py" id="/scripts/config.py"><code>config&period;py</code></a> <em>Load YAML config, merge with env vars.</em></li>
+<li><a class="file_link" href="index.html?q=/scripts/document_generation.py" id="/scripts/document_generation.py"><code>document&UnderBar;generation&period;py</code></a> <em>AppAgent setup for document generation with GPT-4V.</em></li>
+<li><a class="file_link" href="index.html?q=/scripts/model.py" id="/scripts/model.py"><code>model&period;py</code></a> <em>Model script with API, JSON parsing, actions, and color formatting.</em></li>
+<li><a class="file_link" href="index.html?q=/scripts/prompts.py" id="/scripts/prompts.py"><code>prompts&period;py</code></a> <em>Mobile app UI templates for touch interactions with task-oriented prompts.</em></li>
+<li><a class="file_link" href="index.html?q=/scripts/self_explorer.py" id="/scripts/self_explorer.py"><code>self&UnderBar;explorer&period;py</code></a> <em>Autonomous exploration with GPT-4, error management, and documentation.</em></li>
+<li><a class="file_link" href="index.html?q=/scripts/step_recorder.py" id="/scripts/step_recorder.py"><code>step&UnderBar;recorder&period;py</code></a> <em>Command line script for AppAgent with step recording capabilities</em></li>
+<li><a class="file_link" href="index.html?q=/scripts/task_executor.py" id="/scripts/task_executor.py"><code>task&UnderBar;executor&period;py</code></a> <em>Automates UI interactions with XML inputs and image verification</em></li>
+<li><a class="file_link" href="index.html?q=/scripts/utils.py" id="/scripts/utils.py"><code>utils&period;py</code></a> <em>Image processing and colorful printing utility functions.</em></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+    </article>
+    <script type="text/javascript">
+        function getQueryParams() {
+            var search = window.location.search.substring(1); // Remove leading '?'
+            var queryParams = {};
+            search.split('&').forEach(function (pair) {
+                var parts = pair.split('=');
+                var key = decodeURIComponent(parts[0]);
+                var value = decodeURIComponent(parts[1]);
+                queryParams[key] = value;
+            });
+            return queryParams;
+        }
+
+        const queryParams = getQueryParams(window.location.search);
+        const show_full = queryParams.full == "true";
+        //const is_random = queryParams.random == 'true';
+        function feelingLucky() {
+            var elements = document.getElementsByClassName("file_link");
+            var randomIndex = Math.floor(Math.random() * elements.length);
+            window.location = elements[randomIndex].href;
+        }
+        //if (is_random) {feelingLucky();}
+        document.getElementById("feeling-lucky").onclick = feelingLucky;
+        if (!show_full) {
+            const spans = document.querySelectorAll('span');
+            for (let span of spans) {
+                if (span.getAttribute("hierarchy") == '0') { continue }
+                toggleVisibility(span);
+            }
+        } else {
+            const expand_elem = document.getElementById('expand-tree');
+            expand_elem.setAttribute("href", "tree.html");
+            expand_elem.setAttribute("title", "Undo expand");
+            expand_elem.innerHTML = '<i class="bi bi-caret-up-square"></i>'
+        }
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,548 @@
+{
+    "100": {
+        "file_id": 9,
+        "content": "Your task is to describe the functionality of the UI element concisely in one or two sentences. Notice that your \ndescription of the UI element should be as general as possible. For example, if swiping the UI element increases the \ncontrast ratio of an image of a building, your description should be just like this: \"Swiping this area enables the \nuser to tune a specific parameter of the image\". Never include the numeric tag of the UI element in your description. \nYou can use pronouns such as \"the UI element\" to refer to the element.\"\"\"\nrefine_doc_suffix = \"\"\"\\nA documentation of this UI element generated from previous demos is shown below. Your \ngenerated description should be based on this previous doc and optimize it. Notice that it is possible that your \nunderstanding of the function of the UI element derived from the given screenshots conflicts with the previous doc, \nbecause the function of a UI element can be flexible. In this case, your generated description should combine both.\nOld documentation of this UI element: <old_doc>\"\"\"",
+        "type": "code",
+        "location": "/scripts/prompts.py:31-41"
+    },
+    "101": {
+        "file_id": 9,
+        "content": "This code appears to be related to generating documentation for a UI element. It provides instructions on how to describe the functionality of the UI element concisely, using general terms and without including the numeric tag. The \"refine_doc_suffix\" variable suggests incorporating previous documentation if available, but also resolving any conflicts that might arise due to flexibility in the UI element's function.",
+        "type": "comment"
+    },
+    "102": {
+        "file_id": 9,
+        "content": "task_template = \"\"\"You are an agent that is trained to perform some basic tasks on a smartphone. You will be given a \nsmartphone screenshot. The interactive UI elements on the screenshot are labeled with numeric tags starting from 1. The \nnumeric tag of each interactive element is located in the center of the element.\nYou can call the following functions to control the smartphone:\n1. tap(element: int)\nThis function is used to tap an UI element shown on the smartphone screen.\n\"element\" is a numeric tag assigned to an UI element shown on the smartphone screen.\nA simple use case can be tap(5), which taps the UI element labeled with the number 5.\n2. text(text_input: str)\nThis function is used to insert text input in an input field/box. text_input is the string you want to insert and must \nbe wrapped with double quotation marks. A simple use case can be text(\"Hello, world!\"), which inserts the string \n\"Hello, world!\" into the input area on the smartphone screen. This function is usually callable when you see a keyboard ",
+        "type": "code",
+        "location": "/scripts/prompts.py:43-57"
+    },
+    "103": {
+        "file_id": 9,
+        "content": "The code provides a template for instructions on how to interact with a smartphone using two functions: tap() and text(). It explains that the user needs to provide an element number for tap(), and a string wrapped in double quotes for text(). These functions can be used to control the phone, such as tapping UI elements or inserting text input.",
+        "type": "comment"
+    },
+    "104": {
+        "file_id": 9,
+        "content": "showing in the lower half of the screen.\n3. long_press(element: int)\nThis function is used to long press an UI element shown on the smartphone screen.\n\"element\" is a numeric tag assigned to an UI element shown on the smartphone screen.\nA simple use case can be long_press(5), which long presses the UI element labeled with the number 5.\n4. swipe(element: int, direction: str, dist: str)\nThis function is used to swipe an UI element shown on the smartphone screen, usually a scroll view or a slide bar.\n\"element\" is a numeric tag assigned to an UI element shown on the smartphone screen. \"direction\" is a string that \nrepresents one of the four directions: up, down, left, right. \"direction\" must be wrapped with double quotation \nmarks. \"dist\" determines the distance of the swipe and can be one of the three options: short, medium, long. You should \nchoose the appropriate distance option according to your need.\nA simple use case can be swipe(21, \"up\", \"medium\"), which swipes up the UI element labeled with the number 21 for a ",
+        "type": "code",
+        "location": "/scripts/prompts.py:58-71"
+    },
+    "105": {
+        "file_id": 9,
+        "content": "Code snippet 57-70 describes functions for interacting with smartphone screen elements. \"long_press(element: int)\" is used to long press an element identified by its numeric tag. \"swipe(element: int, direction: str, dist: str)\" swipes an element in a specific direction and distance specified by the input parameters. The element is identified using its numeric tag, while direction and distance are string inputs enclosed in quotes.",
+        "type": "comment"
+    },
+    "106": {
+        "file_id": 9,
+        "content": "medium distance.\n5. grid()\nYou should call this function when you find the element you want to interact with is not labeled with a numeric tag and \nother elements with numeric tags cannot help with the task. The function will bring up a grid overlay to divide the \nsmartphone screen into small areas and this will give you more freedom to choose any part of the screen to tap, long \npress, or swipe.\n<ui_document>\nThe task you need to complete is to <task_description>. Your past actions to proceed with this task are summarized as \nfollows: <last_act>\nNow, given the documentation and the following labeled screenshot, you need to think and call the function needed to \nproceed with the task. Your output should include three parts in the given format:\nObservation: <Describe what you observe in the image>\nThought: <To complete the given task, what is the next step I should do>\nAction: <The function call with the correct parameters to proceed with the task. If you believe the task is completed or \nthere is no",
+        "type": "code",
+        "location": "/scripts/prompts.py:72-87"
+    },
+    "107": {
+        "file_id": 9,
+        "content": "The code is providing instructions for a function grid() to be used when an element isn't labeled with a numeric tag and other elements can't help. It brings up a grid overlay to allow selecting any part of the screen for tapping, long pressing or swiping. The user needs to observe the image, think about the next step and call the correct function with parameters.",
+        "type": "comment"
+    },
+    "108": {
+        "file_id": 9,
+        "content": "thing to be done, you should output FINISH. You cannot output anything else except a function call or FINISH \nin this field.>\nSummary: <Summarize your past actions along with your latest action in one or two sentences. Do not include the numeric \ntag in your summary>\nYou can only take one action at a time, so please directly call the function.\"\"\"\ntask_template_grid = \"\"\"You are an agent that is trained to perform some basic tasks on a smartphone. You will be given \na smartphone screenshot overlaid by a grid. The grid divides the screenshot into small square areas. Each area is \nlabeled with an integer in the top-left corner.\nYou can call the following functions to control the smartphone:\n1. tap(area: int, subarea: str)\nThis function is used to tap a grid area shown on the smartphone screen. \"area\" is the integer label assigned to a grid \narea shown on the smartphone screen. \"subarea\" is a string representing the exact location to tap within the grid area. \nIt can take one of the nine values: center, top-left, top, top-right, left, right, bottom-left, bottom, and ",
+        "type": "code",
+        "location": "/scripts/prompts.py:87-102"
+    },
+    "109": {
+        "file_id": 9,
+        "content": "Code snippet is providing a task template for an agent that will interact with a smartphone by tapping on grid areas. The agent can call the tap() function to perform this action.",
+        "type": "comment"
+    },
+    "110": {
+        "file_id": 9,
+        "content": "bottom-right.\nA simple use case can be tap(5, \"center\"), which taps the exact center of the grid area labeled with the number 5.\n2. long_press(area: int, subarea: str)\nThis function is used to long press a grid area shown on the smartphone screen. \"area\" is the integer label assigned to \na grid area shown on the smartphone screen. \"subarea\" is a string representing the exact location to long press within \nthe grid area. It can take one of the nine values: center, top-left, top, top-right, left, right, bottom-left, bottom, \nand bottom-right.\nA simple use case can be long_press(7, \"top-left\"), which long presses the top left part of the grid area labeled with \nthe number 7.\n3. swipe(start_area: int, start_subarea: str, end_area: int, end_subarea: str)\nThis function is used to perform a swipe action on the smartphone screen, especially when you want to interact with a \nscroll view or a slide bar. \"start_area\" is the integer label assigned to the grid area which marks the starting \nlocation of the swipe. \"start_subarea\" is a string representing the exact location to begin the swipe within the grid ",
+        "type": "code",
+        "location": "/scripts/prompts.py:103-117"
+    },
+    "111": {
+        "file_id": 9,
+        "content": "This code defines functions for interacting with a smartphone screen, including tap, long_press, and swipe actions. The functions allow specifying the grid area and subarea for precise touch interactions.",
+        "type": "comment"
+    },
+    "112": {
+        "file_id": 9,
+        "content": "area. \"end_area\" is the integer label assigned to the grid area which marks the ending location of the swipe. \n\"end_subarea\" is a string representing the exact location to end the swipe within the grid area.\nThe two subarea parameters can take one of the nine values: center, top-left, top, top-right, left, right, bottom-left, \nbottom, and bottom-right.\nA simple use case can be swipe(21, \"center\", 25, \"right\"), which performs a swipe starting from the center of grid area \n21 to the right part of grid area 25.\nThe task you need to complete is to <task_description>. Your past actions to proceed with this task are summarized as \nfollows: <last_act>\nNow, given the following labeled screenshot, you need to think and call the function needed to proceed with the task. \nYour output should include three parts in the given format:\nObservation: <Describe what you observe in the image>\nThought: <To complete the given task, what is the next step I should do>\nAction: <The function call with the correct parameters to proceed with the task. If you believe the task is completed or ",
+        "type": "code",
+        "location": "/scripts/prompts.py:118-131"
+    },
+    "113": {
+        "file_id": 9,
+        "content": "This code is defining a swipe function that allows users to perform a swipe action between two grid areas with specified start and end subareas. It takes four parameters: the starting area, start subarea, ending area, and end subarea. The possible subarea values are center, top-left, top, top-right, left, right, bottom-left, bottom, and bottom-right.\n\nObservation: I see a screenshot with labeled grid areas and subareas.\nThought: To proceed with the task, I need to call the appropriate function with the correct parameters based on the information in the image.\nAction: swipe(21, \"center\", 25, \"right\")",
+        "type": "comment"
+    },
+    "114": {
+        "file_id": 9,
+        "content": "there is nothing to be done, you should output FINISH. You cannot output anything else except a function call or FINISH \nin this field.>\nSummary: <Summarize your past actions along with your latest action in one or two sentences. Do not include the grid \narea number in your summary>\nYou can only take one action at a time, so please directly call the function.\"\"\"\nself_explore_task_template = \"\"\"You are an agent that is trained to complete certain tasks on a smartphone. You will be \ngiven a screenshot of a smartphone app. The interactive UI elements on the screenshot are labeled with numeric tags \nstarting from 1. \nYou can call the following functions to interact with those labeled elements to control the smartphone:\n1. tap(element: int)\nThis function is used to tap an UI element shown on the smartphone screen.\n\"element\" is a numeric tag assigned to an UI element shown on the smartphone screen.\nA simple use case can be tap(5), which taps the UI element labeled with the number 5.\n2. text(text_input: str)",
+        "type": "code",
+        "location": "/scripts/prompts.py:132-149"
+    },
+    "115": {
+        "file_id": 9,
+        "content": "This code defines a template for self-exploration tasks. It explains that the agent is trained to complete tasks on a smartphone, given a screenshot with labeled UI elements, and provides information about the functions available (tap(element: int) and text(text_input: str)) to interact with those UI elements. The agent must call these functions one at a time and summarize past actions.",
+        "type": "comment"
+    },
+    "116": {
+        "file_id": 9,
+        "content": "This function is used to insert text input in an input field/box. text_input is the string you want to insert and must \nbe wrapped with double quotation marks. A simple use case can be text(\"Hello, world!\"), which inserts the string \n\"Hello, world!\" into the input area on the smartphone screen. This function is only callable when you see a keyboard \nshowing in the lower half of the screen.\n3. long_press(element: int)\nThis function is used to long press an UI element shown on the smartphone screen.\n\"element\" is a numeric tag assigned to an UI element shown on the smartphone screen.\nA simple use case can be long_press(5), which long presses the UI element labeled with the number 5.\n4. swipe(element: int, direction: str, dist: str)\nThis function is used to swipe an UI element shown on the smartphone screen, usually a scroll view or a slide bar.\n\"element\" is a numeric tag assigned to an UI element shown on the smartphone screen. \"direction\" is a string that \nrepresents one of the four directions: up, down, left, right. \"direction\" must be wrapped with double quotation ",
+        "type": "code",
+        "location": "/scripts/prompts.py:150-163"
+    },
+    "117": {
+        "file_id": 9,
+        "content": "This function inserts text into an input field, long presses a UI element, or swipes an element on the smartphone screen.\ntext: Inserts string into input area when keyboard shows.\nlong_press: Long presses UI element with assigned numeric tag.\nswipe: Swipes UI element in specified direction and distance.",
+        "type": "comment"
+    },
+    "118": {
+        "file_id": 9,
+        "content": "marks. \"dist\" determines the distance of the swipe and can be one of the three options: short, medium, long. You should \nchoose the appropriate distance option according to your need.\nA simple use case can be swipe(21, \"up\", \"medium\"), which swipes up the UI element labeled with the number 21 for a \nmedium distance.\nThe task you need to complete is to <task_description>. Your past actions to proceed with this task are summarized as \nfollows: <last_act>\nNow, given the following labeled screenshot, you need to think and call the function needed to proceed with the task. \nYour output should include three parts in the given format:\nObservation: <Describe what you observe in the image>\nThought: <To complete the given task, what is the next step I should do>\nAction: <The function call with the correct parameters to proceed with the task. If you believe the task is completed or \nthere is nothing to be done, you should output FINISH. You cannot output anything else except a function call or FINISH \nin this field.>",
+        "type": "code",
+        "location": "/scripts/prompts.py:164-177"
+    },
+    "119": {
+        "file_id": 9,
+        "content": "Observation: The code explains the usage of a swipe function with options for distance (\"short\", \"medium\", or \"long\") and direction.\nThought: To complete the task, I need to call the appropriate function with the correct parameters.\nAction: FINISH",
+        "type": "comment"
+    },
+    "120": {
+        "file_id": 9,
+        "content": "Summary: <Summarize your past actions along with your latest action in one or two sentences. Do not include the numeric \ntag in your summary>\nYou can only take one action at a time, so please directly call the function.\"\"\"\nself_explore_reflect_template = \"\"\"I will give you screenshots of a mobile app before and after <action> the UI \nelement labeled with the number '<ui_element>' on the first screenshot. The numeric tag of each element is located at \nthe center of the element. The action of <action> this UI element was described as follows:\n<last_act>\nThe action was also an attempt to proceed with a larger task, which is to <task_desc>. Your job is to carefully analyze \nthe difference between the two screenshots to determine if the action is in accord with the description above and at \nthe same time effectively moved the task forward. Your output should be determined based on the following situations:\n1. BACK\nIf you think the action navigated you to a page where you cannot proceed with the given task, you should go back to the ",
+        "type": "code",
+        "location": "/scripts/prompts.py:178-190"
+    },
+    "121": {
+        "file_id": 9,
+        "content": "The code is a prompt template for analyzing differences in mobile app screenshots before and after an action. The user needs to determine if the action was effective and helped progress the task.",
+        "type": "comment"
+    },
+    "122": {
+        "file_id": 9,
+        "content": "previous interface. At the same time, describe the functionality of the UI element concisely in one or two sentences by \nobserving the difference between the two screenshots. Notice that your description of the UI element should focus on \nthe general function. Never include the numeric tag of the UI element in your description. You can use pronouns such as \n\"the UI element\" to refer to the element. Your output should be in the following format:\nDecision: BACK\nThought: <explain why you think the last action is wrong and you should go back to the previous interface>\nDocumentation: <describe the function of the UI element>\n2. INEFFECTIVE\nIf you find the action changed nothing on the screen (screenshots before and after the action are identical), you \nshould continue to interact with other elements on the screen. Notice that if you find the location of the cursor \nchanged between the two screenshots, then they are not identical. Your output should be in the following format:\nDecision: INEFFECTIVE\nThought: <explain why you made this decision>",
+        "type": "code",
+        "location": "/scripts/prompts.py:191-203"
+    },
+    "123": {
+        "file_id": 9,
+        "content": "Decision: BACK\nThought: Reverses the last action and returns to previous interface.\nDocumentation: Allows user to undo the previous action and go back to the previous screen.",
+        "type": "comment"
+    },
+    "124": {
+        "file_id": 9,
+        "content": "3. CONTINUE\nIf you find the action changed something on the screen but does not reflect the action description above and did not \nmove the given task forward, you should continue to interact with other elements on the screen. At the same time, \ndescribe the functionality of the UI element concisely in one or two sentences by observing the difference between the \ntwo screenshots. Notice that your description of the UI element should focus on the general function. Never include the \nnumeric tag of the UI element in your description. You can use pronouns such as \"the UI element\" to refer to the \nelement. Your output should be in the following format:\nDecision: CONTINUE\nThought: <explain why you think the action does not reflect the action description above and did not move the given \ntask forward>\nDocumentation: <describe the function of the UI element>\n4. SUCCESS\nIf you think the action successfully moved the task forward (even though it did not completed the task), you should \ndescribe the functionality of the UI element concisely in one or two sentences. Notice that your description of the UI ",
+        "type": "code",
+        "location": "/scripts/prompts.py:204-217"
+    },
+    "125": {
+        "file_id": 9,
+        "content": "Code snippet discusses the process of interacting with a UI element and documenting its functionality when the action doesn't fully complete the task but still makes progress.",
+        "type": "comment"
+    },
+    "126": {
+        "file_id": 9,
+        "content": "element should focus on the general function. Never include the numeric tag of the UI element in your description. You \ncan use pronouns such as \"the UI element\" to refer to the element. Your output should be in the following format:\nDecision: SUCCESS\nThought: <explain why you think the action successfully moved the task forward>\nDocumentation: <describe the function of the UI element>\n\"\"\"",
+        "type": "code",
+        "location": "/scripts/prompts.py:218-223"
+    },
+    "127": {
+        "file_id": 9,
+        "content": "The code provides instructions for describing UI elements in a task-oriented manner, using pronouns and avoiding numeric tags. It specifies the output format as \"Decision: SUCCESS\" followed by a thought explaining why the action moved the task forward, along with documentation describing the function of the UI element.",
+        "type": "comment"
+    },
+    "128": {
+        "file_id": 10,
+        "content": "/scripts/self_explorer.py",
+        "type": "filepath"
+    },
+    "129": {
+        "file_id": 10,
+        "content": "The code prepares the environment, generates tasks, and logs interactions with GPT-4. It handles various actions, checks for completion, queries GPT-4 upon task completion, logs relevant information, manages errors, and processes, logs, and updates actions while managing errors and documentation; autonomous exploration ends upon reaching max rounds or in case of unexpected events, displaying a yellow or red message with doc count and success status.",
+        "type": "summary"
+    },
+    "130": {
+        "file_id": 10,
+        "content": "import argparse\nimport ast\nimport datetime\nimport json\nimport os\nimport re\nimport sys\nimport time\nimport prompts\nfrom config import load_config\nfrom and_controller import list_all_devices, AndroidController, traverse_tree\nfrom model import ask_gpt4v, parse_explore_rsp, parse_reflect_rsp\nfrom utils import print_with_color, draw_bbox_multi, encode_image\narg_desc = \"AppAgent - Autonomous Exploration\"\nparser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=arg_desc)\nparser.add_argument(\"--app\")\nparser.add_argument(\"--root_dir\", default=\"./\")\nargs = vars(parser.parse_args())\nconfigs = load_config()\napp = args[\"app\"]\nroot_dir = args[\"root_dir\"]\nif not app:\n    print_with_color(\"What is the name of the target app?\", \"blue\")\n    app = input()\n    app = app.replace(\" \", \"\")\nwork_dir = os.path.join(root_dir, \"apps\")\nif not os.path.exists(work_dir):\n    os.mkdir(work_dir)\nwork_dir = os.path.join(work_dir, app)\nif not os.path.exists(work_dir):\n    os.mkdir(work_dir)\ndemo_dir = os.path.join(work_dir, \"demos\")",
+        "type": "code",
+        "location": "/scripts/self_explorer.py:1-38"
+    },
+    "131": {
+        "file_id": 10,
+        "content": "The code imports necessary libraries and defines arguments for executing the autonomous exploration script. It then loads configuration files, retrieves input from the user for target app name, creates directories if they don't exist, and prepares the environment for running the script.",
+        "type": "comment"
+    },
+    "132": {
+        "file_id": 10,
+        "content": "if not os.path.exists(demo_dir):\n    os.mkdir(demo_dir)\ndemo_timestamp = int(time.time())\ntask_name = datetime.datetime.fromtimestamp(demo_timestamp).strftime(\"self_explore_%Y-%m-%d_%H-%M-%S\")\ntask_dir = os.path.join(demo_dir, task_name)\nos.mkdir(task_dir)\ndocs_dir = os.path.join(work_dir, \"auto_docs\")\nif not os.path.exists(docs_dir):\n    os.mkdir(docs_dir)\nexplore_log_path = os.path.join(task_dir, f\"log_explore_{task_name}.txt\")\nreflect_log_path = os.path.join(task_dir, f\"log_reflect_{task_name}.txt\")\ndevice_list = list_all_devices()\nif not device_list:\n    print_with_color(\"ERROR: No device found!\", \"red\")\n    sys.exit()\nprint_with_color(f\"List of devices attached:\\n{str(device_list)}\", \"yellow\")\nif len(device_list) == 1:\n    device = device_list[0]\n    print_with_color(f\"Device selected: {device}\", \"yellow\")\nelse:\n    print_with_color(\"Please choose the Android device to start demo by entering its ID:\", \"blue\")\n    device = input()\ncontroller = AndroidController(device)\nwidth, height = controller.get_device_size()",
+        "type": "code",
+        "location": "/scripts/self_explorer.py:39-63"
+    },
+    "133": {
+        "file_id": 10,
+        "content": "Checking if demo directory exists and creating it, then generating a task name and directory. Creating directories for auto_docs, log files, listing devices, and assigning one device based on the number of devices found.",
+        "type": "comment"
+    },
+    "134": {
+        "file_id": 10,
+        "content": "if not width and not height:\n    print_with_color(\"ERROR: Invalid device size!\", \"red\")\n    sys.exit()\nprint_with_color(f\"Screen resolution of {device}: {width}x{height}\", \"yellow\")\nprint_with_color(\"Please enter the description of the task you want me to complete in a few sentences:\", \"blue\")\ntask_desc = input()\nround_count = 0\ndoc_count = 0\nuseless_list = set()\nlast_act = \"None\"\ntask_complete = False\nwhile round_count < configs[\"MAX_ROUNDS\"]:\n    round_count += 1\n    print_with_color(f\"Round {round_count}\", \"yellow\")\n    screenshot_before = controller.get_screenshot(f\"{round_count}_before\", task_dir)\n    xml_path = controller.get_xml(f\"{round_count}\", task_dir)\n    if screenshot_before == \"ERROR\" or xml_path == \"ERROR\":\n        break\n    clickable_list = []\n    focusable_list = []\n    traverse_tree(xml_path, clickable_list, \"clickable\", True)\n    traverse_tree(xml_path, focusable_list, \"focusable\", True)\n    elem_list = []\n    for elem in clickable_list:\n        if elem.uid in useless_list:\n            continue",
+        "type": "code",
+        "location": "/scripts/self_explorer.py:64-91"
+    },
+    "135": {
+        "file_id": 10,
+        "content": "Checks if width and height are provided. If not, displays an error message and exits. Otherwise, prints device resolution and prompts for task description. Starts a loop to complete the task in multiple rounds until reaching MAX_ROUNDS.",
+        "type": "comment"
+    },
+    "136": {
+        "file_id": 10,
+        "content": "        elem_list.append(elem)\n    for elem in focusable_list:\n        if elem.uid in useless_list:\n            continue\n        bbox = elem.bbox\n        center = (bbox[0][0] + bbox[1][0]) // 2, (bbox[0][1] + bbox[1][1]) // 2\n        close = False\n        for e in clickable_list:\n            bbox = e.bbox\n            center_ = (bbox[0][0] + bbox[1][0]) // 2, (bbox[0][1] + bbox[1][1]) // 2\n            dist = (abs(center[0] - center_[0]) ** 2 + abs(center[1] - center_[1]) ** 2) ** 0.5\n            if dist <= configs[\"MIN_DIST\"]:\n                close = True\n                break\n        if not close:\n            elem_list.append(elem)\n    draw_bbox_multi(screenshot_before, os.path.join(task_dir, f\"{round_count}_before_labeled.png\"), elem_list,\n                    dark_mode=configs[\"DARK_MODE\"])\n    prompt = re.sub(r\"<task_description>\", task_desc, prompts.self_explore_task_template)\n    prompt = re.sub(r\"<last_act>\", last_act, prompt)\n    base64_img_before = encode_image(os.path.join(task_dir, f\"{round_count}_before_labeled.png\"))",
+        "type": "code",
+        "location": "/scripts/self_explorer.py:92-113"
+    },
+    "137": {
+        "file_id": 10,
+        "content": "This code finds focusable elements on the screen, checks if they are close to any clickable elements, and adds them to a list. It then draws bounding boxes around these elements in an image and generates a task prompt with the image encoded as base64.",
+        "type": "comment"
+    },
+    "138": {
+        "file_id": 10,
+        "content": "    content = [\n        {\n            \"type\": \"text\",\n            \"text\": prompt\n        },\n        {\n            \"type\": \"image_url\",\n            \"image_url\": {\n                \"url\": f\"data:image/jpeg;base64,{base64_img_before}\"\n            }\n        }\n    ]\n    print_with_color(\"Thinking about what to do in the next step...\", \"yellow\")\n    rsp = ask_gpt4v(content)\n    if \"error\" not in rsp:\n        with open(explore_log_path, \"a\") as logfile:\n            log_item = {\"step\": round_count, \"prompt\": prompt, \"image\": f\"{round_count}_before_labeled.png\",\n                        \"response\": rsp}\n            logfile.write(json.dumps(log_item) + \"\\n\")\n        res = parse_explore_rsp(rsp)\n        act_name = res[0]\n        last_act = res[-1]\n        res = res[:-1]\n        if act_name == \"FINISH\":\n            task_complete = True\n            break\n        if act_name == \"tap\":\n            _, area = res\n            tl, br = elem_list[area - 1].bbox\n            x, y = (tl[0] + br[0]) // 2, (tl[1] + br[1]) // 2\n            ret = controller.tap(x, y)",
+        "type": "code",
+        "location": "/scripts/self_explorer.py:114-145"
+    },
+    "139": {
+        "file_id": 10,
+        "content": "This code is sending a prompt to GPT-4 and receiving a response. It then logs the step, prompt, image, and response before parsing the response and checking if it's a \"FINISH\" command or a \"tap\" action.",
+        "type": "comment"
+    },
+    "140": {
+        "file_id": 10,
+        "content": "            if ret == \"ERROR\":\n                print_with_color(\"ERROR: tap execution failed\", \"red\")\n                break\n        elif act_name == \"text\":\n            _, input_str = res\n            ret = controller.text(input_str)\n            if ret == \"ERROR\":\n                print_with_color(\"ERROR: text execution failed\", \"red\")\n                break\n        elif act_name == \"long_press\":\n            _, area = res\n            tl, br = elem_list[area - 1].bbox\n            x, y = (tl[0] + br[0]) // 2, (tl[1] + br[1]) // 2\n            ret = controller.long_press(x, y)\n            if ret == \"ERROR\":\n                print_with_color(\"ERROR: long press execution failed\", \"red\")\n                break\n        elif act_name == \"swipe\":\n            _, area, swipe_dir, dist = res\n            tl, br = elem_list[area - 1].bbox\n            x, y = (tl[0] + br[0]) // 2, (tl[1] + br[1]) // 2\n            ret = controller.swipe(x, y, swipe_dir, dist)\n            if ret == \"ERROR\":\n                print_with_color(\"ERROR: swipe execution failed\", \"red\")",
+        "type": "code",
+        "location": "/scripts/self_explorer.py:146-169"
+    },
+    "141": {
+        "file_id": 10,
+        "content": "This code handles different actions (tap, text, long_press, swipe) performed by the script. It checks if the execution of each action fails and prints an error message with color formatting in case of failure.",
+        "type": "comment"
+    },
+    "142": {
+        "file_id": 10,
+        "content": "                break\n        else:\n            break\n        time.sleep(configs[\"REQUEST_INTERVAL\"])\n    else:\n        print_with_color(rsp[\"error\"][\"message\"], \"red\")\n        break\n    screenshot_after = controller.get_screenshot(f\"{round_count}_after\", task_dir)\n    if screenshot_after == \"ERROR\":\n        break\n    draw_bbox_multi(screenshot_after, os.path.join(task_dir, f\"{round_count}_after_labeled.png\"), elem_list,\n                    dark_mode=configs[\"DARK_MODE\"])\n    base64_img_after = encode_image(os.path.join(task_dir, f\"{round_count}_after_labeled.png\"))\n    if act_name == \"tap\":\n        prompt = re.sub(r\"<action>\", \"tapping\", prompts.self_explore_reflect_template)\n    elif act_name == \"text\":\n        continue\n    elif act_name == \"long_press\":\n        prompt = re.sub(r\"<action>\", \"long pressing\", prompts.self_explore_reflect_template)\n    elif act_name == \"swipe\":\n        swipe_dir = res[2]\n        if swipe_dir == \"up\" or swipe_dir == \"down\":\n            act_name = \"v_swipe\"\n        elif swipe_dir == \"left\" or swipe_dir == \"right\":",
+        "type": "code",
+        "location": "/scripts/self_explorer.py:170-195"
+    },
+    "143": {
+        "file_id": 10,
+        "content": "Checking if task is complete and breaks loop",
+        "type": "comment"
+    },
+    "144": {
+        "file_id": 10,
+        "content": "            act_name = \"h_swipe\"\n        prompt = re.sub(r\"<action>\", \"swiping\", prompts.self_explore_reflect_template)\n    else:\n        print_with_color(\"ERROR: Undefined act!\", \"red\")\n        break\n    prompt = re.sub(r\"<ui_element>\", str(area), prompt)\n    prompt = re.sub(r\"<task_desc>\", task_desc, prompt)\n    prompt = re.sub(r\"<last_act>\", last_act, prompt)\n    content = [\n        {\n            \"type\": \"text\",\n            \"text\": prompt\n        },\n        {\n            \"type\": \"image_url\",\n            \"image_url\": {\n                \"url\": f\"data:image/jpeg;base64,{base64_img_before}\"\n            }\n        },\n        {\n            \"type\": \"image_url\",\n            \"image_url\": {\n                \"url\": f\"data:image/jpeg;base64,{base64_img_after}\"\n            }\n        }\n    ]\n    print_with_color(\"Reflecting on my previous action...\", \"yellow\")\n    rsp = ask_gpt4v(content)\n    if \"error\" not in rsp:\n        resource_id = elem_list[int(area) - 1].uid\n        with open(reflect_log_path, \"a\") as logfile:\n            ",
+        "type": "code",
+        "location": "/scripts/self_explorer.py:196-228"
+    },
+    "145": {
+        "file_id": 10,
+        "content": "Code is preparing a message to ask GPT-4 about a previous action. It replaces placeholders in the prompt with appropriate values and sends it to GPT-4 for response. If there's no error in the response, it logs relevant information into reflect_log_path.",
+        "type": "comment"
+    },
+    "146": {
+        "file_id": 10,
+        "content": "log_item = {\"step\": round_count, \"prompt\": prompt, \"image_before\": f\"{round_count}_before_labeled.png\",\n                        \"image_after\": f\"{round_count}_after.png\", \"response\": rsp}\n            logfile.write(json.dumps(log_item) + \"\\n\")\n        res = parse_reflect_rsp(rsp)\n        decision = res[0]\n        if decision == \"ERROR\":\n            break\n        if decision == \"INEFFECTIVE\":\n            useless_list.add(resource_id)\n            last_act = \"None\"\n        elif decision == \"BACK\" or decision == \"CONTINUE\" or decision == \"SUCCESS\":\n            if decision == \"BACK\" or decision == \"CONTINUE\":\n                useless_list.add(resource_id)\n                last_act = \"None\"\n                if decision == \"BACK\":\n                    ret = controller.back()\n                    if ret == \"ERROR\":\n                        print_with_color(\"ERROR: back execution failed\", \"red\")\n                        break\n            doc = res[-1]\n            doc_name = resource_id + \".txt\"\n            doc_path = os.path.join(docs_dir, doc_name)",
+        "type": "code",
+        "location": "/scripts/self_explorer.py:228-249"
+    },
+    "147": {
+        "file_id": 10,
+        "content": "Writing log item to file\nParses response and makes decision\nHandles \"ERROR\", \"INEFFECTIVE\", and other decisions\nIf \"BACK\" or \"CONTINUE\", adds resource_id to useless list, sets last_act to \"None\", and executes back action if necessary\nDocs processing begins",
+        "type": "comment"
+    },
+    "148": {
+        "file_id": 10,
+        "content": "            if os.path.exists(doc_path):\n                doc_content = ast.literal_eval(open(doc_path).read())\n                if doc_content[act_name]:\n                    print_with_color(f\"Documentation for the element {resource_id} already exists.\", \"yellow\")\n                    continue\n            else:\n                doc_content = {\n                    \"tap\": \"\",\n                    \"text\": \"\",\n                    \"v_swipe\": \"\",\n                    \"h_swipe\": \"\",\n                    \"long_press\": \"\"\n                }\n            doc_content[act_name] = doc\n            with open(doc_path, \"w\") as outfile:\n                outfile.write(str(doc_content))\n            doc_count += 1\n            print_with_color(f\"Documentation generated and saved to {doc_path}\", \"yellow\")\n        else:\n            print_with_color(f\"ERROR: Undefined decision! {decision}\", \"red\")\n            break\n    else:\n        print_with_color(rsp[\"error\"][\"message\"], \"red\")\n        break\n    time.sleep(configs[\"REQUEST_INTERVAL\"])\nif task_complete:",
+        "type": "code",
+        "location": "/scripts/self_explorer.py:250-276"
+    },
+    "149": {
+        "file_id": 10,
+        "content": "If file exists, read its content, and if the action's documentation already exists, print a message and continue. Otherwise, create an empty dictionary for the document content, add the current action's documentation, save it to file, increment documentation count, and print a success message. If there is an undefined decision or error in response, print an error message and break the loop. After each task, sleep for the specified request interval.",
+        "type": "comment"
+    },
+    "150": {
+        "file_id": 10,
+        "content": "    print_with_color(f\"Autonomous exploration completed successfully. {doc_count} docs generated.\", \"yellow\")\nelif round_count == configs[\"MAX_ROUNDS\"]:\n    print_with_color(f\"Autonomous exploration finished due to reaching max rounds. {doc_count} docs generated.\",\n                     \"yellow\")\nelse:\n    print_with_color(f\"Autonomous exploration finished unexpectedly. {doc_count} docs generated.\", \"red\")",
+        "type": "code",
+        "location": "/scripts/self_explorer.py:277-282"
+    },
+    "151": {
+        "file_id": 10,
+        "content": "Autonomous exploration ended. Yellow message if max rounds reached, red if unexpected, displays doc count and success status.",
+        "type": "comment"
+    },
+    "152": {
+        "file_id": 11,
+        "content": "/scripts/step_recorder.py",
+        "type": "filepath"
+    },
+    "153": {
+        "file_id": 11,
+        "content": "The code sets up command line arguments for \"AppAgent,\" enables user actions selection or input gestures, validates inputs, performs corresponding actions with a controller object, logs data, handles errors, and displays recorded steps.",
+        "type": "summary"
+    },
+    "154": {
+        "file_id": 11,
+        "content": "import argparse\nimport datetime\nimport cv2\nimport os\nimport shutil\nimport sys\nimport time\nfrom and_controller import list_all_devices, AndroidController, traverse_tree\nfrom config import load_config\nfrom utils import print_with_color, draw_bbox_multi\narg_desc = \"AppAgent - Human Demonstration\"\nparser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=arg_desc)\nparser.add_argument(\"--app\")\nparser.add_argument(\"--demo\")\nparser.add_argument(\"--root_dir\", default=\"./\")\nargs = vars(parser.parse_args())\napp = args[\"app\"]\ndemo_name = args[\"demo\"]\nroot_dir = args[\"root_dir\"]\nconfigs = load_config()\nif not app:\n    print_with_color(\"What is the name of the app you are going to demo?\", \"blue\")\n    app = input()\n    app = app.replace(\" \", \"\")\nif not demo_name:\n    demo_timestamp = int(time.time())\n    demo_name = datetime.datetime.fromtimestamp(demo_timestamp).strftime(f\"demo_{app}_%Y-%m-%d_%H-%M-%S\")\nwork_dir = os.path.join(root_dir, \"apps\")\nif not os.path.exists(work_dir):\n    os.mkdir(work_dir)",
+        "type": "code",
+        "location": "/scripts/step_recorder.py:1-37"
+    },
+    "155": {
+        "file_id": 11,
+        "content": "This code is setting up the command line arguments for an application called \"AppAgent\" which records human demonstrations of mobile app interactions. It checks if the app and demo names are provided, creates a directory to store the recorded data, and sets default values if any arguments are missing.",
+        "type": "comment"
+    },
+    "156": {
+        "file_id": 11,
+        "content": "work_dir = os.path.join(work_dir, app)\nif not os.path.exists(work_dir):\n    os.mkdir(work_dir)\ndemo_dir = os.path.join(work_dir, \"demos\")\nif not os.path.exists(demo_dir):\n    os.mkdir(demo_dir)\ntask_dir = os.path.join(demo_dir, demo_name)\nif os.path.exists(task_dir):\n    shutil.rmtree(task_dir)\nos.mkdir(task_dir)\nraw_ss_dir = os.path.join(task_dir, \"raw_screenshots\")\nos.mkdir(raw_ss_dir)\nxml_dir = os.path.join(task_dir, \"xml\")\nos.mkdir(xml_dir)\nlabeled_ss_dir = os.path.join(task_dir, \"labeled_screenshots\")\nos.mkdir(labeled_ss_dir)\nrecord_path = os.path.join(task_dir, \"record.txt\")\nrecord_file = open(record_path, \"w\")\ntask_desc_path = os.path.join(task_dir, \"task_desc.txt\")\ndevice_list = list_all_devices()\nif not device_list:\n    print_with_color(\"ERROR: No device found!\", \"red\")\n    sys.exit()\nprint_with_color(\"List of devices attached:\\n\" + str(device_list), \"yellow\")\nif len(device_list) == 1:\n    device = device_list[0]\n    print_with_color(f\"Device selected: {device}\", \"yellow\")\nelse:\n    print_with_color(\"Please choose the Android device to start demo by entering its ID:\", \"blue\")",
+        "type": "code",
+        "location": "/scripts/step_recorder.py:38-67"
+    },
+    "157": {
+        "file_id": 11,
+        "content": "Creating directories for storing demo and task files, checking if devices are attached.",
+        "type": "comment"
+    },
+    "158": {
+        "file_id": 11,
+        "content": "    device = input()\ncontroller = AndroidController(device)\nwidth, height = controller.get_device_size()\nif not width and not height:\n    print_with_color(\"ERROR: Invalid device size!\", \"red\")\n    sys.exit()\nprint_with_color(f\"Screen resolution of {device}: {width}x{height}\", \"yellow\")\nprint_with_color(\"Please state the goal of your following demo actions clearly, e.g. send a message to John\", \"blue\")\ntask_desc = input()\nwith open(task_desc_path, \"w\") as f:\n    f.write(task_desc)\nprint_with_color(\"All interactive elements on the screen are labeled with red and blue numeric tags. Elements \"\n                 \"labeled with red tags are clickable elements; elements labeled with blue tags are scrollable \"\n                 \"elements.\", \"blue\")\nstep = 0\nwhile True:\n    step += 1\n    screenshot_path = controller.get_screenshot(f\"{demo_name}_{step}\", raw_ss_dir)\n    xml_path = controller.get_xml(f\"{demo_name}_{step}\", xml_dir)\n    if screenshot_path == \"ERROR\" or xml_path == \"ERROR\":\n        break\n    clickable_list = []",
+        "type": "code",
+        "location": "/scripts/step_recorder.py:68-92"
+    },
+    "159": {
+        "file_id": 11,
+        "content": "Device input and check for valid device size.\nGet device resolution and print it, request user to specify demo goal.\nSave goal description in file.\nLabel interactive elements with red and blue numeric tags, clickable with red, scrollable with blue.\nLoop to capture screenshots and XML until errors occur.",
+        "type": "comment"
+    },
+    "160": {
+        "file_id": 11,
+        "content": "    focusable_list = []\n    traverse_tree(xml_path, clickable_list, \"clickable\", True)\n    traverse_tree(xml_path, focusable_list, \"focusable\", True)\n    elem_list = clickable_list.copy()\n    for elem in focusable_list:\n        bbox = elem.bbox\n        center = (bbox[0][0] + bbox[1][0]) // 2, (bbox[0][1] + bbox[1][1]) // 2\n        close = False\n        for e in clickable_list:\n            bbox = e.bbox\n            center_ = (bbox[0][0] + bbox[1][0]) // 2, (bbox[0][1] + bbox[1][1]) // 2\n            dist = (abs(center[0] - center_[0]) ** 2 + abs(center[1] - center_[1]) ** 2) ** 0.5\n            if dist <= configs[\"MIN_DIST\"]:\n                close = True\n                break\n        if not close:\n            elem_list.append(elem)\n    labeled_img = draw_bbox_multi(screenshot_path, os.path.join(labeled_ss_dir, f\"{demo_name}_{step}.png\"), elem_list,\n                                  True)\n    cv2.imshow(\"image\", labeled_img)\n    cv2.waitKey(0)\n    cv2.destroyAllWindows()\n    user_input = \"xxx\"\n    print_with_col",
+        "type": "code",
+        "location": "/scripts/step_recorder.py:93-116"
+    },
+    "161": {
+        "file_id": 11,
+        "content": "Code comments:\n\n1. Traverse the XML tree to find clickable and focusable elements (lines 92-104).\n2. Copy the clickable list to a new list called elem_list.\n3. Check if any focusable element is close to any clickable element based on distance threshold (configs[\"MIN_DIST\"]). If not, add it to elem_list (lines 107-114).\n4. Display the labeled image with bounding boxes for elements in elem_list using draw_bbox_multi function.\n5. Show the image and wait for user input (cv2 functions).\n6. Set user_input variable to \"xxx\" and print with colored output.",
+        "type": "comment"
+    },
+    "162": {
+        "file_id": 11,
+        "content": "or(\"Choose one of the following actions you want to perform on the current screen:\\ntap, text, long \"\n                     \"press, swipe, stop\", \"blue\")\n    while user_input.lower() != \"tap\" and user_input.lower() != \"text\" and user_input.lower() != \"long press\" \\\n            and user_input.lower() != \"swipe\" and user_input.lower() != \"stop\":\n        user_input = input()\n    if user_input.lower() == \"tap\":\n        print_with_color(f\"Which element do you want to tap? Choose a numeric tag from 1 to {len(elem_list)}:\", \"blue\")\n        user_input = \"xxx\"\n        while not user_input.isnumeric() or int(user_input) > len(elem_list) or int(user_input) < 1:\n            user_input = input()\n        tl, br = elem_list[int(user_input) - 1].bbox\n        x, y = (tl[0] + br[0]) // 2, (tl[1] + br[1]) // 2\n        ret = controller.tap(x, y)\n        if ret == \"ERROR\":\n            print_with_color(\"ERROR: tap execution failed\", \"red\")\n            break\n        record_file.write(f\"tap({int(user_input)}):::{elem_list[int(user_input) - 1].uid}\\n\")",
+        "type": "code",
+        "location": "/scripts/step_recorder.py:116-132"
+    },
+    "163": {
+        "file_id": 11,
+        "content": "This code asks the user to choose an action from a list of options. It continues to ask for input until the correct option is chosen. If \"tap\" is chosen, it prompts for the element to tap by its numeric tag, then taps the element on screen and writes a record if successful.",
+        "type": "comment"
+    },
+    "164": {
+        "file_id": 11,
+        "content": "    elif user_input.lower() == \"text\":\n        print_with_color(f\"Which element do you want to input the text string? Choose a numeric tag from 1 to \"\n                         f\"{len(elem_list)}:\", \"blue\")\n        input_area = \"xxx\"\n        while not input_area.isnumeric() or int(input_area) > len(elem_list) or int(input_area) < 1:\n            input_area = input()\n        print_with_color(\"Enter your input text below:\", \"blue\")\n        user_input = \"\"\n        while not user_input:\n            user_input = input()\n        controller.text(user_input)\n        record_file.write(f\"text({input_area}:sep:\\\"{user_input}\\\"):::{elem_list[int(input_area) - 1].uid}\\n\")\n    elif user_input.lower() == \"long press\":\n        print_with_color(f\"Which element do you want to long press? Choose a numeric tag from 1 to {len(elem_list)}:\",\n                         \"blue\")\n        user_input = \"xxx\"\n        while not user_input.isnumeric() or int(user_input) > len(elem_list) or int(user_input) < 1:\n            user_input = input()",
+        "type": "code",
+        "location": "/scripts/step_recorder.py:133-150"
+    },
+    "165": {
+        "file_id": 11,
+        "content": "This code segment allows the user to input text or simulate a long press on an element by choosing a numeric tag from 1 to the total number of elements in the list. It prompts for the input, validates the input, and performs the corresponding action using the controller object. The data is then recorded in a file with appropriate formatting.",
+        "type": "comment"
+    },
+    "166": {
+        "file_id": 11,
+        "content": "        tl, br = elem_list[int(user_input) - 1].bbox\n        x, y = (tl[0] + br[0]) // 2, (tl[1] + br[1]) // 2\n        ret = controller.long_press(x, y)\n        if ret == \"ERROR\":\n            print_with_color(\"ERROR: long press execution failed\", \"red\")\n            break\n        record_file.write(f\"long_press({int(user_input)}):::{elem_list[int(user_input) - 1].uid}\\n\")\n    elif user_input.lower() == \"swipe\":\n        print_with_color(f\"What is the direction of your swipe? Choose one from the following options:\\nup, down, left,\"\n                         f\" right\", \"blue\")\n        user_input = \"\"\n        while user_input != \"up\" and user_input != \"down\" and user_input != \"left\" and user_input != \"right\":\n            user_input = input()\n        swipe_dir = user_input\n        print_with_color(f\"Which element do you want to swipe? Choose a numeric tag from 1 to {len(elem_list)}:\")\n        while not user_input.isnumeric() or int(user_input) > len(elem_list) or int(user_input) < 1:\n            user_input = input()",
+        "type": "code",
+        "location": "/scripts/step_recorder.py:151-167"
+    },
+    "167": {
+        "file_id": 11,
+        "content": "The code is prompting the user for input to perform a long press or swipe action on an element from a list. It retrieves the bounding box coordinates, calculates the center point, performs the requested action, and logs the information if it was successful.",
+        "type": "comment"
+    },
+    "168": {
+        "file_id": 11,
+        "content": "        tl, br = elem_list[int(user_input) - 1].bbox\n        x, y = (tl[0] + br[0]) // 2, (tl[1] + br[1]) // 2\n        ret = controller.swipe(x, y, swipe_dir)\n        if ret == \"ERROR\":\n            print_with_color(\"ERROR: swipe execution failed\", \"red\")\n            break\n        record_file.write(f\"swipe({int(user_input)}:sep:{swipe_dir}):::{elem_list[int(user_input) - 1].uid}\\n\")\n    elif user_input.lower() == \"stop\":\n        record_file.write(\"stop\\n\")\n        record_file.close()\n        break\n    else:\n        break\n    time.sleep(3)\nprint_with_color(f\"Demonstration phase completed. {step} steps were recorded.\", \"yellow\")",
+        "type": "code",
+        "location": "/scripts/step_recorder.py:168-183"
+    },
+    "169": {
+        "file_id": 11,
+        "content": "This code takes user input to record a swipe action, writes it into a file along with the element's unique ID, and handles stopping the recording. If swipe execution fails, it prints an error message and breaks the loop. After completion, it displays the number of steps recorded in yellow color.",
+        "type": "comment"
+    },
+    "170": {
+        "file_id": 12,
+        "content": "/scripts/task_executor.py",
+        "type": "filepath"
+    },
+    "171": {
+        "file_id": 12,
+        "content": "The code imports libraries, handles user inputs and directory creation, verifies grid images, populates lists from XML tree, manages UI elements, replaces placeholders with data, handles actions like tap/text/long press, logs and parses responses based on grid setting, checks for errors, and prints success or error messages.",
+        "type": "summary"
+    },
+    "172": {
+        "file_id": 12,
+        "content": "import argparse\nimport ast\nimport datetime\nimport json\nimport os\nimport re\nimport sys\nimport time\nimport prompts\nfrom config import load_config\nfrom and_controller import list_all_devices, AndroidController, traverse_tree\nfrom model import ask_gpt4v, parse_explore_rsp, parse_grid_rsp\nfrom utils import print_with_color, draw_bbox_multi, encode_image, draw_grid\narg_desc = \"AppAgent Executor\"\nparser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=arg_desc)\nparser.add_argument(\"--app\")\nparser.add_argument(\"--root_dir\", default=\"./\")\nargs = vars(parser.parse_args())\nconfigs = load_config()\napp = args[\"app\"]\nroot_dir = args[\"root_dir\"]\nif not app:\n    print_with_color(\"What is the name of the app you want me to operate?\", \"blue\")\n    app = input()\n    app = app.replace(\" \", \"\")\napp_dir = os.path.join(os.path.join(root_dir, \"apps\"), app)\nwork_dir = os.path.join(root_dir, \"tasks\")\nif not os.path.exists(work_dir):\n    os.mkdir(work_dir)\nauto_docs_dir = os.path.join(app_dir, \"auto_docs\")",
+        "type": "code",
+        "location": "/scripts/task_executor.py:1-36"
+    },
+    "173": {
+        "file_id": 12,
+        "content": "Code imports necessary libraries, sets up argument parsing for executing the AppAgent tasks. It defines the description of the executor, loads configuration from config file and gets the name of app to be operated. If no app name is given, it prompts user for input and proceeds with executing tasks for specified app. It also creates work directory if it does not exist and defines auto_docs_dir in the app directory.",
+        "type": "comment"
+    },
+    "174": {
+        "file_id": 12,
+        "content": "demo_docs_dir = os.path.join(app_dir, \"demo_docs\")\ntask_timestamp = int(time.time())\ndir_name = datetime.datetime.fromtimestamp(task_timestamp).strftime(f\"task_{app}_%Y-%m-%d_%H-%M-%S\")\ntask_dir = os.path.join(work_dir, dir_name)\nos.mkdir(task_dir)\nlog_path = os.path.join(task_dir, f\"log_{app}_{dir_name}.txt\")\nno_doc = False\nif not os.path.exists(auto_docs_dir) and not os.path.exists(demo_docs_dir):\n    print_with_color(f\"No documentations found for the app {app}. Do you want to proceed with no docs? Enter y or n\",\n                     \"red\")\n    user_input = \"\"\n    while user_input != \"y\" and user_input != \"n\":\n        user_input = input().lower()\n    if user_input == \"y\":\n        no_doc = True\n    else:\n        sys.exit()\nelif os.path.exists(auto_docs_dir) and os.path.exists(demo_docs_dir):\n    print_with_color(f\"The app {app} has documentations generated from both autonomous exploration and human \"\n                     f\"demonstration. Which one do you want to use? Type 1 or 2.\\n1. Autonomous exploration\\n2. Human \"",
+        "type": "code",
+        "location": "/scripts/task_executor.py:37-57"
+    },
+    "175": {
+        "file_id": 12,
+        "content": "Creating a new task directory with a timestamped name, checking for documentation directories, and asking user to choose which documentation to use or if no documents are found, prompting the user whether to proceed without documents.",
+        "type": "comment"
+    },
+    "176": {
+        "file_id": 12,
+        "content": "                     f\"Demonstration\",\n                     \"blue\")\n    user_input = \"\"\n    while user_input != \"1\" and user_input != \"2\":\n        user_input = input()\n    if user_input == \"1\":\n        docs_dir = auto_docs_dir\n    else:\n        docs_dir = demo_docs_dir\nelif os.path.exists(auto_docs_dir):\n    print_with_color(f\"Documentations generated from autonomous exploration were found for the app {app}. The doc base \"\n                     f\"is selected automatically.\", \"yellow\")\n    docs_dir = auto_docs_dir\nelse:\n    print_with_color(f\"Documentations generated from human demonstration were found for the app {app}. The doc base is \"\n                     f\"selected automatically.\", \"yellow\")\n    docs_dir = demo_docs_dir\ndevice_list = list_all_devices()\nif not device_list:\n    print_with_color(\"ERROR: No device found!\", \"red\")\n    sys.exit()\nprint_with_color(f\"List of devices attached:\\n{str(device_list)}\", \"yellow\")\nif len(device_list) == 1:\n    device = device_list[0]\n    print_with_color(f\"Device selected: {device}\", \"yellow\")",
+        "type": "code",
+        "location": "/scripts/task_executor.py:58-83"
+    },
+    "177": {
+        "file_id": 12,
+        "content": "This code snippet prompts the user to select a document base from either automatically generated ones or demonstration ones. It then checks if any devices are attached and prints relevant messages based on the conditions met.",
+        "type": "comment"
+    },
+    "178": {
+        "file_id": 12,
+        "content": "else:\n    print_with_color(\"Please choose the Android device to start demo by entering its ID:\", \"blue\")\n    device = input()\ncontroller = AndroidController(device)\nwidth, height = controller.get_device_size()\nif not width and not height:\n    print_with_color(\"ERROR: Invalid device size!\", \"red\")\n    sys.exit()\nprint_with_color(f\"Screen resolution of {device}: {width}x{height}\", \"yellow\")\nprint_with_color(\"Please enter the description of the task you want me to complete in a few sentences:\", \"blue\")\ntask_desc = input()\nround_count = 0\nlast_act = \"None\"\ntask_complete = False\ngrid_on = False\nrows, cols = 0, 0\ndef area_to_xy(area, subarea):\n    area -= 1\n    row, col = area // cols, area % cols\n    x_0, y_0 = col * (width // cols), row * (height // rows)\n    if subarea == \"top-left\":\n        x, y = x_0 + (width // cols) // 4, y_0 + (height // rows) // 4\n    elif subarea == \"top\":\n        x, y = x_0 + (width // cols) // 2, y_0 + (height // rows) // 4\n    elif subarea == \"top-right\":\n        x, y = x_0 + (width // cols) * 3 // 4, y_0 + (height // rows) // 4",
+        "type": "code",
+        "location": "/scripts/task_executor.py:84-113"
+    },
+    "179": {
+        "file_id": 12,
+        "content": "User is prompted to choose an Android device for the demo by entering its ID. The device size is checked and if it's invalid, an error is displayed and the program exits. Otherwise, user is asked to provide a task description in a few sentences. A function `area_to_xy` is defined to convert area number to x-y coordinates on the screen. \n\nStorage location: \"AppAgent/scripts/task_executor.py\":115-142\nCode:\n```\ndef get_subarea(area):\n    while True:\n        try:\n            subarea = input(\"Please enter the subarea (top, top-left, top-right) for area \" + str(area+1) + \":\").lower()\n            if subarea in (\"top\", \"top-left\", \"top-right\"):\n                return subarea\n        except Exception as e:\n            print_with_color(\"ERROR:\", \"red\")\n            print(e)\n```\nComment for code:\n\nThe function `get_subarea` prompts the user to enter the sub-areas for each area in a loop until valid input is provided. Valid inputs are 'top', 'top-left' or 'top-right'. If invalid input is entered, an error message is displayed along with the exception and the program continues to prompt until valid input is given.",
+        "type": "comment"
+    },
+    "180": {
+        "file_id": 12,
+        "content": "    elif subarea == \"left\":\n        x, y = x_0 + (width // cols) // 4, y_0 + (height // rows) // 2\n    elif subarea == \"right\":\n        x, y = x_0 + (width // cols) * 3 // 4, y_0 + (height // rows) // 2\n    elif subarea == \"bottom-left\":\n        x, y = x_0 + (width // cols) // 4, y_0 + (height // rows) * 3 // 4\n    elif subarea == \"bottom\":\n        x, y = x_0 + (width // cols) // 2, y_0 + (height // rows) * 3 // 4\n    elif subarea == \"bottom-right\":\n        x, y = x_0 + (width // cols) * 3 // 4, y_0 + (height // rows) * 3 // 4\n    else:\n        x, y = x_0 + (width // cols) // 2, y_0 + (height // rows) // 2\n    return x, y\nwhile round_count < configs[\"MAX_ROUNDS\"]:\n    round_count += 1\n    print_with_color(f\"Round {round_count}\", \"yellow\")\n    screenshot_path = controller.get_screenshot(f\"{dir_name}_{round_count}\", task_dir)\n    xml_path = controller.get_xml(f\"{dir_name}_{round_count}\", task_dir)\n    if screenshot_path == \"ERROR\" or xml_path == \"ERROR\":\n        break\n    if grid_on:\n        rows, cols = draw_grid(screenshot_path, os.path.join(task_dir, f\"{dir_name}_{round_count}_grid.png\"))",
+        "type": "code",
+        "location": "/scripts/task_executor.py:114-137"
+    },
+    "181": {
+        "file_id": 12,
+        "content": "Code calculates the coordinates for subareas of a screenshot and continues with round processing. It checks if screenshots or XML paths are errors, then breaks if so. If grid is on, it draws the grid.",
+        "type": "comment"
+    },
+    "182": {
+        "file_id": 12,
+        "content": "        base64_img = encode_image(os.path.join(task_dir, f\"{dir_name}_{round_count}_grid.png\"))\n        prompt = prompts.task_template_grid\n    else:\n        clickable_list = []\n        focusable_list = []\n        traverse_tree(xml_path, clickable_list, \"clickable\", True)\n        traverse_tree(xml_path, focusable_list, \"focusable\", True)\n        elem_list = clickable_list.copy()\n        for elem in focusable_list:\n            bbox = elem.bbox\n            center = (bbox[0][0] + bbox[1][0]) // 2, (bbox[0][1] + bbox[1][1]) // 2\n            close = False\n            for e in clickable_list:\n                bbox = e.bbox\n                center_ = (bbox[0][0] + bbox[1][0]) // 2, (bbox[0][1] + bbox[1][1]) // 2\n                dist = (abs(center[0] - center_[0]) ** 2 + abs(center[1] - center_[1]) ** 2) ** 0.5\n                if dist <= configs[\"MIN_DIST\"]:\n                    close = True\n                    break\n            if not close:\n                elem_list.append(elem)\n        draw_bbox_multi(screenshot_path, os.path.join(task_dir, f\"{dir_name}_{round_count}_labeled.png\"), elem_list,",
+        "type": "code",
+        "location": "/scripts/task_executor.py:138-159"
+    },
+    "183": {
+        "file_id": 12,
+        "content": "If `os.path.join(task_dir, f\"{dir_name}_{round_count}_grid.png\")` exists:\n- Encode the image using `encode_image()`.\n- Set prompt to `prompts.task_template_grid`.\nElse:\n- Create empty `clickable_list` and `focusable_list`.\n- Traverse XML tree to populate `clickable_list` and `focusable_list`.\n- Combine `clickable_list` and `focusable_list` into `elem_list`, excluding duplicates.\n- Draw bounding boxes for elements in `elem_list` on `screenshot_path` and save as `os.path.join(task_dir, f\"{dir_name}_{round_count}_labeled.png\")`.",
+        "type": "comment"
+    },
+    "184": {
+        "file_id": 12,
+        "content": "                        dark_mode=configs[\"DARK_MODE\"])\n        base64_img = encode_image(os.path.join(task_dir, f\"{dir_name}_{round_count}_labeled.png\"))\n        if no_doc:\n            prompt = re.sub(r\"<ui_document>\", \"\", prompts.task_template)\n        else:\n            ui_doc = \"\"\"\n            You also have access to the following documentations that describes the functionalities of UI \n            elements you can interact on the screen. These docs are crucial for you to determine the target of your \n            next action. You should always prioritize these documented elements for interaction:\"\"\"\n            for i, elem in enumerate(elem_list):\n                doc_path = os.path.join(docs_dir, f\"{elem.uid}.txt\")\n                if not os.path.exists(doc_path):\n                    continue\n                ui_doc += f\"Documentation of UI element labeled with the numeric tag '{i + 1}':\\n\"\n                doc_content = ast.literal_eval(open(doc_path, \"r\").read())\n                if doc_content[\"tap\"]:",
+        "type": "code",
+        "location": "/scripts/task_executor.py:160-175"
+    },
+    "185": {
+        "file_id": 12,
+        "content": "This code is checking if there are any documentation files for UI elements and constructing the prompt accordingly. If there are no documentation files, it removes the \"<ui_document>\" placeholder from the task template. Otherwise, it adds a formatted documentation section to the prompt, listing each element's documentation file path and content.",
+        "type": "comment"
+    },
+    "186": {
+        "file_id": 12,
+        "content": "                    ui_doc += f\"This UI element is clickable. {doc_content['tap']}\\n\\n\"\n                if doc_content[\"text\"]:\n                    ui_doc += f\"This UI element can receive text input. The text input is used for the following \" \\\n                              f\"purposes: {doc_content['text']}\\n\\n\"\n                if doc_content[\"long_press\"]:\n                    ui_doc += f\"This UI element is long clickable. {doc_content['long_press']}\\n\\n\"\n                if doc_content[\"v_swipe\"]:\n                    ui_doc += f\"This element can be swiped directly without tapping. You can swipe vertically on \" \\\n                              f\"this UI element. {doc_content['v_swipe']}\\n\\n\"\n                if doc_content[\"h_swipe\"]:\n                    ui_doc += f\"This element can be swiped directly without tapping. You can swipe horizontally on \" \\\n                              f\"this UI element. {doc_content['h_swipe']}\\n\\n\"\n            print_with_color(f\"Documentations retrieved for the current interface:\\n{ui_doc}\", \"magenta\")",
+        "type": "code",
+        "location": "/scripts/task_executor.py:176-188"
+    },
+    "187": {
+        "file_id": 12,
+        "content": "This code retrieves UI documentation for an interface and prints it in color. It includes clickability, text input, long press, vertical swipe, and horizontal swipe information.",
+        "type": "comment"
+    },
+    "188": {
+        "file_id": 12,
+        "content": "            prompt = re.sub(r\"<ui_document>\", ui_doc, prompts.task_template)\n    prompt = re.sub(r\"<task_description>\", task_desc, prompt)\n    prompt = re.sub(r\"<last_act>\", last_act, prompt)\n    content = [\n        {\n            \"type\": \"text\",\n            \"text\": prompt\n        },\n        {\n            \"type\": \"image_url\",\n            \"image_url\": {\n                \"url\": f\"data:image/jpeg;base64,{base64_img}\"\n            }\n        }\n    ]\n    print_with_color(\"Thinking about what to do in the next step...\", \"yellow\")\n    rsp = ask_gpt4v(content)\n    if \"error\" not in rsp:\n        with open(log_path, \"a\") as logfile:\n            log_item = {\"step\": round_count, \"prompt\": prompt, \"image\": f\"{dir_name}_{round_count}_labeled.png\",\n                        \"response\": rsp}\n            logfile.write(json.dumps(log_item) + \"\\n\")\n        if grid_on:\n            res = parse_grid_rsp(rsp)\n        else:\n            res = parse_explore_rsp(rsp)\n        act_name = res[0]\n        if act_name == \"FINISH\":\n            task_complete = True",
+        "type": "code",
+        "location": "/scripts/task_executor.py:189-218"
+    },
+    "189": {
+        "file_id": 12,
+        "content": "This code is creating a prompt by replacing placeholders with relevant information, then sending it to an AI model for response. If there's no error in the response, log the prompt, image, and response, and parse the response based on the grid setting. If the action name is \"FINISH\", set task_complete to True.",
+        "type": "comment"
+    },
+    "190": {
+        "file_id": 12,
+        "content": "            break\n        if act_name == \"ERROR\":\n            break\n        last_act = res[-1]\n        res = res[:-1]\n        if act_name == \"tap\":\n            _, area = res\n            tl, br = elem_list[area - 1].bbox\n            x, y = (tl[0] + br[0]) // 2, (tl[1] + br[1]) // 2\n            ret = controller.tap(x, y)\n            if ret == \"ERROR\":\n                print_with_color(\"ERROR: tap execution failed\", \"red\")\n                break\n        elif act_name == \"text\":\n            _, input_str = res\n            ret = controller.text(input_str)\n            if ret == \"ERROR\":\n                print_with_color(\"ERROR: text execution failed\", \"red\")\n                break\n        elif act_name == \"long_press\":\n            _, area = res\n            tl, br = elem_list[area - 1].bbox\n            x, y = (tl[0] + br[0]) // 2, (tl[1] + br[1]) // 2\n            ret = controller.long_press(x, y)\n            if ret == \"ERROR\":\n                print_with_color(\"ERROR: long press execution failed\", \"red\")\n                break",
+        "type": "code",
+        "location": "/scripts/task_executor.py:219-245"
+    },
+    "191": {
+        "file_id": 12,
+        "content": "Code handles various actions such as tap, text, and long press based on the given action name. It also checks for errors during execution and breaks if an error occurs.",
+        "type": "comment"
+    },
+    "192": {
+        "file_id": 12,
+        "content": "        elif act_name == \"swipe\":\n            _, area, swipe_dir, dist = res\n            tl, br = elem_list[area - 1].bbox\n            x, y = (tl[0] + br[0]) // 2, (tl[1] + br[1]) // 2\n            ret = controller.swipe(x, y, swipe_dir, dist)\n            if ret == \"ERROR\":\n                print_with_color(\"ERROR: swipe execution failed\", \"red\")\n                break\n        elif act_name == \"grid\":\n            grid_on = True\n        elif act_name == \"tap_grid\" or act_name == \"long_press_grid\":\n            _, area, subarea = res\n            x, y = area_to_xy(area, subarea)\n            if act_name == \"tap_grid\":\n                ret = controller.tap(x, y)\n                if ret == \"ERROR\":\n                    print_with_color(\"ERROR: tap execution failed\", \"red\")\n                    break\n            else:\n                ret = controller.long_press(x, y)\n                if ret == \"ERROR\":\n                    print_with_color(\"ERROR: tap execution failed\", \"red\")\n                    break\n        elif act_name == \"swipe_grid\":",
+        "type": "code",
+        "location": "/scripts/task_executor.py:246-269"
+    },
+    "193": {
+        "file_id": 12,
+        "content": "This code handles different types of actions such as \"swipe\", \"grid\", \"tap_grid\", and \"long_press_grid\". If the action is \"swipe\", it executes a swipe on the screen with specified direction and distance. If it fails, it prints an error message. For grid-related actions, it maps the area and subarea to coordinates and performs either a tap or long press accordingly. Again, if there's an error, it prints an error message.",
+        "type": "comment"
+    },
+    "194": {
+        "file_id": 12,
+        "content": "            _, start_area, start_subarea, end_area, end_subarea = res\n            start_x, start_y = area_to_xy(start_area, start_subarea)\n            end_x, end_y = area_to_xy(end_area, end_subarea)\n            ret = controller.swipe_precise((start_x, start_y), (end_x, end_y))\n            if ret == \"ERROR\":\n                print_with_color(\"ERROR: tap execution failed\", \"red\")\n                break\n        if act_name != \"grid\":\n            grid_on = False\n        time.sleep(configs[\"REQUEST_INTERVAL\"])\n    else:\n        print_with_color(rsp[\"error\"][\"message\"], \"red\")\n        break\nif task_complete:\n    print_with_color(\"Task completed successfully\", \"yellow\")\nelif round_count == configs[\"MAX_ROUNDS\"]:\n    print_with_color(\"Task finished due to reaching max rounds\", \"yellow\")\nelse:\n    print_with_color(\"Task finished unexpectedly\", \"red\")",
+        "type": "code",
+        "location": "/scripts/task_executor.py:270-289"
+    },
+    "195": {
+        "file_id": 12,
+        "content": "This code executes a swipe action with precise coordinates, checks for errors, and prints error or success messages based on task completion status.",
+        "type": "comment"
+    },
+    "196": {
+        "file_id": 13,
+        "content": "/scripts/utils.py",
+        "type": "filepath"
+    },
+    "197": {
+        "file_id": 13,
+        "content": "The code defines `print_with_color` and `draw_bbox_multi` functions, used to print text with different colors, draw bounding boxes on images, read images, draw grid lines and labels, save changes using OpenCV's putText, and encode in base64 format.",
+        "type": "summary"
+    },
+    "198": {
+        "file_id": 13,
+        "content": "import base64\nimport cv2\nimport pyshine as ps\nfrom colorama import Fore, Style\ndef print_with_color(text: str, color=\"\"):\n    if color == \"red\":\n        print(Fore.RED + text)\n    elif color == \"green\":\n        print(Fore.GREEN + text)\n    elif color == \"yellow\":\n        print(Fore.YELLOW + text)\n    elif color == \"blue\":\n        print(Fore.BLUE + text)\n    elif color == \"magenta\":\n        print(Fore.MAGENTA + text)\n    elif color == \"cyan\":\n        print(Fore.CYAN + text)\n    elif color == \"white\":\n        print(Fore.WHITE + text)\n    elif color == \"black\":\n        print(Fore.BLACK + text)\n    else:\n        print(text)\n    print(Style.RESET_ALL)\ndef draw_bbox_multi(img_path, output_path, elem_list, record_mode=False, dark_mode=False):\n    imgcv = cv2.imread(img_path)\n    count = 1\n    for elem in elem_list:\n        try:\n            top_left = elem.bbox[0]\n            bottom_right = elem.bbox[1]\n            left, top = top_left[0], top_left[1]\n            right, bottom = bottom_right[0], bottom_right[1]\n            label = str(count)",
+        "type": "code",
+        "location": "/scripts/utils.py:1-39"
+    },
+    "199": {
+        "file_id": 13,
+        "content": "The code defines a function `print_with_color` that allows printing text with different colors and a function `draw_bbox_multi` that draws bounding boxes on an image. The `print_with_color` function takes in a string to print and an optional color argument, which can be \"red\", \"green\", \"yellow\", \"blue\", \"magenta\", \"cyan\", \"white\" or \"black\". It then prints the text with the specified color. The `draw_bbox_multi` function reads an image from a file, loops through a list of elements (each having bounding box coordinates), and draws rectangles around each element on the image. Optionally, it can also keep track of the elements order in the record mode and use dark colors in dark mode.",
+        "type": "comment"
+    }
+}

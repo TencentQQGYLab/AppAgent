@@ -1,0 +1,15 @@
+{
+    "summary": "The code configures OpenAI API settings, GPT-4V request interval, Android screenshot and XML directories for an app agent. It also sets a round limit, dark mode, and minimum distance between elements for element labeling in the configuration file.",
+    "details": [
+        {
+            "comment": "This code is configuring OpenAI API settings, GPT-4V request interval, Android screenshot and XML directories for an app agent.",
+            "location": "\"/media/root/Toshiba XG3/works/AppAgent/docs/src/config.yaml\":0-10",
+            "content": "OPENAI_API_BASE: \"https://api.openai.com/v1/chat/completions\"\nOPENAI_API_KEY: \"sk-\"  # Set the value to sk-xxx if you host the openai interface for open llm model\nOPENAI_API_MODEL: \"gpt-4-vision-preview\"  # The only OpenAI model by now that accepts visual input\nMAX_TOKENS: 300  # The max token limit for the response completion\nTEMPERATURE: 0.0  # The temperature of the model: the lower the value, the more consistent the output of the model\nREQUEST_INTERVAL: 10  # Time in seconds between consecutive GPT-4V requests\nANDROID_SCREENSHOT_DIR: \"/sdcard/Pictures/Screenshots\"  # Set the directory on your Android device to store the intermediate screenshots. Make sure the directory EXISTS on your phone!\nANDROID_XML_DIR: \"/sdcard\"  # Set the directory on your Android device to store the intermediate XML files used for determining locations of UI elements on your screen. Make sure the directory EXISTS on your phone!\nDOC_REFINE: false  # Set this to true will make the agent refine existing documentation b"
+        },
+        {
+            "comment": "The configuration file sets round limit, dark mode, and minimum distance between elements for agent's element labeling.",
+            "location": "\"/media/root/Toshiba XG3/works/AppAgent/docs/src/config.yaml\":10-13",
+            "content": "ased on the latest demonstration; otherwise, the agent will not regenerate a new documentation for elements with the same resource ID.\nMAX_ROUNDS: 20  # Set the round limit for the agent to complete the task\nDARK_MODE: false  # Set this to true if your app is in dark mode to enhance the element labeling\nMIN_DIST: 30  # The minimum distance between elements to prevent overlapping during the labeling process"
+        }
+    ]
+}

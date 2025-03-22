@@ -1,0 +1,14 @@
+OPENAI_API_BASE: "https://api.openai.com/v1/chat/completions"
+OPENAI_API_KEY: "sk-"  # Set the value to sk-xxx if you host the openai interface for open llm model
+OPENAI_API_MODEL: "gpt-4-vision-preview"  # The only OpenAI model by now that accepts visual input
+MAX_TOKENS: 300  # The max token limit for the response completion
+TEMPERATURE: 0.0  # The temperature of the model: the lower the value, the more consistent the output of the model
+REQUEST_INTERVAL: 10  # Time in seconds between consecutive GPT-4V requests
+
+ANDROID_SCREENSHOT_DIR: "/sdcard/Pictures/Screenshots"  # Set the directory on your Android device to store the intermediate screenshots. Make sure the directory EXISTS on your phone!
+ANDROID_XML_DIR: "/sdcard"  # Set the directory on your Android device to store the intermediate XML files used for determining locations of UI elements on your screen. Make sure the directory EXISTS on your phone!
+
+DOC_REFINE: false  # Set this to true will make the agent refine existing documentation based on the latest demonstration; otherwise, the agent will not regenerate a new documentation for elements with the same resource ID.
+MAX_ROUNDS: 20  # Set the round limit for the agent to complete the task
+DARK_MODE: false  # Set this to true if your app is in dark mode to enhance the element labeling
+MIN_DIST: 30  # The minimum distance between elements to prevent overlapping during the labeling process

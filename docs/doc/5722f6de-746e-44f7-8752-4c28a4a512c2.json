@@ -1,0 +1,20 @@
+{
+    "summary": "The code is for an argument parser in the exploration phase of AppAgent, enabling users to select between autonomous or human demonstration mode and specifying required parameters. It also includes a document generation script for running specified apps and demos.",
+    "details": [
+        {
+            "comment": "This code is for an argument parser in the exploration phase of AppAgent. It allows users to input app and root directory, then provides a description of the phase's purpose: generating documentations for UI elements through autonomous exploration or human demonstration. The task-oriented approach requires giving task descriptions.",
+            "location": "\"/media/root/Toshiba XG3/works/AppAgent/docs/src/learn.py\":0-22",
+            "content": "import argparse\nimport datetime\nimport os\nimport time\nfrom scripts.utils import print_with_color\narg_desc = \"AppAgent - exploration phase\"\nparser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=arg_desc)\nparser.add_argument(\"--app\")\nparser.add_argument(\"--root_dir\", default=\"./\")\nargs = vars(parser.parse_args())\napp = args[\"app\"]\nroot_dir = args[\"root_dir\"]\nprint_with_color(\"Welcome to the exploration phase of AppAgent!\\nThe exploration phase aims at generating \"\n                 \"documentations for UI elements through either autonomous exploration or human demonstration. \"\n                 \"Both options are task-oriented, which means you need to give a task description. During \"\n                 \"autonomous exploration, the agent will try to complete the task by interacting with possible \"\n                 \"elements on the UI within limited rounds. Documentations will be generated during the process of \"\n                 \"interacting with the correct elements to proceed with the task. Human demonstration relies on \""
+        },
+        {
+            "comment": "This code asks the user to choose between autonomous exploration or human demonstration mode for the app agent. If \"1\" is entered, it starts autonomous exploration using specific script with app and root_dir parameters. If \"2\" is entered, it begins a human demonstration by creating a demo name and running another script for step recording with app, demo name, and root_dir parameters.",
+            "location": "\"/media/root/Toshiba XG3/works/AppAgent/docs/src/learn.py\":23-43",
+            "content": "                 \"the user to show the agent how to complete the given task, and the agent will generate \"\n                 \"documentations for the elements interacted during the human demo. To start, please enter the \"\n                 \"main interface of the app on your phone.\", \"yellow\")\nprint_with_color(\"Choose from the following modes:\\n1. autonomous exploration\\n2. human demonstration\\n\"\n                 \"Type 1 or 2.\", \"blue\")\nuser_input = \"\"\nwhile user_input != \"1\" and user_input != \"2\":\n    user_input = input()\nif not app:\n    print_with_color(\"What is the name of the target app?\", \"blue\")\n    app = input()\n    app = app.replace(\" \", \"\")\nif user_input == \"1\":\n    os.system(f\"python scripts/self_explorer.py --app {app} --root_dir {root_dir}\")\nelse:\n    demo_timestamp = int(time.time())\n    demo_name = datetime.datetime.fromtimestamp(demo_timestamp).strftime(f\"demo_{app}_%Y-%m-%d_%H-%M-%S\")\n    os.system(f\"python scripts/step_recorder.py --app {app} --demo {demo_name} --root_dir {root_dir}\")\n    o"
+        },
+        {
+            "comment": "Running document generation script for specified app and demo.",
+            "location": "\"/media/root/Toshiba XG3/works/AppAgent/docs/src/learn.py\":43-43",
+            "content": "s.system(f\"python scripts/document_generation.py --app {app} --demo {demo_name} --root_dir {root_dir}\")"
+        }
+    ]
+}

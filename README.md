@@ -93,9 +93,9 @@ pip install -r requirements.txt
 ### 🤖 Step 2. Configure the Agent
 
 AppAgent needs to be powered by a multi-modal model which can receive both text and visual inputs. During our experiment
-, we used `gpt-4-vision-preview` as the model to make decisions on how to take actions to complete a task on the smartphone.
+, we used `gpt-4o` as the model to make decisions on how to take actions to complete a task on the smartphone.
 
-To configure your requests to GPT-4V, you should modify `config.yaml` in the root directory.
+To configure your requests to GPT-4, you should modify `config.yaml` in the root directory.
 There are two key parameters that must be configured to try AppAgent:
 1. OpenAI API key: you must purchase an eligible API key from OpenAI so that you can have access to GPT-4V.
 2. Request interval: this is the time interval in seconds between consecutive GPT-4V requests to control the frequency 
@@ -110,6 +110,8 @@ free to use but its performance in the context of AppAgent is poorer compared wi
 
 To use it, you should create an Alibaba Cloud account and [create a Dashscope API key](https://help.aliyun.com/zh/dashscope/developer-reference/activate-dashscope-and-create-an-api-key?spm=a2c4g.11186623.0.i1) to fill in the `DASHSCOPE_API_KEY` field 
 in the `config.yaml` file. Change the `MODEL` field from `OpenAI` to `Qwen` as well.
+
+You can also try `Gemini` as another alternative multi-modal model to power the AppAgent. To use it, you should create an account on the respective platform and obtain the necessary API key to fill in the `GEMINI_API_KEY` field in the `config.yaml` file. Change the `MODEL` field to `Gemini` as well.
 
 If you want to test AppAgent using your own models, you should write a new model class in `scripts/model.py` accordingly.
 

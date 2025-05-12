@@ -175,6 +175,6 @@ class AndroidController:
     def swipe_precise(self, start, end, duration=400):
         start_x, start_y = start
         end_x, end_y = end
-        adb_command = f"adb -s {self.device} shell input swipe {start_x} {start_x} {end_x} {end_y} {duration}"
+        adb_command = f"adb -s {self.device} shell input swipe {start_x} {start_y} {end_x} {end_y} {duration}"
         ret = execute_adb(adb_command)
         return ret

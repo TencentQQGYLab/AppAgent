@@ -8,7 +8,7 @@ import time
 
 import prompts
 from config import load_config
-from model import OpenAIModel, QwenModel
+from model import OpenAIModel, QwenModel, GeminiModel
 from utils import print_with_color
 
 arg_desc = "AppAgent - Human Demonstration"
@@ -29,6 +29,9 @@ if configs["MODEL"] == "OpenAI":
 elif configs["MODEL"] == "Qwen":
     mllm = QwenModel(api_key=configs["DASHSCOPE_API_KEY"],
                      model=configs["QWEN_MODEL"])
+elif configs["MODEL"] == "Gemini":
+    mllm = GeminiModel(api_key=configs["GEMINI_API_KEY"],
+                       model=configs["GEMINI_MODEL"])
 else:
     print_with_color(f"ERROR: Unsupported model type {configs['MODEL']}!", "red")
     sys.exit()

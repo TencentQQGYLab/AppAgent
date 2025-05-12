@@ -1,6 +1,6 @@
 import re
 from abc import abstractmethod
-from typing import List
+from typing import List, Tuple
 from http import HTTPStatus
 
 import requests
@@ -14,7 +14,7 @@ class BaseModel:
         pass
 
     @abstractmethod
-    def get_model_response(self, prompt: str, images: List[str]) -> (bool, str):
+    def get_model_response(self, prompt: str, images: List[str]) -> Tuple[bool, str]:
         pass
 
 
@@ -27,7 +27,7 @@ class OpenAIModel(BaseModel):
         self.temperature = temperature
         self.max_tokens = max_tokens
 
-    def get_model_response(self, prompt: str, images: List[str]) -> (bool, str):
+    def get_model_response(self, prompt: str, images: List[str]) -> Tuple[bool, str]:
         content = [
             {
                 "type": "text",
@@ -76,7 +76,7 @@ class QwenModel(BaseModel):
         self.model = model
         dashscope.api_key = api_key
 
-    def get_model_response(self, prompt: str, images: List[str]) -> (bool, str):
+    def get_model_response(self, prompt: str, images: List[str]) -> Tuple[bool, str]:
         content = [{
             "text": prompt
         }]
@@ -97,6 +97,32 @@ class QwenModel(BaseModel):
         else:
             return False, response.message
 
+class GeminiModel(BaseModel):
+    def __init__(self, api_key: str, model: str):
+        super().__init__()
+        self.api_key = api_key
+        self.model = model
+
+    def get_model_response(self, prompt: str, images: List[str]) -> tuple[bool, str]:
+        # Implement Gemini API call here
+        # This is a placeholder; actual implementation depends on Gemini's API specifications
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {self.api_key}"
+        }
+        payload = {
+            "model": self.model,
+            "prompt": prompt,
+            "images": images  # Assuming Gemini supports image inputs
+        }
+        try:
+            # Replace with actual Gemini API endpoint
+            response = requests.post("https://api.gemini.com/v1/completions", headers=headers, json=payload)
+            response.raise_for_status()
+            response_data = response.json()
+            return True, response_data["choices"][0]["message"]["content"]
+        except Exception as e:
+            return False, str(e)
 
 def parse_explore_rsp(rsp):
     try:

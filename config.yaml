@@ -1,14 +1,17 @@
-MODEL: "OpenAI"  # The type of multi-modal LLM you would like to use to power the AppAgent, must be either OpenAI or Qwen
+MODEL: "Gemini"  # The type of multi-modal LLM you would like to use to power the AppAgent, must be either OpenAI, Qwen or Gemini
 
 OPENAI_API_BASE: "https://api.openai.com/v1/chat/completions"
 OPENAI_API_KEY: "sk-"  # Set the value to sk-xxx if you host the openai interface for open llm model
-OPENAI_API_MODEL: "gpt-4-vision-preview"  # The only OpenAI model by now that accepts visual input
+OPENAI_API_MODEL: "gpt-4o"  # The only OpenAI model by now that accepts visual input
 MAX_TOKENS: 300  # The max token limit for the response completion
 TEMPERATURE: 0.0  # The temperature of the model: the lower the value, the more consistent the output of the model
 REQUEST_INTERVAL: 10  # Time in seconds between consecutive GPT-4V requests
 
 DASHSCOPE_API_KEY: "sk-"  # The dashscope API key that gives you access to Qwen-VL model
 QWEN_MODEL: "qwen-vl-max"
+
+GEMINI_API_KEY: "AI"  # Your Gemini API key
+GEMINI_MODEL: "gemini-1.5-flash"  # The Gemini model to use
 
 ANDROID_SCREENSHOT_DIR: "/sdcard"  # Set the directory on your Android device to store the intermediate screenshots. Make sure the directory EXISTS on your phone!
 ANDROID_XML_DIR: "/sdcard"  # Set the directory on your Android device to store the intermediate XML files used for determining locations of UI elements on your screen. Make sure the directory EXISTS on your phone!

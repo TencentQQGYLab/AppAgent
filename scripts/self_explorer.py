@@ -10,7 +10,7 @@ import time
 import prompts
 from config import load_config
 from and_controller import list_all_devices, AndroidController, traverse_tree
-from model import parse_explore_rsp, parse_reflect_rsp, OpenAIModel, QwenModel
+from model import parse_explore_rsp, parse_reflect_rsp, OpenAIModel, QwenModel, GeminiModel
 from utils import print_with_color, draw_bbox_multi
 
 arg_desc = "AppAgent - Autonomous Exploration"
@@ -30,6 +30,9 @@ if configs["MODEL"] == "OpenAI":
 elif configs["MODEL"] == "Qwen":
     mllm = QwenModel(api_key=configs["DASHSCOPE_API_KEY"],
                      model=configs["QWEN_MODEL"])
+elif configs["MODEL"] == "Gemini":
+    mllm = GeminiModel(api_key=configs["GEMINI_API_KEY"],
+                    model=configs["GEMINI_MODEL"])
 else:
     print_with_color(f"ERROR: Unsupported model type {configs['MODEL']}!", "red")
     sys.exit()

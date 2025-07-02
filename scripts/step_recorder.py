@@ -7,9 +7,9 @@ import shutil
 import sys
 import time
 
-from and_controller import list_all_devices, AndroidController, traverse_tree
-from config import load_config
-from utils import print_with_color, draw_bbox_multi
+from .and_controller import list_all_devices, AndroidController, traverse_tree
+from .config import load_config
+from .utils import print_with_color, draw_bbox_multi
 
 arg_desc = "AppAgent - Human Demonstration"
 parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=arg_desc)

@@ -1,4 +1,4 @@
-MODEL: "OpenAI"  # The type of multi-modal LLM you would like to use to power the AppAgent, must be either OpenAI or Qwen
+MODEL: "Qwen"  # The type of multi-modal LLM you would like to use to power the AppAgent, must be either OpenAI or Qwen
 
 OPENAI_API_BASE: "https://api.openai.com/v1/chat/completions"
 OPENAI_API_KEY: "sk-"  # Set the value to sk-xxx if you host the openai interface for open llm model
@@ -7,8 +7,8 @@ MAX_TOKENS: 300  # The max token limit for the response completion
 TEMPERATURE: 0.0  # The temperature of the model: the lower the value, the more consistent the output of the model
 REQUEST_INTERVAL: 10  # Time in seconds between consecutive GPT-4V requests
 
-DASHSCOPE_API_KEY: "sk-"  # The dashscope API key that gives you access to Qwen-VL model
-QWEN_MODEL: "qwen-vl-max"
+DASHSCOPE_API_KEY: "sk-f203b6a80a0d4af1800cd9f8bb9b7fa6"  # The dashscope API key that gives you access to Qwen-VL model
+QWEN_MODEL: "qwen-vl-plus"
 
 ANDROID_SCREENSHOT_DIR: "/sdcard"  # Set the directory on your Android device to store the intermediate screenshots. Make sure the directory EXISTS on your phone!
 ANDROID_XML_DIR: "/sdcard"  # Set the directory on your Android device to store the intermediate XML files used for determining locations of UI elements on your screen. Make sure the directory EXISTS on your phone!

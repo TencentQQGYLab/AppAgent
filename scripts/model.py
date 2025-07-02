@@ -6,7 +6,7 @@ from http import HTTPStatus
 import requests
 import dashscope
 
-from utils import print_with_color, encode_image
+from .utils import print_with_color, encode_image
 
 
 class BaseModel:

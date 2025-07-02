@@ -1,0 +1,18 @@
+"""
+Prompt templates for different agent types
+"""
+from prompts.captcha_prompts import (
+    CAPTCHA_DETECTION_PROMPT,
+    IMAGE_CAPTCHA_PROMPT,
+    SLIDER_CAPTCHA_PROMPT,
+    CLICK_CAPTCHA_PROMPT,
+    ROTATION_CAPTCHA_PROMPT
+)
+
+__all__ = [
+    'CAPTCHA_DETECTION_PROMPT',
+    'IMAGE_CAPTCHA_PROMPT', 
+    'SLIDER_CAPTCHA_PROMPT',
+    'CLICK_CAPTCHA_PROMPT',
+    'ROTATION_CAPTCHA_PROMPT'
+]

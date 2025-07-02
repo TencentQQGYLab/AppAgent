@@ -1,200 +1,191 @@
-# [CHI 2025] AppAgent 
+# AppAgent Extended - 多Agent架构设置指南
 
-<div align="center">
+## 新架构概述
 
-<a href='https://arxiv.org/abs/2312.13771'><img src='https://img.shields.io/badge/arXiv-2312.13771-b31b1b.svg'></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
- <a href='https://appagent-official.github.io'><img src='https://img.shields.io/badge/Project-Page-Green'></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
- <a href='https://github.com/buaacyw/GaussianEditor/blob/master/LICENSE.txt'><img src='https://img.shields.io/badge/License-MIT-blue'></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
- <a href="https://twitter.com/dr_chizhang"><img src="https://img.shields.io/twitter/follow/dr_chizhang?style=social" alt="Twitter Follow"></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
- <br><br>
- <!-- [![Model](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Model-blue)](https://huggingface.co/listen2you002/ChartLlama-13b) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-[![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Dataset-blue)](https://huggingface.co/datasets/listen2you002/ChartLlama-Dataset) -->
+AppAgent Extended 将原始的AppAgent扩展为支持多种专门任务的agent系统：
 
-[**Chi Zhang***†](https://icoz69.github.io/), [**Zhao Yang***](https://github.com/yz93), [**Jiaxuan Liu***](https://www.linkedin.com/in/jiaxuan-liu-9051b7105/), [Yucheng Han](http://tingxueronghua.github.io), [Xin Chen](https://chenxin.tech/), [Zebiao Huang](),
-<br>
-[Bin Fu](https://openreview.net/profile?id=~BIN_FU2), [Gang Yu✦](https://www.skicyyu.org/)
-<br>
-(* equal contribution, † Project Leader, ✦ Corresponding Author )
-</div>
+- **CAPTCHA Agent**: 专门处理各种验证码
+- **Payment Agent**: 处理支付流程（开发中）
+- **Quiz Agent**: 处理问答和测验（开发中）
+- **General Agent**: 原始的通用AppAgent
 
+## 目录结构
 
-![](./assets/teaser.png)
+```
+AppAgent/
+├── agents/                    # 专门的agent模块
+│   ├── __init__.py
+│   ├── base_agent.py         # 基础Agent类
+│   ├── captcha_agent.py      # 验证码Agent
+│   ├── captcha_utils.py      # 验证码处理工具
+│   ├── payment_agent.py      # 支付Agent（待实现）
+│   └── quiz_agent.py         # 答题Agent（待实现）
+├── prompts/                   # 提示词模块
+│   ├── __init__.py
+│   ├── base_prompts.py       # 基础提示词
+│   └── captcha_prompts.py    # 验证码相关提示词
+├── scripts/                   # 原有脚本（保持不变）
+├── agent_runner.py           # 新的多Agent运行器
+└── [其他原有文件]
+```
 
-ℹ️ 🔥🔥🔥 [AppAgentX](https://appagentx.github.io/) is released, the next-generatation GUI Agent with evolving mechanism.
+## 安装步骤
 
-ℹ️Should you encounter any issues⚠️ while using our project, please feel free to report them on [GitHub Issues](https://github.com/mnotgod96/AppAgent/issues) or reach out to [Dr. Chi Zhang](https://icoz69.github.io/) via email at dr.zhang.chi@outlook.com.
-
-ℹ️This project will be synchronously updated on the official [TencentQQGYLab](https://github.com/TencentQQGYLab/AppAgent) Github Page.
-
-## 📝 Changelog
-
-- __[2025.3.5]__: 🔥🔥🔥[AppAgentX](https://appagentx.github.io/) is released, the next-generatation GUI Agent with evloving mechanism.
-- __[2024.2.8]__: Added `qwen-vl-max` (通义千问-VL) as an alternative multi-modal model. The model is currently free to use but has a relatively poorer performance compared with GPT-4V.
-- __[2024.1.31]__: Released the [evaluation benchmark](https://github.com/mnotgod96/AppAgent/blob/main/assets/testset.md) used during our testing of AppAgent
-- __[2024.1.2]__: Added an optional method for the agent to bring up a grid overlay on the screen to **tap/swipe anywhere** on the screen.
-- __[2023.12.26]__: Added [Tips](#tips) section for better use experience; added instruction for using the **Android Studio emulator** for
-  users who do not have Android devices.
-- __[2023.12.21]__:  Open-sourced the git repository, including the detailed configuration steps to implement our AppAgent!
-
-
-## 🔆 Introduction
-
-We introduce a novel LLM-based multimodal agent framework designed to operate smartphone applications. 
-
-Our framework enables the agent to operate smartphone applications through a simplified action space, mimicking human-like interactions such as tapping and swiping. This novel approach bypasses the need for system back-end access, thereby broadening its applicability across diverse apps.
-
-Central to our agent's functionality is its innovative learning method. The agent learns to navigate and use new apps either through autonomous exploration or by observing human demonstrations. This process generates a knowledge base that the agent refers to for executing complex tasks across different applications.
-
-
-## ✨ Demo
-
-The demo video shows the process of using AppAgent to follow a user on X (Twitter) in the deployment phase.
-
-https://github.com/mnotgod96/AppAgent/assets/40715314/db99d650-dec1-4531-b4b2-e085bfcadfb7
-
-An interesting experiment showing AppAgent's ability to pass CAPTCHA.
-
-https://github.com/mnotgod96/AppAgent/assets/27103154/5cc7ba50-dbab-42a0-a411-a9a862482548
-
-An example of using the grid overlay to locate a UI element that is not labeled with a numeric tag.
-
-https://github.com/mnotgod96/AppAgent/assets/27103154/71603333-274c-46ed-8381-2f9a34cdfc53
-
-## 🚀 Quick Start
-
-This section will guide you on how to quickly use `gpt-4-vision-preview` (or `qwen-vl-max`) as an agent to complete specific tasks for you on
-your Android app.
-
-### ⚙️ Step 1. Prerequisites
-
-1. On your PC, download and install [Android Debug Bridge](https://developer.android.com/tools/adb) (adb) which is a
-   command-line tool that lets you communicate with your Android device from the PC.
-
-2. Get an Android device and enable the USB debugging that can be found in Developer Options in Settings.
-
-3. Connect your device to your PC using a USB cable.
-
-4. (Optional) If you do not have an Android device but still want to try AppAgent. We recommend you download
-   [Android Studio](https://developer.android.com/studio/run/emulator) and use the emulator that comes with it.
-   The emulator can be found in the device manager of Android Studio. You can install apps on an emulator by
-   downloading APK files from the internet and dragging them to the emulator.
-   AppAgent can detect the emulated device and operate apps on it just like operating a real device.
-
-   <img width="570" alt="Screenshot 2023-12-26 at 22 25 42" src="https://github.com/mnotgod96/AppAgent/assets/27103154/5d76b810-1f42-44c8-b024-d63ec7776789">
-
-5. Clone this repo and install the dependencies. All scripts in this project are written in Python 3 so make sure you
-   have installed it.
+### 1. 创建新目录结构
 
 ```bash
-cd AppAgent
-pip install -r requirements.txt
+# 在AppAgent根目录下创建新目录
+mkdir agents
+mkdir prompts
+
+# 将新文件放入对应目录
+# agents/目录下：
+# - __init__.py
+# - base_agent.py
+# - captcha_agent.py
+# - captcha_utils.py
+
+# prompts/目录下：
+# - __init__.py
+# - base_prompts.py
+# - captcha_prompts.py
 ```
 
-### 🤖 Step 2. Configure the Agent
-
-AppAgent needs to be powered by a multi-modal model which can receive both text and visual inputs. During our experiment
-, we used `gpt-4-vision-preview` as the model to make decisions on how to take actions to complete a task on the smartphone.
-
-To configure your requests to GPT-4V, you should modify `config.yaml` in the root directory.
-There are two key parameters that must be configured to try AppAgent:
-1. OpenAI API key: you must purchase an eligible API key from OpenAI so that you can have access to GPT-4V.
-2. Request interval: this is the time interval in seconds between consecutive GPT-4V requests to control the frequency 
-of your requests to GPT-4V. Adjust this value according to the status of your account.
-
-Other parameters in `config.yaml` are well commented. Modify them as you need.
-
-> Be aware that GPT-4V is not free. Each request/response pair involved in this project costs around $0.03. Use it wisely.
-
-You can also try `qwen-vl-max` (通义千问-VL) as the alternative multi-modal model to power the AppAgent. The model is currently 
-free to use but its performance in the context of AppAgent is poorer compared with GPT-4V.
-
-To use it, you should create an Alibaba Cloud account and [create a Dashscope API key](https://help.aliyun.com/zh/dashscope/developer-reference/activate-dashscope-and-create-an-api-key?spm=a2c4g.11186623.0.i1) to fill in the `DASHSCOPE_API_KEY` field 
-in the `config.yaml` file. Change the `MODEL` field from `OpenAI` to `Qwen` as well.
-
-If you want to test AppAgent using your own models, you should write a new model class in `scripts/model.py` accordingly.
-
-### 🔍 Step 3. Exploration Phase
-
-Our paper proposed a novel solution that involves two phases, exploration, and deployment, to turn GPT-4V into a capable 
-agent that can help users operate their Android phones when a task is given. The exploration phase starts with a task 
-given by you, and you can choose to let the agent either explore the app on its own or learn from your demonstration. 
-In both cases, the agent generates documentation for elements interacted during the exploration/demonstration and 
-saves them for use in the deployment phase.
-
-#### Option 1: Autonomous Exploration
-
-This solution features a fully autonomous exploration which allows the agent to explore the use of the app by attempting
-the given task without any intervention from humans.
-
-To start, run `learn.py` in the root directory. Follow the prompted instructions to select `autonomous exploration` 
-as the operating mode and provide the app name and task description. Then, your agent will do the job for you. Under 
-this mode, AppAgent will reflect on its previous action making sure its action adheres to the given task and generate 
-documentation for the elements explored.
+### 2. 安装额外依赖
 
 ```bash
-python learn.py
+# 验证码处理需要的额外依赖
+pip install opencv-python numpy
 ```
 
-#### Option 2: Learning from Human Demonstrations
+### 3. 修改原有文件
 
-This solution requires users to demonstrate a similar task first. AppAgent will learn from the demo and generate 
-documentations for UI elements seen during the demo.
+将原来的 `prompts.py` 文件移动到 `scripts/prompts.py`，或者更新导入路径。
 
-To start human demonstration, you should run `learn.py` in the root directory. Follow the prompted instructions to select 
-`human demonstration` as the operating mode and provide the app name and task description. A screenshot of your phone 
-will be captured and all interactive elements shown on the screen will be labeled with numeric tags. You need to follow 
-the prompts to determine your next action and the target of the action. When you believe the demonstration is finished, 
-type `stop` to end the demo.
+## 使用方法
+
+### 运行CAPTCHA Agent
+
+1. **启动Agent运行器**：
+```bash
+python agent_runner.py
+```
+
+2. **选择Agent类型**：
+```
+Select the type of agent you want to use:
+1. CAPTCHA Agent - Handles various types of CAPTCHAs
+2. Payment Agent - Handles payment processes (Coming soon)
+3. Quiz Agent - Handles quiz and questionnaire (Coming soon)
+4. General Agent - Original AppAgent for general tasks
+
+Enter your choice (1-4): 1
+```
+
+3. **导航到验证码页面**：
+   - 在手机上打开包含验证码的应用页面
+   - 按Enter键开始处理
+
+### 命令行参数
 
 ```bash
-python learn.py
+# 直接指定agent类型
+python agent_runner.py --agent captcha
+
+# 运行通用agent（原AppAgent）
+python agent_runner.py --agent general --app Twitter
 ```
 
-![](./assets/demo.png)
+## CAPTCHA Agent 功能
 
-### 📱 Step 4. Deployment Phase
+### 支持的验证码类型
 
-After the exploration phase finishes, you can run `run.py` in the root directory. Follow the prompted instructions to enter 
-the name of the app, select the appropriate documentation base you want the agent to use and provide the task 
-description. Then, your agent will do the job for you. The agent will automatically detect if there is documentation 
-base generated before for the app; if there is no documentation found, you can also choose to run the agent without any 
-documentation (success rate not guaranteed).
+1. **图片验证码**：识别扭曲的文字/数字
+2. **滑块验证码**：拖动滑块完成拼图
+3. **点击验证码**：点击特定对象（如"点击所有红绿灯"）
+4. **旋转验证码**：旋转图片到正确方向
 
+### 工作流程
+
+1. **检测验证码类型**：自动识别屏幕上的验证码类型
+2. **应用专门策略**：根据类型使用不同的解决方案
+3. **执行操作**：自动完成验证码验证
+4. **验证结果**：检查是否成功通过验证
+
+## 扩展新的Agent
+
+要添加新的专门Agent（如PaymentAgent）：
+
+1. **创建新的Agent类**：
+```python
+# agents/payment_agent.py
+from agents.base_agent import BaseAgent
+
+class PaymentAgent(BaseAgent):
+    def get_task_prompt(self, task_desc, last_act, **kwargs):
+        # 实现支付相关的提示词
+        pass
+    
+    def parse_response(self, response):
+        # 解析支付相关的响应
+        pass
+    
+    def execute_action(self, action):
+        # 执行支付相关的操作
+        pass
+    
+    def check_task_completion(self, screenshot_path, xml_path):
+        # 检查支付是否完成
+        pass
+```
+
+2. **创建对应的提示词**：
+```python
+# prompts/payment_prompts.py
+PAYMENT_DETECTION_PROMPT = """..."""
+PAYMENT_EXECUTION_PROMPT = """..."""
+```
+
+3. **在agent_runner.py中注册**：
+```python
+from agents.payment_agent import PaymentAgent
+
+# 在main()函数中添加：
+elif agent_choice == "2":
+    run_payment_agent(controller, model, configs, work_dir)
+```
+
+## 注意事项
+
+1. **兼容性**：新架构完全兼容原有的AppAgent功能
+2. **配置文件**：使用相同的 `config.yaml`
+3. **文档生成**：CAPTCHA Agent不需要预先的文档学习阶段
+4. **错误处理**：增强了错误处理和重试机制
+
+## 故障排除
+
+### 常见问题
+
+1. **导入错误**：确保正确创建了目录结构和__init__.py文件
+2. **验证码识别失败**：
+   - 检查截图质量
+   - 确保验证码完全可见
+   - 尝试调整屏幕亮度
+
+3. **Agent选择错误**：使用 `--agent` 参数直接指定agent类型
+
+### 调试模式
+
+设置环境变量启用详细日志：
 ```bash
-python run.py
+export APPAGENT_DEBUG=1
+python agent_runner.py
 ```
 
-## 💡 Tips<a name="tips"></a>
-- For an improved experience, you might permit AppAgent to undertake a broader range of tasks through autonomous exploration, or you can directly demonstrate more app functions to enhance the app documentation. Generally, the more extensive the documentation provided to the agent, the higher the likelihood of successful task completion.
-- It is always a good practice to inspect the documentation generated by the agent. When you find some documentation not accurately
-  describe the function of the element, manually revising the documentation is also an option.
+## 未来计划
 
-
-## 📊 Evaluation
-Please refer to  [evaluation benchmark](https://github.com/mnotgod96/AppAgent/blob/main/assets/testset.md).
-
-
-## 📖 To-Do List
-- [ ] Incorporate more LLM APIs into the project.
-- [x] Open source the Benchmark.
-- [x] Open source the configuration.
-
-## 😉 Citation
-```bib
-@misc{yang2023appagent,
-      title={AppAgent: Multimodal Agents as Smartphone Users}, 
-      author={Chi Zhang and Zhao Yang and Jiaxuan Liu and Yucheng Han and Xin Chen and Zebiao Huang and Bin Fu and Gang Yu},
-      year={2023},
-      eprint={2312.13771},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
-}
-```
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=mnotgod96/AppAgent&type=Date)](https://star-history.com/#mnotgod96/AppAgent&Date)
-
-
-## License
-The [MIT license](./assets/license.txt).
+- [ ] 集成OCR服务提高图片验证码识别率
+- [ ] 添加机器学习模型用于对象检测
+- [ ] 实现PaymentAgent
+- [ ] 实现QuizAgent
+- [ ] 添加更多验证码类型支持

@@ -8,10 +8,10 @@ import sys
 import time
 
 import prompts
-from config import load_config
-from and_controller import list_all_devices, AndroidController, traverse_tree
-from model import parse_explore_rsp, parse_reflect_rsp, OpenAIModel, QwenModel
-from utils import print_with_color, draw_bbox_multi
+from .config import load_config
+from .and_controller import list_all_devices, AndroidController, traverse_tree
+from .model import parse_explore_rsp, parse_reflect_rsp, OpenAIModel, QwenModel
+from .utils import print_with_color, draw_bbox_multi
 
 arg_desc = "AppAgent - Autonomous Exploration"
 parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=arg_desc)

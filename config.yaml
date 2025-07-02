@@ -10,8 +10,8 @@ REQUEST_INTERVAL: 10  # Time in seconds between consecutive GPT-4V requests
 DASHSCOPE_API_KEY: "sk-f203b6a80a0d4af1800cd9f8bb9b7fa6"  # The dashscope API key that gives you access to Qwen-VL model
 QWEN_MODEL: "qwen-vl-plus"
 
-ANDROID_SCREENSHOT_DIR: "/sdcard"  # Set the directory on your Android device to store the intermediate screenshots. Make sure the directory EXISTS on your phone!
-ANDROID_XML_DIR: "/sdcard"  # Set the directory on your Android device to store the intermediate XML files used for determining locations of UI elements on your screen. Make sure the directory EXISTS on your phone!
+ANDROID_SCREENSHOT_DIR: "/data/local/tmp"  # Set the directory on your Android device to store the intermediate screenshots. Make sure the directory EXISTS on your phone!
+ANDROID_XML_DIR: "/data/local/tmp"  # Set the directory on your Android device to store the intermediate XML files used for determining locations of UI elements on your screen. Make sure the directory EXISTS on your phone!
 
 DOC_REFINE: false  # Set this to true will make the agent refine existing documentation based on the latest demonstration; otherwise, the agent will not regenerate a new documentation for elements with the same resource ID.
 MAX_ROUNDS: 20  # Set the round limit for the agent to complete the task

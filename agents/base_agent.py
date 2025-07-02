@@ -47,10 +47,35 @@ class BaseAgent(ABC):
         """Check if the specific task is completed"""
         pass
     
-    def get_screenshot_and_xml(self, prefix: str) -> Tuple[str, str]:
-        """Get screenshot and XML from device"""
-        screenshot_path = self.controller.get_screenshot(prefix, self.work_dir)
-        xml_path = self.controller.get_xml(prefix, self.work_dir)
+    def get_screenshot_and_xml(self, prefix: str, max_retries: int = 3) -> Tuple[str, str]:
+        """Get screenshot and XML from device with retry mechanism"""
+        for attempt in range(max_retries):
+            if attempt > 0:
+                print_with_color(f"Retrying... (attempt {attempt + 1}/{max_retries})", "yellow")
+                time.sleep(2)  # Wait before retry
+            
+            screenshot_path = self.controller.get_screenshot(prefix, self.work_dir)
+            xml_path = self.controller.get_xml(prefix, self.work_dir)
+            
+            # If both succeed, return them
+            if screenshot_path != "ERROR" and xml_path != "ERROR":
+                return screenshot_path, xml_path
+            
+            # If only one failed, try to get it again
+            if screenshot_path == "ERROR" and xml_path != "ERROR":
+                print_with_color("Retrying screenshot capture...", "yellow")
+                screenshot_path = self.controller.get_screenshot(prefix + f"_retry{attempt}", self.work_dir)
+            
+            if xml_path == "ERROR" and screenshot_path != "ERROR":
+                print_with_color("Retrying XML capture...", "yellow")
+                xml_path = self.controller.get_xml(prefix + f"_retry{attempt}", self.work_dir)
+            
+            # Check again after retry
+            if screenshot_path != "ERROR" and xml_path != "ERROR":
+                return screenshot_path, xml_path
+        
+        # If we get here, all retries failed
+        print_with_color(f"Failed to get screenshot or XML after {max_retries} attempts", "red")
         return screenshot_path, xml_path
     
     def wait_interval(self):
@@ -70,6 +95,22 @@ class BaseAgent(ABC):
             screenshot_path, xml_path = self.get_screenshot_and_xml(f"round_{self.round_count}")
             if screenshot_path == "ERROR" or xml_path == "ERROR":
                 print_with_color("ERROR: Failed to get screenshot or XML", "red")
+                
+                # Provide diagnostic information
+                if screenshot_path == "ERROR" and xml_path == "ERROR":
+                    print_with_color("Both screenshot and XML capture failed.", "red")
+                elif screenshot_path == "ERROR":
+                    print_with_color("Screenshot capture failed, but XML was successful.", "red")
+                else:
+                    print_with_color("XML capture failed, but screenshot was successful.", "red")
+                
+                print_with_color("Possible solutions:", "yellow")
+                print_with_color("  1. Check device connection and authorization", "white")
+                print_with_color("  2. Ensure sufficient storage space on device", "white")
+                print_with_color("  3. Check if USB debugging is enabled", "white")
+                print_with_color("  4. Run the diagnose.py script for detailed diagnosis", "white")
+                print_with_color("  5. Try different device paths in config.yaml", "white")
+                
                 break
             
             # Check if task is already completed

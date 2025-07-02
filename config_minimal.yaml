@@ -1,0 +1,28 @@
+# 最小配置 - 针对权限受限环境
+MODEL: "Qwen"
+DASHSCOPE_API_KEY: "your-api-key-here"
+QWEN_MODEL: "qwen-vl-plus"
+
+# 基础设置
+MAX_TOKENS: 300
+TEMPERATURE: 0.0
+REQUEST_INTERVAL: 10
+MAX_ROUNDS: 20
+MIN_DIST: 15
+
+# 增强检测设置 (根据安装情况调整)
+ENABLE_OMNI_PARSER: false  # PyTorch未安装时设为false
+ENABLE_OCR: true
+OCR_CONFIDENCE_THRESHOLD: 0.3
+CAPTCHA_DETECTION_MODE: "enhanced"
+
+# OCR引擎设置 (只使用可用的引擎)
+OCR_ENGINES: ["easy", "tesseract"]  # 跳过paddle
+OCR_PREPROCESS_IMAGES: true
+OCR_MAX_TEXT_LENGTH: 20
+
+# Android设置
+ANDROID_SCREENSHOT_DIR: "/data/local/tmp"
+ANDROID_XML_DIR: "/data/local/tmp"
+DARK_MODE: false
+DOC_REFINE: false

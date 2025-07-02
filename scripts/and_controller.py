@@ -92,6 +92,227 @@ def traverse_tree(xml_path, elem_list, attrib, add_index=False):
             path.pop()
 
 
+def enhanced_traverse_tree(xml_path, elem_list, add_index=False, include_all_elements=False):
+    """增强的元素遍历函数，提供更好的元素识别"""
+    path = []
+    
+    # 定义需要识别的元素属性
+    target_attributes = ["clickable", "focusable", "checkable", "scrollable", "long-clickable"]
+    
+    # 定义重要的元素类型（即使没有交互属性也要包含）
+    important_classes = [
+        "android.widget.Button",
+        "android.widget.ImageButton", 
+        "android.widget.EditText",
+        "android.widget.TextView",
+        "android.widget.CheckBox",
+        "android.widget.RadioButton",
+        "android.widget.Switch",
+        "android.widget.Spinner",
+        "android.widget.SeekBar",
+        "android.widget.ProgressBar",
+        "android.widget.ImageView"
+    ]
+    
+    for event, elem in ET.iterparse(xml_path, ['start', 'end']):
+        if event == 'start':
+            path.append(elem)
+            
+            # 检查元素是否应该被识别
+            should_include = False
+            element_type = "unknown"
+            
+            # 首先检查交互属性
+            for attr in target_attributes:
+                if attr in elem.attrib and elem.attrib[attr] == "true":
+                    should_include = True
+                    element_type = attr
+                    break
+            
+            # 如果没有交互属性，检查是否是重要的元素类型且有内容
+            if not should_include:
+                elem_class = elem.attrib.get("class", "")
+                has_text = elem.attrib.get("text", "").strip()
+                has_desc = elem.attrib.get("content-desc", "").strip()
+                has_resource_id = elem.attrib.get("resource-id", "").strip()
+                
+                # 检查是否有有意义的内容
+                has_content = has_text or has_desc or has_resource_id
+                
+                # 特别关注TextView，因为它们经常包含可点击的文本
+                if elem_class in important_classes and has_content:
+                    should_include = True
+                    element_type = "content"
+                
+                # 如果启用了包含所有元素模式
+                if include_all_elements and has_content:
+                    should_include = True
+                    if element_type == "unknown":
+                        element_type = "content"
+            
+            if should_include:
+                try:
+                    bounds_str = elem.attrib.get("bounds", "")
+                    if not bounds_str:
+                        continue
+                    
+                    bounds = bounds_str[1:-1].split("][")
+                    x1, y1 = map(int, bounds[0].split(","))
+                    x2, y2 = map(int, bounds[1].split(","))
+                    width = x2 - x1
+                    height = y2 - y1
+                    area = width * height
+                    
+                    # 过滤掉太小的元素（可能是装饰性的）
+                    min_area = 50  # 降低最小面积阈值
+                    max_area = 800000  # 提高最大面积阈值
+                    
+                    if area < min_area:
+                        continue
+                    
+                    # 过滤掉整个屏幕大小的容器元素
+                    if area > max_area:
+                        continue
+                    
+                    parent_prefix = ""
+                    if len(path) > 1:
+                        parent_prefix = get_id_from_element(path[-2])
+                    
+                    center = (x1 + x2) // 2, (y1 + y2) // 2
+                    
+                    elem_id = get_id_from_element(elem)
+                    if parent_prefix:
+                        elem_id = parent_prefix + "_" + elem_id
+                    if add_index:
+                        elem_id += f"_{elem.attrib.get('index', '0')}"
+                    
+                    # 使用更智能的重叠检测
+                    is_duplicate = False
+                    min_dist = configs.get("MIN_DIST", 15)
+                    
+                    for existing_elem in elem_list:
+                        existing_bbox = existing_elem.bbox
+                        existing_center = (
+                            (existing_bbox[0][0] + existing_bbox[1][0]) // 2,
+                            (existing_bbox[0][1] + existing_bbox[1][1]) // 2
+                        )
+                        
+                        # 计算中心点距离
+                        dist = ((center[0] - existing_center[0]) ** 2 + (center[1] - existing_center[1]) ** 2) ** 0.5
+                        
+                        # 计算重叠区域
+                        overlap_x1 = max(x1, existing_bbox[0][0])
+                        overlap_y1 = max(y1, existing_bbox[0][1])
+                        overlap_x2 = min(x2, existing_bbox[1][0])
+                        overlap_y2 = min(y2, existing_bbox[1][1])
+                        
+                        if overlap_x1 < overlap_x2 and overlap_y1 < overlap_y2:
+                            overlap_area = (overlap_x2 - overlap_x1) * (overlap_y2 - overlap_y1)
+                            current_area = (x2 - x1) * (y2 - y1)
+                            existing_area = (existing_bbox[1][0] - existing_bbox[0][0]) * (existing_bbox[1][1] - existing_bbox[0][1])
+                            
+                            # 如果重叠面积超过当前元素面积的50%或距离太近，认为是重复
+                            overlap_ratio = overlap_area / min(current_area, existing_area)
+                            if overlap_ratio > 0.5 or dist <= min_dist:
+                                is_duplicate = True
+                                break
+                    
+                    if not is_duplicate:
+                        elem_list.append(AndroidElement(elem_id, ((x1, y1), (x2, y2)), element_type))
+                        
+                except Exception as e:
+                    print_with_color(f"Error processing element: {e}", "yellow")
+                    continue
+
+        if event == 'end':
+            path.pop()
+
+
+def optimize_element_list(elem_list, screenshot_path=None):
+    """优化元素列表，移除不必要的元素并优化布局"""
+    optimized_list = []
+    
+    # 按面积排序，优先处理较小的元素（更可能是有用的交互元素）
+    elem_list.sort(key=lambda e: (e.bbox[1][0] - e.bbox[0][0]) * (e.bbox[1][1] - e.bbox[0][1]))
+    
+    for elem in elem_list:
+        should_keep = True
+        x1, y1 = elem.bbox[0]
+        x2, y2 = elem.bbox[1]
+        width = x2 - x1
+        height = y2 - y1
+        area = width * height
+        
+        # 过滤规则
+        # 1. 过滤掉太小的元素
+        if area < 25:  # 进一步降低阈值
+            should_keep = False
+        
+        # 2. 过滤掉太窄或太高的元素（可能是分隔线），但不要太严格
+        if width > 0 and height > 0:
+            aspect_ratio = max(width, height) / min(width, height)
+            if aspect_ratio > 50:  # 增加阈值，更宽松
+                should_keep = False
+        
+        # 3. 检查是否被其他更好的元素完全包含
+        for other_elem in optimized_list:
+            other_x1, other_y1 = other_elem.bbox[0]
+            other_x2, other_y2 = other_elem.bbox[1]
+            
+            # 如果当前元素完全在另一个元素内部，且另一个元素更大
+            if (x1 >= other_x1 and y1 >= other_y1 and x2 <= other_x2 and y2 <= other_y2):
+                other_area = (other_x2 - other_x1) * (other_y2 - other_y1)
+                # 只有当包含元素明显更大时才过滤掉当前元素
+                if other_area > area * 3:
+                    should_keep = False
+                    break
+        
+        if should_keep:
+            optimized_list.append(elem)
+    
+    # 按从上到下、从左到右的顺序重新排序
+    optimized_list.sort(key=lambda e: (e.bbox[0][1], e.bbox[0][0]))
+    
+    print_with_color(f"元素优化完成: {len(elem_list)} -> {len(optimized_list)}", "green")
+    
+    return optimized_list
+
+def analyze_element_distribution(elem_list, screenshot_path=None):
+    """分析元素分布，提供诊断信息"""
+    if not elem_list:
+        print_with_color("⚠️ 没有找到任何可交互元素", "yellow")
+        return
+    
+    print_with_color(f"找到 {len(elem_list)} 个元素", "green")
+    
+    # 按类型统计
+    type_counts = {}
+    for elem in elem_list:
+        elem_type = elem.attrib
+        type_counts[elem_type] = type_counts.get(elem_type, 0) + 1
+    
+    print_with_color("元素类型分布:", "blue")
+    for elem_type, count in type_counts.items():
+        print_with_color(f"  {elem_type}: {count}", "white")
+    
+    # 分析元素大小分布
+    areas = [(e.bbox[1][0] - e.bbox[0][0]) * (e.bbox[1][1] - e.bbox[0][1]) for e in elem_list]
+    if areas:
+        avg_area = sum(areas) / len(areas)
+        min_area = min(areas)
+        max_area = max(areas)
+        print_with_color(f"元素面积统计: 平均={avg_area:.0f}, 最小={min_area}, 最大={max_area}", "blue")
+    
+    # 检查是否有明显遗漏
+    large_elements = [e for e in elem_list if (e.bbox[1][0] - e.bbox[0][0]) * (e.bbox[1][1] - e.bbox[0][1]) > 10000]
+    small_elements = [e for e in elem_list if (e.bbox[1][0] - e.bbox[0][0]) * (e.bbox[1][1] - e.bbox[0][1]) < 500]
+    
+    if len(large_elements) > len(elem_list) * 0.3:
+        print_with_color("⚠️ 检测到较多大面积元素，可能存在容器元素", "yellow")
+    
+    if len(small_elements) > len(elem_list) * 0.5:
+        print_with_color("⚠️ 检测到较多小面积元素，可能包含装饰性元素", "yellow")
+
 class AndroidController:
     def __init__(self, device, diagnose=False):
         self.device = device
@@ -473,3 +694,12 @@ class AndroidController:
                 if check_result != "ERROR" and "No such file" not in check_result:
                     # 尝试拉取文件
                     pull_cmd = f"adb -s {self.device} pull {path}/{prefix}.xml {os.path.join(save_dir, prefix + '.xml')}"
+                    result = execute_adb(pull_cmd)
+                    if result != "ERROR":
+                        local_path = os.path.join(save_dir, prefix + ".xml")
+                        if os.path.exists(local_path):
+                            print_with_color(f"成功通过压缩格式获取XML: {local_path}", "green")
+                            return local_path
+        
+        print_with_color("所有高级方法都失败", "red")
+        return "ERROR"

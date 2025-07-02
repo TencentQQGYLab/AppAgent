@@ -16,4 +16,22 @@ ANDROID_XML_DIR: "/data/local/tmp"  # Set the directory on your Android device t
 DOC_REFINE: false  # Set this to true will make the agent refine existing documentation based on the latest demonstration; otherwise, the agent will not regenerate a new documentation for elements with the same resource ID.
 MAX_ROUNDS: 20  # Set the round limit for the agent to complete the task
 DARK_MODE: false  # Set this to true if your app is in dark mode to enhance the element labeling
-MIN_DIST: 30  # The minimum distance between elements to prevent overlapping during the labeling process
+MIN_DIST: 15  # The minimum distance between elements to prevent overlapping during the labeling process (reduced for better element detection)
+
+# Enhanced Detection Settings
+ENABLE_OMNI_PARSER: true  # Enable OmniParser for advanced UI element detection
+ENABLE_OCR: true  # Enable OCR for text recognition in images
+OCR_CONFIDENCE_THRESHOLD: 0.3  # Minimum confidence threshold for OCR results
+OMNI_PARSER_CONFIDENCE_THRESHOLD: 0.2  # Minimum confidence threshold for OmniParser results
+CAPTCHA_DETECTION_MODE: "enhanced"  # Use "enhanced" for comprehensive detection, "traditional" for XML-only
+
+# OCR Engine Settings
+OCR_ENGINES: ["paddle", "easy", "tesseract"]  # OCR engines to use (in order of preference)
+OCR_PREPROCESS_IMAGES: true  # Whether to preprocess images before OCR
+OCR_MAX_TEXT_LENGTH: 20  # Maximum length of text to consider for CAPTCHA
+
+# OmniParser Settings
+OMNI_PARSER_MODEL: "yolov8n"  # YOLO model to use for object detection
+OMNI_PARSER_DEVICE: "auto"  # Device to use: "auto", "cpu", or "cuda"
+OMNI_PARSER_MIN_AREA: 100  # Minimum area for detected elements
+OMNI_PARSER_MAX_AREA: 50000  # Maximum area for detected elements

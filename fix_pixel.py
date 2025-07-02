@@ -2,6 +2,7 @@
 """
 Google Pixel设备UIAutomator修复脚本
 专门针对Google Pixel设备的SELinux Enforcing模式问题
+有问题就运行一次
 """
 
 import sys

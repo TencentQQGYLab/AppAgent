@@ -5,3 +5,16 @@ opencv-python
 pyshine
 pyyaml
 requests
+# OCR dependencies
+paddlepaddle
+paddleocr
+easyocr
+pytesseract
+# OmniParser dependencies
+torch
+torchvision
+transformers
+ultralytics
+pillow
+numpy
+matplotlib

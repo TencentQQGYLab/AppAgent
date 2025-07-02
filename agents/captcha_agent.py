@@ -7,8 +7,11 @@ from typing import List, Any, Optional
 from enum import Enum
 
 from agents.base_agent import BaseAgent
-from scripts.and_controller import traverse_tree
+from scripts.and_controller import traverse_tree, enhanced_traverse_tree, optimize_element_list, analyze_element_distribution
 from scripts.utils import print_with_color, draw_bbox_multi
+from scripts.captcha_detector import CaptchaDetector
+from scripts.ocr_engine import OCREngine
+from scripts.omni_parser import OmniParser
 from prompts.captcha_prompts import (
     CAPTCHA_DETECTION_PROMPT,
     IMAGE_CAPTCHA_PROMPT,
@@ -35,47 +38,83 @@ class CaptchaAgent(BaseAgent):
         self.captcha_type = None
         self.captcha_elements = []
         
-    def detect_captcha_type(self, screenshot_path: str, xml_path: str) -> CaptchaType:
-        """Detect the type of CAPTCHA present on the screen"""
-        # Get all elements
-        clickable_list = []
-        focusable_list = []
-        traverse_tree(xml_path, clickable_list, "clickable", True)
-        traverse_tree(xml_path, focusable_list, "focusable", True)
+        # Initialize enhanced detection components
+        self.captcha_detector = CaptchaDetector()
+        self.ocr_engine = OCREngine()
+        self.omni_parser = OmniParser()
         
-        # Prepare detection prompt
-        elem_list = self._merge_elements(clickable_list, focusable_list)
+        print_with_color("🔧 增强验证码代理已初始化", "green")
+        
+    def detect_captcha_type(self, screenshot_path: str, xml_path: str) -> CaptchaType:
+        """Detect the type of CAPTCHA present on the screen using enhanced detection"""
+        print_with_color("使用增强检测系统分析验证码类型...", "blue")
+        
+        # Use the enhanced captcha detector
+        detection_results = self.captcha_detector.detect_captcha_elements(
+            screenshot_path, xml_path, self.work_dir
+        )
+        
+        # Analyze results to determine CAPTCHA type
+        captcha_analysis = detection_results['captcha_analysis']
+        
+        if captcha_analysis['captcha_type'] != 'unknown':
+            captcha_type_map = {
+                'text': CaptchaType.IMAGE,
+                'image': CaptchaType.IMAGE,
+                'slider': CaptchaType.SLIDER,
+                'click': CaptchaType.CLICK,
+                'rotation': CaptchaType.ROTATION
+            }
+            detected_type = captcha_type_map.get(captcha_analysis['captcha_type'], CaptchaType.UNKNOWN)
+            print_with_color(f"🎯 自动检测到验证码类型: {detected_type.value}", "green")
+            return detected_type
+        
+        # Fallback to LLM-based detection if automatic detection fails
+        print_with_color("自动检测失败，使用LLM进行验证码类型识别...", "yellow")
+        
+        # Use the combined elements for LLM analysis
+        elem_list = detection_results['combined_elements']
         labeled_screenshot = self._create_labeled_screenshot(screenshot_path, elem_list)
         
         prompt = CAPTCHA_DETECTION_PROMPT
         status, response = self.model.get_model_response(prompt, [labeled_screenshot])
         
         if status:
-            # Parse detection response
             captcha_type = self._parse_captcha_type(response)
+            print_with_color(f"🤖 LLM检测到验证码类型: {captcha_type.value}", "cyan")
             return captcha_type
         
         return CaptchaType.UNKNOWN
     
     def get_task_prompt(self, task_desc: str, last_act: str, **kwargs) -> str:
-        """Generate CAPTCHA-specific prompt based on detected type"""
+        """Generate CAPTCHA-specific prompt based on detected type using enhanced detection"""
         screenshot_path = kwargs.get('screenshot_path')
         xml_path = kwargs.get('xml_path')
         
         # Detect CAPTCHA type if not already detected
         if not self.captcha_type:
             self.captcha_type = self.detect_captcha_type(screenshot_path, xml_path)
-            print_with_color(f"Detected CAPTCHA type: {self.captcha_type.value}", "cyan")
+            print_with_color(f"检测到的验证码类型: {self.captcha_type.value}", "cyan")
         
-        # Get elements and create labeled screenshot
-        clickable_list = []
-        focusable_list = []
-        traverse_tree(xml_path, clickable_list, "clickable", True)
-        traverse_tree(xml_path, focusable_list, "focusable", True)
-        self.captcha_elements = self._merge_elements(clickable_list, focusable_list)
+        # Use enhanced detection to get comprehensive element list
+        print_with_color("使用增强检测获取验证码元素...", "blue")
+        detection_results = self.captcha_detector.detect_captcha_elements(
+            screenshot_path, xml_path, self.work_dir
+        )
         
-        labeled_screenshot = self._create_labeled_screenshot(screenshot_path, self.captcha_elements)
+        # Use the combined elements which include XML, OmniParser, and OCR results
+        self.captcha_elements = detection_results['combined_elements']
         
+        print_with_color(f"✅ 检测到 {len(self.captcha_elements)} 个可交互元素", "green")
+        
+        # Add OCR information to the context
+        ocr_info = ""
+        if detection_results['ocr_results']:
+            ocr_texts = [ocr.text for ocr in detection_results['ocr_results'] if ocr.text]
+            if ocr_texts:
+                ocr_info = f"\n\n🔤 OCR识别到的文本内容: {', '.join(ocr_texts)}"
+                print_with_color(f"OCR识别结果: {ocr_texts}", "yellow")
+
         # Select appropriate prompt template
         if self.captcha_type == CaptchaType.IMAGE:
             prompt_template = IMAGE_CAPTCHA_PROMPT
@@ -92,6 +131,7 @@ class CaptchaAgent(BaseAgent):
         # Replace placeholders
         prompt = prompt_template.replace("<task_description>", task_desc)
         prompt = prompt.replace("<last_act>", last_act)
+        prompt += ocr_info  # Add OCR information to the prompt
         
         return prompt
     

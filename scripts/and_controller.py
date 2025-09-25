@@ -98,7 +98,20 @@ class AndroidController:
         adb_command = f"adb -s {self.device} shell wm size"
         result = execute_adb(adb_command)
         if result != "ERROR":
-            return map(int, result.split(": ")[1].split("x"))
+            lines = result.strip().split('\n')
+            for line in lines:
+                if ':' in line and 'x' in line:
+                    size_part = line.split(': ')[1]
+                    if 'x' in size_part:
+                        width, height = size_part.split('x')
+                        return int(width.strip()), int(height.strip())
+                elif 'x' in line and line.count('x') == 1:
+                    parts = line.strip().split('x')
+                    if len(parts) == 2:
+                        try:
+                            return int(parts[0].strip()), int(parts[1].strip())
+                        except ValueError:
+                            continue
         return 0, 0
 
     def get_screenshot(self, prefix, save_dir):
@@ -175,6 +188,6 @@ class AndroidController:
     def swipe_precise(self, start, end, duration=400):
         start_x, start_y = start
         end_x, end_y = end
-        adb_command = f"adb -s {self.device} shell input swipe {start_x} {start_x} {end_x} {end_y} {duration}"
+        adb_command = f"adb -s {self.device} shell input swipe {start_x} {start_y} {end_x} {end_y} {duration}"
         ret = execute_adb(adb_command)
         return ret

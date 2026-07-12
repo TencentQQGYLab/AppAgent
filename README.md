@@ -1,4 +1,4 @@
-# [CHI 2025] AppAgent 
+# [CHI 2025] AppAgent
 
 <div align="center">
 
@@ -7,7 +7,7 @@
  <a href='https://github.com/buaacyw/GaussianEditor/blob/master/LICENSE.txt'><img src='https://img.shields.io/badge/License-MIT-blue'></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
  <a href="https://twitter.com/dr_chizhang"><img src="https://img.shields.io/twitter/follow/dr_chizhang?style=social" alt="Twitter Follow"></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
  <br><br>
- <!-- [![Model](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Model-blue)](https://huggingface.co/listen2you002/ChartLlama-13b) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+ <!-- [![Model](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Model-blue)](https://huggingface.co/listen2you002/ChartLlama-13b) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 [![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Dataset-blue)](https://huggingface.co/datasets/listen2you002/ChartLlama-Dataset) -->
 
 [**Chi Zhang***†](https://icoz69.github.io/), [**Zhao Yang***](https://github.com/yz93), [**Jiaxuan Liu***](https://www.linkedin.com/in/jiaxuan-liu-9051b7105/), [Yucheng Han](http://tingxueronghua.github.io), [Xin Chen](https://chenxin.tech/), [Zebiao Huang](),
@@ -39,7 +39,7 @@
 
 ## 🔆 Introduction
 
-We introduce a novel LLM-based multimodal agent framework designed to operate smartphone applications. 
+We introduce a novel LLM-based multimodal agent framework designed to operate smartphone applications.
 
 Our framework enables the agent to operate smartphone applications through a simplified action space, mimicking human-like interactions such as tapping and swiping. This novel approach bypasses the need for system back-end access, thereby broadening its applicability across diverse apps.
 
@@ -98,27 +98,27 @@ AppAgent needs to be powered by a multi-modal model which can receive both text 
 To configure your requests to GPT-4V, you should modify `config.yaml` in the root directory.
 There are two key parameters that must be configured to try AppAgent:
 1. OpenAI API key: you must purchase an eligible API key from OpenAI so that you can have access to GPT-4V.
-2. Request interval: this is the time interval in seconds between consecutive GPT-4V requests to control the frequency 
+2. Request interval: this is the time interval in seconds between consecutive GPT-4V requests to control the frequency
 of your requests to GPT-4V. Adjust this value according to the status of your account.
 
 Other parameters in `config.yaml` are well commented. Modify them as you need.
 
 > Be aware that GPT-4V is not free. Each request/response pair involved in this project costs around $0.03. Use it wisely.
 
-You can also try `qwen-vl-max` (通义千问-VL) as the alternative multi-modal model to power the AppAgent. The model is currently 
+You can also try `qwen-vl-max` (通义千问-VL) as the alternative multi-modal model to power the AppAgent. The model is currently
 free to use but its performance in the context of AppAgent is poorer compared with GPT-4V.
 
-To use it, you should create an Alibaba Cloud account and [create a Dashscope API key](https://help.aliyun.com/zh/dashscope/developer-reference/activate-dashscope-and-create-an-api-key?spm=a2c4g.11186623.0.i1) to fill in the `DASHSCOPE_API_KEY` field 
+To use it, you should create an Alibaba Cloud account and [create a Dashscope API key](https://help.aliyun.com/zh/dashscope/developer-reference/activate-dashscope-and-create-an-api-key?spm=a2c4g.11186623.0.i1) to fill in the `DASHSCOPE_API_KEY` field
 in the `config.yaml` file. Change the `MODEL` field from `OpenAI` to `Qwen` as well.
 
 If you want to test AppAgent using your own models, you should write a new model class in `scripts/model.py` accordingly.
 
 ### 🔍 Step 3. Exploration Phase
 
-Our paper proposed a novel solution that involves two phases, exploration, and deployment, to turn GPT-4V into a capable 
-agent that can help users operate their Android phones when a task is given. The exploration phase starts with a task 
-given by you, and you can choose to let the agent either explore the app on its own or learn from your demonstration. 
-In both cases, the agent generates documentation for elements interacted during the exploration/demonstration and 
+Our paper proposed a novel solution that involves two phases, exploration, and deployment, to turn GPT-4V into a capable
+agent that can help users operate their Android phones when a task is given. The exploration phase starts with a task
+given by you, and you can choose to let the agent either explore the app on its own or learn from your demonstration.
+In both cases, the agent generates documentation for elements interacted during the exploration/demonstration and
 saves them for use in the deployment phase.
 
 #### Option 1: Autonomous Exploration
@@ -126,9 +126,9 @@ saves them for use in the deployment phase.
 This solution features a fully autonomous exploration which allows the agent to explore the use of the app by attempting
 the given task without any intervention from humans.
 
-To start, run `learn.py` in the root directory. Follow the prompted instructions to select `autonomous exploration` 
-as the operating mode and provide the app name and task description. Then, your agent will do the job for you. Under 
-this mode, AppAgent will reflect on its previous action making sure its action adheres to the given task and generate 
+To start, run `learn.py` in the root directory. Follow the prompted instructions to select `autonomous exploration`
+as the operating mode and provide the app name and task description. Then, your agent will do the job for you. Under
+this mode, AppAgent will reflect on its previous action making sure its action adheres to the given task and generate
 documentation for the elements explored.
 
 ```bash
@@ -137,13 +137,13 @@ python learn.py
 
 #### Option 2: Learning from Human Demonstrations
 
-This solution requires users to demonstrate a similar task first. AppAgent will learn from the demo and generate 
+This solution requires users to demonstrate a similar task first. AppAgent will learn from the demo and generate
 documentations for UI elements seen during the demo.
 
-To start human demonstration, you should run `learn.py` in the root directory. Follow the prompted instructions to select 
-`human demonstration` as the operating mode and provide the app name and task description. A screenshot of your phone 
-will be captured and all interactive elements shown on the screen will be labeled with numeric tags. You need to follow 
-the prompts to determine your next action and the target of the action. When you believe the demonstration is finished, 
+To start human demonstration, you should run `learn.py` in the root directory. Follow the prompted instructions to select
+`human demonstration` as the operating mode and provide the app name and task description. A screenshot of your phone
+will be captured and all interactive elements shown on the screen will be labeled with numeric tags. You need to follow
+the prompts to determine your next action and the target of the action. When you believe the demonstration is finished,
 type `stop` to end the demo.
 
 ```bash
@@ -154,10 +154,10 @@ python learn.py
 
 ### 📱 Step 4. Deployment Phase
 
-After the exploration phase finishes, you can run `run.py` in the root directory. Follow the prompted instructions to enter 
-the name of the app, select the appropriate documentation base you want the agent to use and provide the task 
-description. Then, your agent will do the job for you. The agent will automatically detect if there is documentation 
-base generated before for the app; if there is no documentation found, you can also choose to run the agent without any 
+After the exploration phase finishes, you can run `run.py` in the root directory. Follow the prompted instructions to enter
+the name of the app, select the appropriate documentation base you want the agent to use and provide the task
+description. Then, your agent will do the job for you. The agent will automatically detect if there is documentation
+base generated before for the app; if there is no documentation found, you can also choose to run the agent without any
 documentation (success rate not guaranteed).
 
 ```bash
@@ -182,7 +182,7 @@ Please refer to  [evaluation benchmark](https://github.com/mnotgod96/AppAgent/bl
 ## 😉 Citation
 ```bib
 @misc{yang2023appagent,
-      title={AppAgent: Multimodal Agents as Smartphone Users}, 
+      title={AppAgent: Multimodal Agents as Smartphone Users},
       author={Chi Zhang and Zhao Yang and Jiaxuan Liu and Yucheng Han and Xin Chen and Zebiao Huang and Bin Fu and Gang Yu},
       year={2023},
       eprint={2312.13771},

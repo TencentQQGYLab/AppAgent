@@ -38,15 +38,32 @@ def list_all_devices():
     return device_list
 
 
+def get_bounds_from_element(elem):
+    raw_bounds = elem.attrib.get("bounds")
+    if not raw_bounds:
+        return None
+    try:
+        bounds = raw_bounds[1:-1].split("][")
+        if len(bounds) != 2:
+            return None
+        x1, y1 = map(int, bounds[0].split(","))
+        x2, y2 = map(int, bounds[1].split(","))
+    except (TypeError, ValueError):
+        return None
+    return (x1, y1), (x2, y2)
+
+
 def get_id_from_element(elem):
-    bounds = elem.attrib["bounds"][1:-1].split("][")
-    x1, y1 = map(int, bounds[0].split(","))
-    x2, y2 = map(int, bounds[1].split(","))
-    elem_w, elem_h = x2 - x1, y2 - y1
+    bounds = get_bounds_from_element(elem)
+    if bounds:
+        (x1, y1), (x2, y2) = bounds
+        elem_w, elem_h = x2 - x1, y2 - y1
     if "resource-id" in elem.attrib and elem.attrib["resource-id"]:
         elem_id = elem.attrib["resource-id"].replace(":", ".").replace("/", "_")
+    elif bounds:
+        elem_id = f"{elem.attrib.get('class', 'element')}_{elem_w}_{elem_h}"
     else:
-        elem_id = f"{elem.attrib['class']}_{elem_w}_{elem_h}"
+        return ""
     if "content-desc" in elem.attrib and elem.attrib["content-desc"] and len(elem.attrib["content-desc"]) < 20:
         content_desc = elem.attrib['content-desc'].replace("/", "_").replace(" ", "").replace(":", "_")
         elem_id += f"_{content_desc}"
@@ -59,12 +76,13 @@ def traverse_tree(xml_path, elem_list, attrib, add_index=False):
         if event == 'start':
             path.append(elem)
             if attrib in elem.attrib and elem.attrib[attrib] == "true":
+                bounds = get_bounds_from_element(elem)
+                if not bounds:
+                    continue
                 parent_prefix = ""
                 if len(path) > 1:
                     parent_prefix = get_id_from_element(path[-2])
-                bounds = elem.attrib["bounds"][1:-1].split("][")
-                x1, y1 = map(int, bounds[0].split(","))
-                x2, y2 = map(int, bounds[1].split(","))
+                (x1, y1), (x2, y2) = bounds
                 center = (x1 + x2) // 2, (y1 + y2) // 2
                 elem_id = get_id_from_element(elem)
                 if parent_prefix:

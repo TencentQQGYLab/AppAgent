@@ -111,6 +111,8 @@ free to use but its performance in the context of AppAgent is poorer compared wi
 To use it, you should create an Alibaba Cloud account and [create a Dashscope API key](https://help.aliyun.com/zh/dashscope/developer-reference/activate-dashscope-and-create-an-api-key?spm=a2c4g.11186623.0.i1) to fill in the `DASHSCOPE_API_KEY` field 
 in the `config.yaml` file. Change the `MODEL` field from `OpenAI` to `Qwen` as well.
 
+You can also try `MiniMax-M3` as another alternative multi-modal model to power the AppAgent. MiniMax-M3 accepts text, image and video inputs and is accessed through the OpenAI-compatible chat completions API; the text-only `MiniMax-M2.7` is also available. To use it, create an account on the MiniMax platform and fill in the `MINIMAX_API_KEY` field in the `config.yaml` file. Use the global endpoint (`https://api.minimax.io/v1`) or the China endpoint (`https://api.minimaxi.com/v1`) for `MINIMAX_API_BASE`, set `MINIMAX_API_MODEL` to `MiniMax-M3` or `MiniMax-M2.7`, and change the `MODEL` field to `MiniMax` as well.
+
 If you want to test AppAgent using your own models, you should write a new model class in `scripts/model.py` accordingly.
 
 ### 🔍 Step 3. Exploration Phase

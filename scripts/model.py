@@ -98,6 +98,71 @@ class QwenModel(BaseModel):
             return False, response.message
 
 
+# MiniMax models exposed through the OpenAI-compatible chat completions API.
+# MiniMax-M3 accepts text, image and video inputs and supports adaptive thinking
+# or disabled thinking. MiniMax-M2.7 is text-only and always reasons with thinking
+# on. The OpenAI-compatible image_url content path is reused, and thinking is
+# expressed through the `thinking` request field instead of being derived from
+# the hardcoded OpenAI-style cost reporting.
+class MiniMaxModel(BaseModel):
+    def __init__(self, base_url: str, api_key: str, model: str, temperature: float, max_tokens: int):
+        super().__init__()
+        self.base_url = base_url
+        self.api_key = api_key
+        self.model = model
+        self.temperature = temperature
+        self.max_tokens = max_tokens
+
+    def get_model_response(self, prompt: str, images: List[str]) -> (bool, str):
+        content = [
+            {
+                "type": "text",
+                "text": prompt
+            }
+        ]
+        for img in images:
+            base64_img = encode_image(img)
+            content.append({
+                "type": "image_url",
+                "image_url": {
+                    "url": f"data:image/jpeg;base64,{base64_img}"
+                }
+            })
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {self.api_key}"
+        }
+        payload = {
+            "model": self.model,
+            "messages": [
+                {
+                    "role": "user",
+                    "content": content
+                }
+            ],
+            "temperature": self.temperature,
+            "max_tokens": self.max_tokens
+        }
+        # MiniMax-M3 supports adaptive thinking and can also disable it; it is
+        # disabled by default to keep AppAgent responses deterministic. MiniMax-M2.7
+        # is text-only and always reasons with thinking on.
+        if self.model == "MiniMax-M2.7":
+            payload["thinking"] = {"type": "enabled"}
+        elif self.model == "MiniMax-M3":
+            payload["thinking"] = {"type": "disabled"}
+        response = requests.post(self.base_url, headers=headers, json=payload).json()
+        if "error" not in response:
+            usage = response["usage"]
+            prompt_tokens = usage["prompt_tokens"]
+            completion_tokens = usage["completion_tokens"]
+            print_with_color(f"Request cost is "
+                             f"${'{0:.2f}'.format(prompt_tokens / 1000 * 0.01 + completion_tokens / 1000 * 0.03)}",
+                             "yellow")
+        else:
+            return False, response["error"]["message"]
+        return True, response["choices"][0]["message"]["content"]
+
+
 def parse_explore_rsp(rsp):
     try:
         observation = re.findall(r"Observation: (.*?)$", rsp, re.MULTILINE)[0]

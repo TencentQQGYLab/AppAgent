@@ -102,18 +102,64 @@ class QwenModel(BaseModel):
 # MiniMax-M3 accepts text, image and video inputs and supports adaptive thinking
 # or disabled thinking. MiniMax-M2.7 is text-only and always reasons with thinking
 # on. The OpenAI-compatible image_url content path is reused, and thinking is
-# expressed through the `thinking` request field instead of being derived from
-# the hardcoded OpenAI-style cost reporting.
+# expressed through the `thinking` request field.
 class MiniMaxModel(BaseModel):
+    PRICING_USD_PER_MILLION_TOKENS = {
+        "MiniMax-M3": {
+            "input": 0.6,
+            "output": 2.4,
+            "cache_read": 0.12,
+            "cache_write": None
+        },
+        "MiniMax-M2.7": {
+            "input": 0.3,
+            "output": 1.2,
+            "cache_read": 0.06,
+            "cache_write": 0.375
+        }
+    }
+
     def __init__(self, base_url: str, api_key: str, model: str, temperature: float, max_tokens: int):
         super().__init__()
-        self.base_url = base_url
+        normalized_base_url = base_url.rstrip("/")
+        if not normalized_base_url.endswith("/chat/completions"):
+            normalized_base_url += "/chat/completions"
+        self.base_url = normalized_base_url
         self.api_key = api_key
         self.model = model
         self.temperature = temperature
         self.max_tokens = max_tokens
 
+    def _calculate_cost(self, usage: dict) -> float:
+        pricing = self.PRICING_USD_PER_MILLION_TOKENS.get(self.model)
+        if pricing is None:
+            return 0.0
+
+        prompt_tokens = usage.get("prompt_tokens", 0)
+        completion_tokens = usage.get("completion_tokens", 0)
+        prompt_details = usage.get("prompt_tokens_details") or {}
+        cache_read_tokens = prompt_details.get(
+            "cached_tokens", usage.get("cache_read_input_tokens", 0)
+        )
+        cache_write_tokens = usage.get("cache_creation_input_tokens", 0)
+        uncached_tokens = max(
+            prompt_tokens - cache_read_tokens - cache_write_tokens, 0
+        )
+        cache_write_price = pricing["cache_write"]
+        if cache_write_price is None:
+            cache_write_price = pricing["input"]
+
+        return (
+            uncached_tokens * pricing["input"]
+            + completion_tokens * pricing["output"]
+            + cache_read_tokens * pricing["cache_read"]
+            + cache_write_tokens * cache_write_price
+        ) / 1_000_000
+
     def get_model_response(self, prompt: str, images: List[str]) -> (bool, str):
+        if self.model == "MiniMax-M2.7" and images:
+            return False, "MiniMax-M2.7 accepts text input only."
+
         content = [
             {
                 "type": "text",
@@ -153,11 +199,8 @@ class MiniMaxModel(BaseModel):
         response = requests.post(self.base_url, headers=headers, json=payload).json()
         if "error" not in response:
             usage = response["usage"]
-            prompt_tokens = usage["prompt_tokens"]
-            completion_tokens = usage["completion_tokens"]
-            print_with_color(f"Request cost is "
-                             f"${'{0:.2f}'.format(prompt_tokens / 1000 * 0.01 + completion_tokens / 1000 * 0.03)}",
-                             "yellow")
+            cost = self._calculate_cost(usage)
+            print_with_color(f"Request cost is ${cost:.6f}", "yellow")
         else:
             return False, response["error"]["message"]
         return True, response["choices"][0]["message"]["content"]

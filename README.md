@@ -111,6 +111,10 @@ free to use but its performance in the context of AppAgent is poorer compared wi
 To use it, you should create an Alibaba Cloud account and [create a Dashscope API key](https://help.aliyun.com/zh/dashscope/developer-reference/activate-dashscope-and-create-an-api-key?spm=a2c4g.11186623.0.i1) to fill in the `DASHSCOPE_API_KEY` field 
 in the `config.yaml` file. Change the `MODEL` field from `OpenAI` to `Qwen` as well.
 
+You can also use `MiniMax-M3.1-Flash` (the MiniMax default) or `MiniMax-M3` to power AppAgent with text and screenshot inputs through the chat completions API. Set `MODEL` to `MiniMax`, fill in `MINIMAX_API_KEY`, and select `MINIMAX_API_MODEL` in `config.yaml`. Use `https://api.minimax.io/v1` for `MINIMAX_API_BASE`, or configure the existing China endpoint `https://api.minimaxi.com/v1` with an eligible regional account. Explicit saved and custom model IDs are passed through unchanged; legacy text-only models retain their image restriction.
+
+Flash uses adaptive thinking with the API's default `max` reasoning effort. `MINIMAX_MAX_TOKENS` includes thinking and answer tokens, so its default is 16384 rather than the small general response budget; increase it if a response is truncated. Older configurations without this setting retain `MAX_TOKENS`. Explicit `MiniMax-M3` selections retain disabled thinking. See the [MiniMax API documentation](https://platform.minimax.io/docs/api-reference/text-openai-api) for the thinking and output-budget contract. USD cost estimates use the [global pricing](https://platform.minimax.io/docs/pricing/overview) only when known; tiered M3 pricing, unlisted cache-write rates, regional endpoints and custom routes report an unavailable estimate.
+
 If you want to test AppAgent using your own models, you should write a new model class in `scripts/model.py` accordingly.
 
 ### 🔍 Step 3. Exploration Phase

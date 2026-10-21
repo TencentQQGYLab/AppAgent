@@ -98,6 +98,121 @@ class QwenModel(BaseModel):
             return False, response.message
 
 
+# MiniMax models exposed through the OpenAI-compatible chat completions API.
+# Flash requires adaptive thinking. Explicit saved model IDs remain supported.
+class MiniMaxModel(BaseModel):
+    PRICING_USD_PER_MILLION_TOKENS = {
+        "MiniMax-M3.1-Flash": {
+            "input": 0.15,
+            "output": 0.60,
+            "cache_read": 0.015,
+            "cache_write": None
+        },
+        "MiniMax-M2.7": {
+            "input": 0.3,
+            "output": 1.2,
+            "cache_read": 0.06,
+            "cache_write": 0.375
+        }
+    }
+
+    def __init__(self, base_url: str, api_key: str, model: str, temperature: float, max_tokens: int):
+        super().__init__()
+        normalized_base_url = base_url.rstrip("/")
+        if not normalized_base_url.endswith("/chat/completions"):
+            normalized_base_url += "/chat/completions"
+        self.base_url = normalized_base_url
+        self.api_key = api_key
+        self.model = model
+        self.temperature = temperature
+        self.max_tokens = max_tokens
+
+    def _calculate_cost(self, usage: dict):
+        # Do not apply global USD rates to regional or custom endpoints. M3's
+        # tiered pricing and unknown model rates cannot yield a fixed estimate.
+        if self.base_url != "https://api.minimax.io/v1/chat/completions":
+            return None
+        pricing = self.PRICING_USD_PER_MILLION_TOKENS.get(self.model)
+        if pricing is None:
+            return None
+
+        prompt_tokens = usage.get("prompt_tokens", 0)
+        completion_tokens = usage.get("completion_tokens", 0)
+        prompt_details = usage.get("prompt_tokens_details") or {}
+        cache_read_tokens = prompt_details.get(
+            "cached_tokens", usage.get("cache_read_input_tokens", 0)
+        )
+        cache_write_tokens = usage.get("cache_creation_input_tokens", 0)
+        uncached_tokens = max(
+            prompt_tokens - cache_read_tokens - cache_write_tokens, 0
+        )
+        cache_write_price = pricing["cache_write"]
+        if cache_write_price is None:
+            if cache_write_tokens:
+                return None
+            cache_write_price = 0.0
+
+        return (
+            uncached_tokens * pricing["input"]
+            + completion_tokens * pricing["output"]
+            + cache_read_tokens * pricing["cache_read"]
+            + cache_write_tokens * cache_write_price
+        ) / 1_000_000
+
+    def get_model_response(self, prompt: str, images: List[str]) -> (bool, str):
+        if self.model == "MiniMax-M2.7" and images:
+            return False, "MiniMax-M2.7 accepts text input only."
+
+        content = [
+            {
+                "type": "text",
+                "text": prompt
+            }
+        ]
+        for img in images:
+            base64_img = encode_image(img)
+            content.append({
+                "type": "image_url",
+                "image_url": {
+                    "url": f"data:image/jpeg;base64,{base64_img}"
+                }
+            })
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {self.api_key}"
+        }
+        payload = {
+            "model": self.model,
+            "messages": [
+                {
+                    "role": "user",
+                    "content": content
+                }
+            ],
+            "temperature": self.temperature,
+            "max_tokens": self.max_tokens
+        }
+        # Flash always thinks; omitted reasoning_effort uses the API default max.
+        # Preserve the request behavior of explicitly selected older models.
+        if self.model == "MiniMax-M3.1-Flash":
+            payload["thinking"] = {"type": "adaptive"}
+        elif self.model == "MiniMax-M2.7":
+            payload["thinking"] = {"type": "enabled"}
+        elif self.model == "MiniMax-M3":
+            payload["thinking"] = {"type": "disabled"}
+        response = requests.post(self.base_url, headers=headers, json=payload).json()
+        if "error" not in response:
+            usage = response["usage"]
+            cost = self._calculate_cost(usage)
+            if cost is None:
+                print_with_color("Request cost estimate is unavailable.", "yellow")
+            else:
+                print_with_color(f"Estimated request cost is ${cost:.6f}", "yellow")
+        else:
+            return False, response["error"]["message"]
+        return True, response["choices"][0]["message"]["content"]
+
+
 def parse_explore_rsp(rsp):
     try:
         observation = re.findall(r"Observation: (.*?)$", rsp, re.MULTILINE)[0]

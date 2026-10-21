@@ -99,16 +99,13 @@ class QwenModel(BaseModel):
 
 
 # MiniMax models exposed through the OpenAI-compatible chat completions API.
-# MiniMax-M3 accepts text, image and video inputs and supports adaptive thinking
-# or disabled thinking. MiniMax-M2.7 is text-only and always reasons with thinking
-# on. The OpenAI-compatible image_url content path is reused, and thinking is
-# expressed through the `thinking` request field.
+# Flash requires adaptive thinking. Explicit saved model IDs remain supported.
 class MiniMaxModel(BaseModel):
     PRICING_USD_PER_MILLION_TOKENS = {
-        "MiniMax-M3": {
-            "input": 0.6,
-            "output": 2.4,
-            "cache_read": 0.12,
+        "MiniMax-M3.1-Flash": {
+            "input": 0.15,
+            "output": 0.60,
+            "cache_read": 0.015,
             "cache_write": None
         },
         "MiniMax-M2.7": {
@@ -130,10 +127,14 @@ class MiniMaxModel(BaseModel):
         self.temperature = temperature
         self.max_tokens = max_tokens
 
-    def _calculate_cost(self, usage: dict) -> float:
+    def _calculate_cost(self, usage: dict):
+        # Do not apply global USD rates to regional or custom endpoints. M3's
+        # tiered pricing and unknown model rates cannot yield a fixed estimate.
+        if self.base_url != "https://api.minimax.io/v1/chat/completions":
+            return None
         pricing = self.PRICING_USD_PER_MILLION_TOKENS.get(self.model)
         if pricing is None:
-            return 0.0
+            return None
 
         prompt_tokens = usage.get("prompt_tokens", 0)
         completion_tokens = usage.get("completion_tokens", 0)
@@ -147,7 +148,9 @@ class MiniMaxModel(BaseModel):
         )
         cache_write_price = pricing["cache_write"]
         if cache_write_price is None:
-            cache_write_price = pricing["input"]
+            if cache_write_tokens:
+                return None
+            cache_write_price = 0.0
 
         return (
             uncached_tokens * pricing["input"]
@@ -189,10 +192,11 @@ class MiniMaxModel(BaseModel):
             "temperature": self.temperature,
             "max_tokens": self.max_tokens
         }
-        # MiniMax-M3 supports adaptive thinking and can also disable it; it is
-        # disabled by default to keep AppAgent responses deterministic. MiniMax-M2.7
-        # is text-only and always reasons with thinking on.
-        if self.model == "MiniMax-M2.7":
+        # Flash always thinks; omitted reasoning_effort uses the API default max.
+        # Preserve the request behavior of explicitly selected older models.
+        if self.model == "MiniMax-M3.1-Flash":
+            payload["thinking"] = {"type": "adaptive"}
+        elif self.model == "MiniMax-M2.7":
             payload["thinking"] = {"type": "enabled"}
         elif self.model == "MiniMax-M3":
             payload["thinking"] = {"type": "disabled"}
@@ -200,7 +204,10 @@ class MiniMaxModel(BaseModel):
         if "error" not in response:
             usage = response["usage"]
             cost = self._calculate_cost(usage)
-            print_with_color(f"Request cost is ${cost:.6f}", "yellow")
+            if cost is None:
+                print_with_color("Request cost estimate is unavailable.", "yellow")
+            else:
+                print_with_color(f"Estimated request cost is ${cost:.6f}", "yellow")
         else:
             return False, response["error"]["message"]
         return True, response["choices"][0]["message"]["content"]

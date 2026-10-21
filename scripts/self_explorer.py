@@ -35,7 +35,7 @@ elif configs["MODEL"] == "MiniMax":
                         api_key=configs["MINIMAX_API_KEY"],
                         model=configs["MINIMAX_API_MODEL"],
                         temperature=configs["TEMPERATURE"],
-                        max_tokens=configs["MAX_TOKENS"])
+                        max_tokens=configs.get("MINIMAX_MAX_TOKENS", configs["MAX_TOKENS"]))
 else:
     print_with_color(f"ERROR: Unsupported model type {configs['MODEL']}!", "red")
     sys.exit()

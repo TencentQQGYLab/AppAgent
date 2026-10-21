@@ -12,10 +12,11 @@ QWEN_MODEL: "qwen-vl-max"
 
 # MiniMax is powered through the OpenAI-compatible chat completions API. Use the
 # global endpoint (api.minimax.io) or the China endpoint (api.minimaxi.com).
-# MiniMax-M3 accepts text, image and video inputs; MiniMax-M2.7 is text-only.
+# MiniMax-M3.1-Flash and MiniMax-M3 accept text and screenshot inputs.
 MINIMAX_API_BASE: "https://api.minimax.io/v1"
 MINIMAX_API_KEY: ""  # Your MiniMax API key
-MINIMAX_API_MODEL: "MiniMax-M3"  # MiniMax-M3 (multimodal) or MiniMax-M2.7 (text-only)
+MINIMAX_API_MODEL: "MiniMax-M3.1-Flash"  # MiniMax-M3.1-Flash (default) or MiniMax-M3
+MINIMAX_MAX_TOKENS: 16384  # Includes thinking tokens; increase if the response is truncated
 
 ANDROID_SCREENSHOT_DIR: "/sdcard"  # Set the directory on your Android device to store the intermediate screenshots. Make sure the directory EXISTS on your phone!
 ANDROID_XML_DIR: "/sdcard"  # Set the directory on your Android device to store the intermediate XML files used for determining locations of UI elements on your screen. Make sure the directory EXISTS on your phone!
